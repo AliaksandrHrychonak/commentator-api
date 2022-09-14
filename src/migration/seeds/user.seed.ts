@@ -28,23 +28,18 @@ export class UserSeed {
             await this.roleService.findOne<RoleDocument>({
                 name: 'admin',
             });
-        const userRole: RoleDocument =
-            await this.roleService.findOne<RoleDocument>({
-                name: 'user',
-            });
 
         try {
             const password = await this.authService.createPassword(
-                'aaAA@@123444'
+                process.env.ADMIN_PASSWORD
             );
 
             await this.userService.create({
                 firstName: 'superadmin',
                 lastName: 'test',
-                email: 'superadmin@mail.com',
+                email: process.env.SUPER_ADMIN_EMAIL,
                 password: password.passwordHash,
                 passwordExpired: password.passwordExpired,
-                mobileNumber: '08111111222',
                 role: superadminRole._id,
                 salt: password.salt,
             });
@@ -52,22 +47,10 @@ export class UserSeed {
             await this.userService.create({
                 firstName: 'admin',
                 lastName: 'test',
-                email: 'admin@mail.com',
+                email: process.env.ADMIN_EMAIL,
                 password: password.passwordHash,
                 passwordExpired: password.passwordExpired,
-                mobileNumber: '08111111111',
                 role: adminRole._id,
-                salt: password.salt,
-            });
-
-            await this.userService.create({
-                firstName: 'user',
-                lastName: 'test',
-                email: 'user@mail.com',
-                password: password.passwordHash,
-                passwordExpired: password.passwordExpired,
-                mobileNumber: '08111111333',
-                role: userRole._id,
                 salt: password.salt,
             });
         } catch (err: any) {

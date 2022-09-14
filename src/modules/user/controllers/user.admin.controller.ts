@@ -125,7 +125,7 @@ export class UserAdminController {
             body.email,
         );
 
-        if (checkExist.email && checkExist.mobileNumber) {
+        if (checkExist.email) {
             throw new BadRequestException({
                 statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_EXISTS_ERROR,
                 message: 'user.error.exist',
@@ -134,12 +134,6 @@ export class UserAdminController {
             throw new BadRequestException({
                 statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_EMAIL_EXIST_ERROR,
                 message: 'user.error.emailExist',
-            });
-        } else if (checkExist.mobileNumber) {
-            throw new BadRequestException({
-                statusCode:
-                    ENUM_USER_STATUS_CODE_ERROR.USER_MOBILE_NUMBER_EXIST_ERROR,
-                message: 'user.error.mobileNumberExist',
             });
         }
 
@@ -160,7 +154,6 @@ export class UserAdminController {
                 firstName: body.firstName,
                 lastName: body.lastName,
                 email: body.email,
-                mobileNumber: body.mobileNumber,
                 role: body.role,
                 password: password.passwordHash,
                 passwordExpired: password.passwordExpired,

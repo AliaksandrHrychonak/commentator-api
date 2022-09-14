@@ -6,10 +6,8 @@ import {
     MaxLength,
     MinLength,
     IsMongoId,
-    IsOptional,
 } from 'class-validator';
 import { IsPasswordStrong } from 'src/common/request/validations/request.is-password-strong.validation';
-import { IsStartWith } from 'src/common/request/validations/request.is-start-with.validation';
 
 export class UserCreateDto {
     @IsEmail()
@@ -32,13 +30,13 @@ export class UserCreateDto {
     @Type(() => String)
     readonly lastName: string;
 
-    @IsOptional()
-    @IsString()
-    @IsNotEmpty()
-    @MinLength(10)
-    @MaxLength(14)
-    @Type(() => String)
-    readonly mobileNumber: string;
+    // @IsOptional()
+    // @IsString()
+    // @IsNotEmpty()
+    // @MinLength(10)
+    // @MaxLength(14)
+    // @Type(() => String)
+    // readonly mobileNumber: string;
 
     @IsNotEmpty()
     @IsMongoId()

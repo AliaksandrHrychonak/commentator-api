@@ -13,5 +13,4 @@ export interface IUserCreate extends UserCreateDto {
 
 export interface IUserCheckExist {
     email: boolean;
-    mobileNumber?: boolean;
 }

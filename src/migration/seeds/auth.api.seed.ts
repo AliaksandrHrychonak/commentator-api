@@ -24,6 +24,11 @@ export class AuthApiSeed {
                 passphrase: 'cuwakimacojulawu',
                 encryptionKey: 'opbUwdiS1FBsrDUoPgZdx',
             });
+
+            await this.authApiService.create({
+                name: 'Auth Api Commentator',
+                description: 'From Client Commentator',
+            })
         } catch (err: any) {
             throw new Error(err.message);
         }

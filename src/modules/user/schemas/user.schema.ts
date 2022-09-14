@@ -21,14 +21,6 @@ export class UserEntity {
     lastName: string;
 
     @Prop({
-        required: false,
-        index: true,
-        unique: true,
-        trim: true,
-    })
-    mobileNumber: string;
-
-    @Prop({
         required: true,
         index: true,
         unique: true,

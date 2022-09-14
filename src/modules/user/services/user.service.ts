@@ -125,13 +125,11 @@ export class UserService {
         passwordExpired,
         salt,
         email,
-        mobileNumber,
         role,
     }: IUserCreate): Promise<UserDocument> {
         const user: UserEntity = {
             firstName,
             email,
-            mobileNumber,
             password,
             role: new Types.ObjectId(role),
             isActive: true,
@@ -166,7 +164,6 @@ export class UserService {
 
     async checkExist(
         email: string,
-        mobileNumber?: string,
         _id?: string
     ): Promise<IUserCheckExist> {
         const existEmail: Record<string, any> = await this.userModel.exists({
@@ -176,16 +173,9 @@ export class UserService {
             },
             _id: { $nin: [new Types.ObjectId(_id)] },
         });
-
-        const existMobileNumber: Record<string, any> =
-            await this.userModel.exists({
-                mobileNumber,
-                _id: { $nin: [new Types.ObjectId(_id)] },
-            });
-
+    
         return {
             email: existEmail ? true : false,
-            mobileNumber: existMobileNumber ? true : false,
         };
     }
 

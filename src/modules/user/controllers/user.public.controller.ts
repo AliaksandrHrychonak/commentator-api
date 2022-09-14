@@ -34,7 +34,7 @@ export class UserPublicController {
     @Post('/sign-up')
     async signUp(
         @Body()
-        { email, mobileNumber, ...body }: UserSignUpDto
+        { email, ...body}: UserSignUpDto
     ): Promise<IResponse> {
         const role: RoleDocument = await this.roleService.findOne<RoleDocument>(
             {
@@ -50,10 +50,9 @@ export class UserPublicController {
 
         const checkExist: IUserCheckExist = await this.userService.checkExist(
             email,
-            mobileNumber
         );
 
-        if (checkExist.email && checkExist.mobileNumber) {
+        if (checkExist.email) {
             throw new BadRequestException({
                 statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_EXISTS_ERROR,
                 message: 'user.error.exist',
@@ -62,12 +61,6 @@ export class UserPublicController {
             throw new BadRequestException({
                 statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_EMAIL_EXIST_ERROR,
                 message: 'user.error.emailExist',
-            });
-        } else if (checkExist.mobileNumber) {
-            throw new BadRequestException({
-                statusCode:
-                    ENUM_USER_STATUS_CODE_ERROR.USER_MOBILE_NUMBER_EXIST_ERROR,
-                message: 'user.error.mobileNumberExist',
             });
         }
 
@@ -80,7 +73,6 @@ export class UserPublicController {
                 firstName: body.firstName,
                 lastName: body.lastName,
                 email,
-                mobileNumber,
                 role: role._id,
                 password: password.passwordHash,
                 passwordExpired: password.passwordExpired,
