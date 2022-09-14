@@ -1,0 +1,4 @@
+{
+    "hello": "Тестовый маршрут {serviceName}.",
+    "helloTimeout": "Тестовый маршрут {serviceName} тайм-аута."
+}

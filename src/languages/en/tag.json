@@ -1,0 +1,12 @@
+{
+  "list": "List Tag Success.",
+  "get": "Get Tag Success.",
+  "create": "Create Tag Success.",
+  "delete": "Delete Tag Success.",
+  "error": {
+      "notFound": "Tag not found.",
+      "exist": "Tag exist",
+      "access": "No access",
+      "noTagAccess": "Tag does not belong to you"
+  }
+}
