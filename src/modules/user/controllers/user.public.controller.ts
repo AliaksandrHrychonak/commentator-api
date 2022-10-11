@@ -108,9 +108,14 @@ export class UserPublicController {
                     rememberMe: false,
                 });
 
+            const tokenType: string = await this.authService.getTokenType();
+            const expiresIn: number = await this.authService.getAccessTokenExpirationTime();
+
             return {
                 accessToken,
                 refreshToken,
+                tokenType,
+                expiresIn
             };
         } catch (err: any) {
             throw new InternalServerErrorException({
