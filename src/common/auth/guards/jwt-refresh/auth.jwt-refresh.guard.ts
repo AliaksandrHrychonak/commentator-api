@@ -16,6 +16,7 @@ export class JwtRefreshGuard extends AuthGuard('jwtRefresh') {
                 message: 'http.clientError.unauthorized',
                 error: err ? err.message : info.message,
             });
+            
         }
 
         return user;

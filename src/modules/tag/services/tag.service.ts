@@ -39,7 +39,6 @@ export class TagService {
     async findAllMe(
         id: string
     ): Promise<TagDocument[]> {
-        console.log(id);
         
         return this.tagModel.find({ owner: id })
     }

@@ -103,7 +103,6 @@ export class ApiKeyStrategy extends PassportStrategy(Strategy, 'api-key') {
                         authApi.hash
                     );
                     
-                    console.log(validateApiKey);
                     
                 if (!validateApiKey) {
                     verified(

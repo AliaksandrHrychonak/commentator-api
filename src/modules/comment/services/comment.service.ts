@@ -32,13 +32,13 @@ export class CommentService {
         });
        
 
-        if (
-            options &&
-            options.limit !== undefined &&
-            options.skip !== undefined
-        ) {
-            comments.limit(options.limit).skip(options.skip);
-        }
+        // if (
+        //     options &&
+        //     options.limit !== undefined &&
+        //     options.skip !== undefined
+        // ) {
+        //     comments.limit(options.limit).skip(options.skip);
+        // }
 
         if (options && options.sort) {
             comments.sort(options.sort);
