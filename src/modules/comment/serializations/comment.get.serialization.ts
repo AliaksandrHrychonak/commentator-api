@@ -16,11 +16,11 @@ export class CommentGetSerialization {
 
     readonly value: string;
 
-    @Exclude()
+    @Type(() => String)
     readonly owner: string;
    
     readonly createdAt: Date;
-
+    
     @Exclude()
     readonly updatedAt: Date;
 }

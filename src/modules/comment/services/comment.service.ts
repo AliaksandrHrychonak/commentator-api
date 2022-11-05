@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { Model, Types } from 'mongoose';
-import { ConfigService } from '@nestjs/config';
 import { CommentDocument, CommentEntity } from '../schemas/comment.schema';
 import { HelperStringService } from 'src/common/helper/services/helper.string.service';
 import { DatabaseEntity } from 'src/common/database/decorators/database.decorator';
@@ -9,8 +8,6 @@ import {
     IDatabaseFindOneOptions,
 } from 'src/common/database/database.interface';
 import { TagEntity } from 'src/modules/tag/schemas/tag.schema';
-import { CommentCreateDto } from '../dtos/comment.create.dto';
-import { TagService } from 'src/modules/tag/services/tag.service';
 import { ICommentCreate } from '../comment.interface';
 
 @Injectable()

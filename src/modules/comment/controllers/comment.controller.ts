@@ -49,6 +49,7 @@ import { CommentRequestDto } from '../dtos/comment.request.dto';
 import { CommentUpdateTagDto } from '../dtos/comment.update-tag.dto';
 import { CommentUpdateDto } from '../dtos/comment.update.dto';
 import { CommentDocument } from '../schemas/comment.schema';
+import { CommentGetSerialization } from '../serializations/comment.get.serialization';
 import { CommentListSerialization } from '../serializations/comment.list.serialization';
 import { CommentService } from '../services/comment.service';
 
@@ -146,15 +147,15 @@ export class CommentController {
         }
 
         try {
-            const create = await this.commentService.create(
+            const comment = await this.commentService.create(
                 value,
                 user._id,
                 body.tags
             );
 
             return {
-                data: create,
-            };
+                _id: comment._id
+            }
         } catch (err: any) {
             throw new InternalServerErrorException({
                 statusCode: ENUM_ERROR_STATUS_CODE_ERROR.ERROR_UNKNOWN,
@@ -190,7 +191,7 @@ export class CommentController {
             );
 
             return {
-                data: update,
+                _id: update._id
             };
         } catch (err: any) {
             throw new InternalServerErrorException({
@@ -253,7 +254,7 @@ export class CommentController {
             );
 
             return {
-                data: update,
+                _id: update._id
             };
         } catch (err: any) {
             throw new InternalServerErrorException({
