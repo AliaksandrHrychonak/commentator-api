@@ -27,15 +27,14 @@ export class CommentService {
             path: 'tags',
             model: TagEntity.name,
         });
-       
 
-        // if (
-        //     options &&
-        //     options.limit !== undefined &&
-        //     options.skip !== undefined
-        // ) {
-        //     comments.limit(options.limit).skip(options.skip);
-        // }
+        if (
+            options &&
+            options.limit !== undefined &&
+            options.skip !== undefined
+        ) {
+            comments.limit(options.limit).skip(options.skip);
+        }
 
         if (options && options.sort) {
             comments.sort(options.sort);
@@ -89,7 +88,7 @@ export class CommentService {
             owner: new Types.ObjectId(owner),
             tags: tags ? tags.map((val) => new Types.ObjectId(val)) : [],
         };
-     
+
         const create: CommentDocument = new this.commentModel(comment);
         return create.save();
     }
@@ -102,28 +101,33 @@ export class CommentService {
         return this.commentModel.findOneAndDelete(find);
     }
 
-    async update(
-        _id: string,
-        value: string,
-    ): Promise<CommentDocument> {
+    async update(_id: string, value: string): Promise<CommentDocument> {
         const update: CommentDocument = await this.commentModel.findById(_id);
         update.value = value;
         return update.save();
     }
 
     async updateTags(id: string, tag: string): Promise<CommentDocument> {
-        const update = await this.commentModel.findByIdAndUpdate(id, {
-            $addToSet: { tags: new Types.ObjectId(tag) },
-        }, { new: true },)
+        const update = await this.commentModel.findByIdAndUpdate(
+            id,
+            {
+                $addToSet: { tags: new Types.ObjectId(tag) },
+            },
+            { new: true }
+        );
 
-        return update
+        return update;
     }
 
     async removeTags(id: string, tag: string): Promise<CommentDocument> {
-        const update = await this.commentModel.findByIdAndUpdate(id, {
-            $pull: { tags: new Types.ObjectId(tag) },
-        }, { new: true })
+        const update = await this.commentModel.findByIdAndUpdate(
+            id,
+            {
+                $pull: { tags: new Types.ObjectId(tag) },
+            },
+            { new: true }
+        );
 
-        return update
+        return update;
     }
 }
