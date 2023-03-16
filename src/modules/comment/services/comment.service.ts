@@ -9,6 +9,7 @@ import {
 } from 'src/common/database/database.interface';
 import { TagEntity } from 'src/modules/tag/schemas/tag.schema';
 import { ICommentCreate } from '../comment.interface';
+import { CommentCreateDto } from '../dtos/comment.create.dto';
 
 @Injectable()
 export class CommentService {
@@ -129,5 +130,18 @@ export class CommentService {
         );
 
         return update;
+    }
+
+    async insert(
+        data: CommentCreateDto[],
+        owner: string
+    ): Promise<CommentDocument[]> {
+        return this.commentModel.insertMany(
+            data.map(({ value, tags }) => ({
+                value,
+                owner: new Types.ObjectId(owner),
+                tags,
+            }))
+        );
     }
 }

@@ -9,5 +9,4 @@ export class CommentBulkService {
         @DatabaseEntity(CommentEntity.name)
         private readonly commentModel: Model<CommentDocument>
     ) {}
-
 }
