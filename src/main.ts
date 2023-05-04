@@ -71,7 +71,7 @@ async function bootstrap() {
         )}/${configService.get<string>('database.name')}`,
         'NestApplication'
     );
-    logger.log(`Server running on ${await app.getUrl()}`, 'NestApplication');
+    logger.log(`Server running on ${await app.getUrl() }`, 'NestApplication');
 
     logger.log(`==========================================================`);
 }

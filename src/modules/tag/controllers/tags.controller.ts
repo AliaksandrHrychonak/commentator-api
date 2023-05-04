@@ -90,6 +90,24 @@ export class TagController {
       };
   }
 
+    @Response('tag.listAll')
+    @AuthJwtGuard()
+    @Get('/list/all')
+    async listAll(
+        @User() user: IUserDocument
+    ): Promise<{ data: TagDocument[] }> {
+
+        const find: Record<string, any> = {
+            owner: new Types.ObjectId(user._id),
+        };
+
+        const tags: TagDocument[] = await this.tagService.findAll(find);
+
+        return {
+            data: tags,
+        };
+    }
+
 
     @Response('tag.create')
     @AuthJwtGuard()
