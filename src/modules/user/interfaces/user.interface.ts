@@ -1,0 +1,31 @@
+import {
+    RoleDoc,
+    RoleEntity,
+} from 'src/modules/role/repository/entities/role.entity';
+import {
+    UserDoc,
+    UserEntity,
+} from 'src/modules/user/repository/entities/user.entity';
+
+export interface IUserEntity extends Omit<UserEntity, 'role'> {
+    role: RoleEntity;
+}
+
+export interface IUserDoc extends Omit<UserDoc, 'role'> {
+    role: RoleDoc;
+}
+
+export interface IUserGoogleEntity {
+    accessToken: string;
+    refreshToken: string;
+}
+
+export interface IUserYandexEntity {
+    accessToken: string;
+    refreshToken: string;
+}
+
+export interface IUserGithubEntity {
+    accessToken: string;
+    refreshToken: string;
+}
