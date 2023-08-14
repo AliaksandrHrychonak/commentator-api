@@ -4,10 +4,9 @@
 - [x] Google auth
 - [x] GitHub auth
 - [x] Yandex.Cloud Object Storage
-- [ ] Refactor to GitHub
-- [ ] Comments module
 - [ ] Tags module
 - [ ] Categories module
+- [ ] Comments module
 - [ ] User frontend UI variables
 - [ ] Docker
 

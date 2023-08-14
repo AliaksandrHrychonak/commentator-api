@@ -44,7 +44,20 @@ export class MigrationRoleSeed {
             {
                 name: 'user',
                 type: ENUM_ROLE_TYPE.USER,
-                permissions: [],
+                permissions: [
+                    {
+                        subject: ENUM_POLICY_SUBJECT.COMMENT,
+                        action: [ENUM_POLICY_ACTION.MANAGE],
+                    },
+                    {
+                        subject: ENUM_POLICY_SUBJECT.TAG,
+                        action: [ENUM_POLICY_ACTION.MANAGE],
+                    },
+                    {
+                        subject: ENUM_POLICY_SUBJECT.CATEGORY,
+                        action: [ENUM_POLICY_ACTION.MANAGE],
+                    },
+                ],
             },
         ];
 
