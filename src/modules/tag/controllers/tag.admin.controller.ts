@@ -82,6 +82,8 @@ import { TagCreateDto } from '../dtos/tag.create.dto';
 import { ENUM_USER_STATUS_CODE_ERROR } from '../../user/constants/user.status-code.constant';
 import { TagUpdateDto } from '../dtos/tag.update.dto';
 import { IUserDoc } from '../../user/interfaces/user.interface';
+import { join } from 'lodash';
+import { TagListExportSerialization } from '../serializations/tag.list-export.serialization';
 
 @ApiTags('modules.admin.tag')
 @Controller({
@@ -264,7 +266,7 @@ export class TagAdminController {
 
     @TagAdminExportDoc()
     @ResponseFile({
-        serialization: TagListSerialization,
+        serialization: TagListExportSerialization,
         fileType: ENUM_HELPER_FILE_TYPE.CSV,
     })
     @PolicyAbilityProtected({
