@@ -41,7 +41,6 @@ export type TagDoc = TagEntity & Document;
 
 TagSchema.pre('save', function (next: CallbackWithoutResultAndOptionalError) {
     this.name = this.name.toLowerCase();
-    this.description = this.description.toLowerCase();
 
     next();
 });

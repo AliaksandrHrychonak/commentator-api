@@ -9,13 +9,6 @@ import {
     DocResponsePaging,
 } from 'src/common/doc/decorators/doc.decorator';
 import { ResponseIdSerialization } from '../../../common/response/serializations/response.id.serialization';
-import {
-    UserDocQueryBlocked,
-    UserDocQueryInactivePermanent,
-    UserDocQueryIsActive,
-    UserDocQueryRole,
-} from '../../user/constants/user.doc.constant';
-import { UserListSerialization } from '../../user/serializations/user.list.serialization';
 import { TagListSerialization } from '../serializations/tag.list.serialization';
 
 export function TagAuthUpdateDoc(): MethodDecorator {

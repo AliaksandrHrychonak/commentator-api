@@ -7,6 +7,8 @@ import {
     DocGuard,
     DocResponse,
     DocResponsePaging,
+    DocRequestFile,
+    DocResponseFile,
 } from 'src/common/doc/decorators/doc.decorator';
 import { ResponseIdSerialization } from 'src/common/response/serializations/response.id.serialization';
 import {
@@ -16,9 +18,9 @@ import {
     UserDocQueryIsActive,
     UserDocQueryRole,
 } from 'src/modules/user/constants/user.doc.constant';
-import {TagListSerialization} from "../serializations/tag.list.serialization";
-import {TagGetSerialization} from "../serializations/tag.get.serialization";
-import {TagDocParamsId} from "../constants/tag.doc.constant";
+import { TagListSerialization } from '../serializations/tag.list.serialization';
+import { TagGetSerialization } from '../serializations/tag.get.serialization';
+import { TagDocParamsId } from '../constants/tag.doc.constant';
 
 export function TagAdminListDoc(): MethodDecorator {
     return applyDecorators(
@@ -61,7 +63,7 @@ export function TagAdminGetDoc(): MethodDecorator {
     );
 }
 
-export function UserAdminCreateDoc(): MethodDecorator {
+export function TagAdminCreateDoc(): MethodDecorator {
     return applyDecorators(
         Doc({
             operation: 'modules.admin.tag',
@@ -77,7 +79,6 @@ export function UserAdminCreateDoc(): MethodDecorator {
         })
     );
 }
-
 
 export function TagAdminUpdateDoc(): MethodDecorator {
     return applyDecorators(
@@ -114,31 +115,31 @@ export function TagAdminDeleteDoc(): MethodDecorator {
     );
 }
 
-// export function TagAdminImportDoc(): MethodDecorator {
-//     return applyDecorators(
-//         Doc({
-//             operation: 'modules.admin.tag',
-//         }),
-//         DocAuth({
-//             jwtAccessToken: true,
-//         }),
-//         DocRequestFile(),
-//         DocGuard({ role: true, policy: true }),
-//         DocResponse('tag.import', {
-//             httpStatus: HttpStatus.CREATED,
-//         })
-//     );
-// }
-//
-// export function TagAdminExportDoc(): MethodDecorator {
-//     return applyDecorators(
-//         Doc({
-//             operation: 'modules.admin.tag',
-//         }),
-//         DocAuth({
-//             jwtAccessToken: true,
-//         }),
-//         DocGuard({ role: true, policy: true }),
-//         DocResponseFile()
-//     );
-// }
+export function TagAdminImportDoc(): MethodDecorator {
+    return applyDecorators(
+        Doc({
+            operation: 'modules.admin.tag',
+        }),
+        DocAuth({
+            jwtAccessToken: true,
+        }),
+        DocRequestFile(),
+        DocGuard({ role: true, policy: true }),
+        DocResponse('tag.import', {
+            httpStatus: HttpStatus.CREATED,
+        })
+    );
+}
+
+export function TagAdminExportDoc(): MethodDecorator {
+    return applyDecorators(
+        Doc({
+            operation: 'modules.admin.tag',
+        }),
+        DocAuth({
+            jwtAccessToken: true,
+        }),
+        DocGuard({ role: true, policy: true }),
+        DocResponseFile()
+    );
+}

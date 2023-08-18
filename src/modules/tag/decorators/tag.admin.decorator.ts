@@ -11,21 +11,9 @@ export function TagAdminCreateGuard(): MethodDecorator {
 }
 
 export function TagAdminDeleteGuard(): MethodDecorator {
-    return applyDecorators(
-        UseGuards(
-            TagPutToRequestGuard,
-            TagNotFoundGuard
-            // UserCanNotOurSelfGuard
-        )
-    );
+    return applyDecorators(UseGuards(TagPutToRequestGuard, TagNotFoundGuard));
 }
 
 export function TagAdminUpdateGuard(): MethodDecorator {
-    return applyDecorators(
-        UseGuards(
-            TagPutToRequestGuard,
-            TagNotFoundGuard
-            // UserCanNotOurSelfGuard
-        )
-    );
+    return applyDecorators(UseGuards(TagPutToRequestGuard, TagNotFoundGuard));
 }

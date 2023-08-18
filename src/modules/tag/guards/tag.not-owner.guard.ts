@@ -5,9 +5,9 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import { IRequestApp } from 'src/common/request/interfaces/request.interface';
-import { UserDoc } from '../../../user/repository/entities/user.entity';
-import { TagDoc } from '../../repository/entities/tag.entity';
-import { ENUM_TAG_STATUS_CODE_ERROR } from '../../constants/tag.status-code.constant';
+import { UserDoc } from '../../user/repository/entities/user.entity';
+import { TagDoc } from '../repository/entities/tag.entity';
+import { ENUM_TAG_STATUS_CODE_ERROR } from '../constants/tag.status-code.constant';
 
 @Injectable()
 export class TagNotOwnerGuard implements CanActivate {

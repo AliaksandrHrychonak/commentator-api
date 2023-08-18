@@ -27,6 +27,7 @@ export class TagService implements ITagService {
     ): Promise<ITagEntity[]> {
         return this.tagRepository.findAll<ITagEntity>(find, {
             ...options,
+            join: true,
         });
     }
 

@@ -14,7 +14,9 @@ export class TagPutToRequestGuard implements CanActivate {
         const { params } = request;
         const { tag } = params;
 
-        const check: TagDoc = await this.tagService.findOneById(tag);
+        const check: TagDoc = await this.tagService.findOneById(tag, {
+            join: true,
+        });
         request.__tag = check;
 
         return true;
