@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import { HelperNumberService } from 'src/common/helper/services/helper.number.service';
+import { HelperNumberService } from '../../src/common/helper/services/helper.number.service';
 
 describe('HelperNumberService', () => {
     let service: HelperNumberService;

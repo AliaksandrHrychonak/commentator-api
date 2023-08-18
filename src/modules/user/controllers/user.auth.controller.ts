@@ -9,6 +9,7 @@ import {
     HttpStatus,
     Patch,
     Post,
+    SerializeOptions,
     UploadedFile,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
@@ -191,7 +192,8 @@ export class UserAuthController {
     }
 
     @UserAuthInfoDoc()
-    @Response('user.info', { serialization: UserPayloadSerialization })
+    @SerializeOptions({})
+    @Response('user.info')
     @AuthJwtAccessProtected()
     @Get('/info')
     async info(

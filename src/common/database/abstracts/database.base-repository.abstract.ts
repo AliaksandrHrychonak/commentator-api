@@ -1,16 +1,17 @@
+import { UpdateQuery, UpdateWithAggregationPipeline } from 'mongoose';
 import {
+    IDatabaseCreateManyOptions,
     IDatabaseCreateOptions,
     IDatabaseExistOptions,
     IDatabaseFindAllOptions,
     IDatabaseFindOneOptions,
-    IDatabaseCreateManyOptions,
-    IDatabaseManyOptions,
-    IDatabaseSoftDeleteManyOptions,
-    IDatabaseRestoreManyOptions,
-    IDatabaseRawOptions,
     IDatabaseGetTotalOptions,
+    IDatabaseManyOptions,
+    IDatabaseRawOptions,
+    IDatabaseRestoreManyOptions,
     IDatabaseSaveOptions,
-} from 'src/common/database/interfaces/database.interface';
+    IDatabaseSoftDeleteManyOptions,
+} from '../interfaces/database.interface';
 
 export abstract class DatabaseBaseRepositoryAbstract<Entity> {
     abstract findAll<T = Entity>(
@@ -117,6 +118,12 @@ export abstract class DatabaseBaseRepositoryAbstract<Entity> {
     abstract updateMany<Dto>(
         find: Record<string, any>,
         data: Dto,
+        options?: IDatabaseManyOptions<any>
+    ): Promise<boolean>;
+
+    abstract updateManyRaw(
+        find: Record<string, any>,
+        data: UpdateWithAggregationPipeline | UpdateQuery<any>,
         options?: IDatabaseManyOptions<any>
     ): Promise<boolean>;
 

@@ -1,7 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { DebuggerOptionService } from 'src/common/debugger/services/debugger.options.service';
 import { LoggerOptions } from 'winston';
+import { DebuggerOptionService } from '../../src/common/debugger/services/debugger.options.service';
 
 describe('DebuggerOptionService', () => {
     let service: DebuggerOptionService;

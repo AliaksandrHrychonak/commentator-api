@@ -64,7 +64,7 @@ export class TagAuthController {
     })
     @UserProtected()
     @AuthJwtAccessProtected()
-    @Get('/list/pagination')
+    @Get('/list')
     async listPagination(
         @GetUser() { _id: ownerId }: UserDoc,
         @PaginationQuery(

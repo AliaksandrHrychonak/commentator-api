@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
 import mongoose from 'mongoose';
-import { DatabaseOptionsService } from 'src/common/database/services/database.options.service';
-import { ENUM_APP_ENVIRONMENT } from 'src/app/constants/app.enum.constant';
+import { DatabaseOptionsService } from '../../src/common/database/services/database.options.service';
+import { ENUM_APP_ENVIRONMENT } from '../../src/app/constants/app.enum.constant';
 
 describe('DatabaseOptionsService', () => {
     let service: DatabaseOptionsService;
@@ -55,8 +55,6 @@ describe('DatabaseOptionsService', () => {
 
             expect(options).toMatchObject({
                 uri: 'mongodb://localhost:27017/test-db?retryWrites=true&w=majority',
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
                 serverSelectionTimeoutMS: 5000,
                 autoCreate: true,
             });
@@ -92,8 +90,6 @@ describe('DatabaseOptionsService', () => {
 
             expect(options).toMatchObject({
                 uri: 'mongodb://localhost:27017/test-db',
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
                 serverSelectionTimeoutMS: 5000,
                 autoCreate: true,
             });

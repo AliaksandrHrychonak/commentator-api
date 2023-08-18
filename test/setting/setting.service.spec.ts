@@ -1,19 +1,19 @@
 import { Test } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
-import { HelperNumberService } from 'src/common/helper/services/helper.number.service';
-import { SettingCreateDto } from 'src/common/setting/dtos/setting.create.dto';
-import { SettingUpdateValueDto } from 'src/common/setting/dtos/setting.update-value.dto';
-import { ENUM_SETTING_DATA_TYPE } from 'src/common/setting/constants/setting.enum.constant';
+import { SettingService } from '../../src/common/setting/services/setting.service';
+import { SettingRepository } from '../../src/common/setting/repository/repositories/setting.repository';
+import { faker } from '@faker-js/faker';
+import mongoose from 'mongoose';
 import {
     SettingDatabaseName,
     SettingDoc,
     SettingEntity,
-} from 'src/common/setting/repository/entities/setting.entity';
-import { SettingRepository } from 'src/common/setting/repository/repositories/setting.repository';
-import { SettingService } from 'src/common/setting/services/setting.service';
-import { faker } from '@faker-js/faker';
-import mongoose from 'mongoose';
-import { SettingSchema } from 'src/common/setting/repository/entities/setting.entity';
+    SettingSchema,
+} from '../../src/common/setting/repository/entities/setting.entity';
+import { ENUM_SETTING_DATA_TYPE } from '../../src/common/setting/constants/setting.enum.constant';
+import { HelperNumberService } from '../../src/common/helper/services/helper.number.service';
+import { SettingCreateDto } from '../../src/common/setting/dtos/setting.create.dto';
+import { SettingUpdateValueDto } from '../../src/common/setting/dtos/setting.update-value.dto';
 
 describe('SettingService', () => {
     let service: SettingService;

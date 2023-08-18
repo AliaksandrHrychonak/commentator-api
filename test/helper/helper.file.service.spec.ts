@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { HelperFileService } from 'src/common/helper/services/helper.file.service';
 import { unlinkSync } from 'fs';
+import { HelperFileService } from '../../src/common/helper/services/helper.file.service';
 
 describe('HelperFileService', () => {
     let service: HelperFileService;
@@ -55,7 +55,7 @@ describe('HelperFileService', () => {
             const workbook = service.createExcelWorkbook(rows);
             const buffer = service.writeExcelToBuffer(workbook);
             const newRows = service.readExcelFromBuffer(buffer);
-            expect(newRows).toEqual(rows);
+            expect(newRows).toEqual([rows]);
         });
     });
 

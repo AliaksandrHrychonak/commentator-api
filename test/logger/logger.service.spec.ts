@@ -1,12 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
+import { LoggerService } from '../../src/common/logger/services/logger.service';
+import { LoggerRepository } from '../../src/common/logger/repository/repositories/logger.repository';
 import {
     ENUM_LOGGER_ACTION,
     ENUM_LOGGER_LEVEL,
-} from 'src/common/logger/constants/logger.enum.constant';
-import { LoggerRepository } from 'src/common/logger/repository/repositories/logger.repository';
-import { LoggerService } from 'src/common/logger/services/logger.service';
-import { ENUM_REQUEST_METHOD } from 'src/common/request/constants/request.enum.constant';
-import { ENUM_ROLE_TYPE } from 'src/modules/role/constants/role.enum.constant';
+} from '../../src/common/logger/constants/logger.enum.constant';
+import { ENUM_REQUEST_METHOD } from '../../src/common/request/constants/request.enum.constant';
+import { ENUM_ROLE_TYPE } from '../../src/modules/role/constants/role.enum.constant';
 
 describe('LoggerService', () => {
     let service: LoggerService;

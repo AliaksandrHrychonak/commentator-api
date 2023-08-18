@@ -1,3 +1,4 @@
+import { UpdateQuery, UpdateWithAggregationPipeline } from 'mongoose';
 import {
     ClientSession,
     Model,
@@ -6,24 +7,24 @@ import {
     Document,
 } from 'mongoose';
 import { DatabaseBaseRepositoryAbstract } from 'src/common/database/abstracts/database.base-repository.abstract';
-import { DATABASE_DELETED_AT_FIELD_NAME } from 'src/common/database/constants/database.constant';
 import {
+    IDatabaseCreateManyOptions,
     IDatabaseCreateOptions,
     IDatabaseExistOptions,
     IDatabaseFindAllOptions,
     IDatabaseFindOneOptions,
     IDatabaseGetTotalOptions,
-    IDatabaseCreateManyOptions,
     IDatabaseManyOptions,
-    IDatabaseSoftDeleteManyOptions,
-    IDatabaseRestoreManyOptions,
     IDatabaseRawOptions,
+    IDatabaseRestoreManyOptions,
     IDatabaseSaveOptions,
-} from 'src/common/database/interfaces/database.interface';
+    IDatabaseSoftDeleteManyOptions,
+} from '../../../interfaces/database.interface';
+import { DATABASE_DELETED_AT_FIELD_NAME } from '../../../constants/database.constant';
 
 export abstract class DatabaseMongoUUIDRepositoryAbstract<
     Entity,
-    EntityDocument
+    EntityDocument,
 > extends DatabaseBaseRepositoryAbstract<EntityDocument> {
     protected _repository: Model<Entity>;
     protected _joinOnFind?: PopulateOptions | PopulateOptions[];
@@ -665,6 +666,37 @@ export abstract class DatabaseMongoUUIDRepositoryAbstract<
             .updateMany(find, {
                 $set: data,
             })
+            .where(DATABASE_DELETED_AT_FIELD_NAME)
+            .exists(false);
+
+        if (options?.session) {
+            update.session(options.session as ClientSession);
+        }
+
+        if (options?.join) {
+            update.populate(
+                typeof options.join === 'boolean'
+                    ? this._joinOnFind
+                    : (options.join as PopulateOptions | PopulateOptions[])
+            );
+        }
+
+        try {
+            await update;
+            return true;
+        } catch (err: unknown) {
+            throw err;
+        }
+    }
+
+    // raw
+    async updateManyRaw(
+        find: Record<string, any>,
+        data: UpdateWithAggregationPipeline | UpdateQuery<Entity>,
+        options?: IDatabaseManyOptions<ClientSession>
+    ): Promise<boolean> {
+        const update = this._repository
+            .updateMany(find, data)
             .where(DATABASE_DELETED_AT_FIELD_NAME)
             .exists(false);
 

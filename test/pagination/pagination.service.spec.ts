@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ENUM_PAGINATION_ORDER_DIRECTION_TYPE } from 'src/common/pagination/constants/pagination.enum.constant';
-import { PaginationService } from 'src/common/pagination/services/pagination.service';
+import { PaginationService } from '../../src/common/pagination/services/pagination.service';
+import { ENUM_PAGINATION_ORDER_DIRECTION_TYPE } from '../../src/common/pagination/constants/pagination.enum.constant';
 
 describe('PaginationService', () => {
     let service: PaginationService;

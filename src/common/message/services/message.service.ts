@@ -65,11 +65,13 @@ export class MessageService implements IMessageService {
         const messages: Array<IErrors[]> = [];
         for (const requestError of requestErrors) {
             let children: Record<string, any>[] = requestError.children;
-            let constraints: string[] = Object.keys(requestError.constraints);
+            let constraints: string[] = Object.keys(
+                requestError.constraints ?? []
+            );
             let property: string = requestError.property;
             let propertyValue: string = requestError.value;
 
-            while (children.length > 0) {
+            while (children?.length > 0) {
                 property = `${property}.${children[0].property}`;
 
                 if (children[0].children?.length > 0) {
@@ -108,6 +110,7 @@ export class MessageService implements IMessageService {
         return errors.map((val) => ({
             row: val.row,
             file: val.file,
+            sheet: val.sheet,
             errors: this.getRequestErrorsMessage(val.errors, options),
         }));
     }

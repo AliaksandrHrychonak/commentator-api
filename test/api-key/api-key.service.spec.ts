@@ -1,24 +1,24 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import mongoose from 'mongoose';
 import { faker } from '@faker-js/faker';
-import { ApiKeyService } from 'src/common/api-key/services/api-key.service';
-import { ApiKeyRepository } from 'src/common/api-key/repository/repositories/api-key.repository';
+import { ApiKeyService } from '../../src/common/api-key/services/api-key.service';
+import { ApiKeyRepository } from '../../src/common/api-key/repository/repositories/api-key.repository';
 import {
     ApiKeyDatabaseName,
     ApiKeyEntity,
     ApiKeySchema,
-} from 'src/common/api-key/repository/entities/api-key.entity';
+} from '../../src/common/api-key/repository/entities/api-key.entity';
+import { HelperDateService } from '../../src/common/helper/services/helper.date.service';
+import { HelperStringService } from '../../src/common/helper/services/helper.string.service';
+import { HelperHashService } from '../../src/common/helper/services/helper.hash.service';
 import { ConfigService } from '@nestjs/config';
-import { HelperStringService } from 'src/common/helper/services/helper.string.service';
-import { HelperHashService } from 'src/common/helper/services/helper.hash.service';
-import { HelperDateService } from 'src/common/helper/services/helper.date.service';
 import {
     ApiKeyCreateDto,
     ApiKeyCreateRawDto,
-} from 'src/common/api-key/dtos/api-key.create.dto';
-import { ApiKeyUpdateDto } from 'src/common/api-key/dtos/api-key.update.dto';
-import { ApiKeyUpdateDateDto } from 'src/common/api-key/dtos/api-key.update-date.dto';
-import { ENUM_API_KEY_TYPE } from 'src/common/api-key/constants/api-key.enum.constant';
+} from '../../src/common/api-key/dtos/api-key.create.dto';
+import { ENUM_API_KEY_TYPE } from '../../src/common/api-key/constants/api-key.enum.constant';
+import { ApiKeyUpdateDto } from '../../src/common/api-key/dtos/api-key.update.dto';
+import { ApiKeyUpdateDateDto } from '../../src/common/api-key/dtos/api-key.update-date.dto';
 
 describe('ApiKeyService', () => {
     let service: ApiKeyService;

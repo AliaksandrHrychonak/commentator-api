@@ -10,13 +10,14 @@ import {
     IsArray,
     ArrayNotEmpty,
     ValidateIf,
+    ValidateNested,
 } from 'class-validator';
 import {
     ENUM_POLICY_ACTION,
     ENUM_POLICY_SUBJECT,
-} from 'src/common/policy/constants/policy.enum.constant';
-import { ENUM_ROLE_TYPE } from 'src/modules/role/constants/role.enum.constant';
-import { RoleUpdateDto } from 'src/modules/role/dtos/role.update.dto';
+} from '../../../common/policy/constants/policy.enum.constant';
+import { RoleUpdateDto } from './role.update.dto';
+import { ENUM_ROLE_TYPE } from '../constants/role.enum.constant';
 
 class RolePermissionsDto {
     @ApiProperty({
@@ -76,6 +77,7 @@ export class RoleCreateDto extends PartialType(RoleUpdateDto) {
     @Type(() => RolePermissionsDto)
     @IsNotEmpty()
     @IsArray()
+    @ValidateNested()
     @ValidateIf((e) => e.type === ENUM_ROLE_TYPE.ADMIN)
     @Transform(({ value, obj }) =>
         obj.type !== ENUM_ROLE_TYPE.ADMIN ? [] : value

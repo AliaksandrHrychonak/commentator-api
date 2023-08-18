@@ -5,22 +5,12 @@ import {
     PopulateOptions,
     Types,
     Document,
+    UpdateWithAggregationPipeline,
+    UpdateQuery,
 } from 'mongoose';
 import { DatabaseBaseRepositoryAbstract } from 'src/common/database/abstracts/database.base-repository.abstract';
 import { DATABASE_DELETED_AT_FIELD_NAME } from 'src/common/database/constants/database.constant';
-import {
-    IDatabaseCreateOptions,
-    IDatabaseExistOptions,
-    IDatabaseFindAllOptions,
-    IDatabaseFindOneOptions,
-    IDatabaseGetTotalOptions,
-    IDatabaseCreateManyOptions,
-    IDatabaseManyOptions,
-    IDatabaseSoftDeleteManyOptions,
-    IDatabaseRestoreManyOptions,
-    IDatabaseRawOptions,
-    IDatabaseSaveOptions,
-} from 'src/common/database/interfaces/database.interface';
+import { IDatabaseCreateManyOptions, IDatabaseCreateOptions, IDatabaseExistOptions, IDatabaseFindAllOptions, IDatabaseFindOneOptions, IDatabaseGetTotalOptions, IDatabaseManyOptions, IDatabaseRawOptions, IDatabaseRestoreManyOptions, IDatabaseSaveOptions, IDatabaseSoftDeleteManyOptions } from 'src/common/database/interfaces/database.interface';
 
 export abstract class DatabaseMongoObjectIdRepositoryAbstract<
     Entity,
@@ -702,6 +692,37 @@ export abstract class DatabaseMongoObjectIdRepositoryAbstract<
     }
 
     // raw
+
+    async updateManyRaw(
+        find: Record<string, any>,
+        data: UpdateWithAggregationPipeline | UpdateQuery<Entity>,
+        options?: IDatabaseManyOptions<ClientSession>
+    ): Promise<boolean> {
+        const update = this._repository
+            .updateMany(find, data)
+            .where(DATABASE_DELETED_AT_FIELD_NAME)
+            .exists(false);
+
+        if (options?.session) {
+            update.session(options.session as ClientSession);
+        }
+
+        if (options?.join) {
+            update.populate(
+                typeof options.join === 'boolean'
+                    ? this._joinOnFind
+                    : (options.join as PopulateOptions | PopulateOptions[])
+            );
+        }
+
+        try {
+            await update;
+            return true;
+        } catch (err: unknown) {
+            throw err;
+        }
+    }
+
     async raw<RawResponse, RawQuery = PipelineStage[]>(
         rawOperation: RawQuery,
         options?: IDatabaseRawOptions

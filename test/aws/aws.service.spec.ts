@@ -13,9 +13,9 @@ import {
 } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { IAwsS3PutItemOptions } from 'src/common/aws/interfaces/aws.interface';
-import { AwsS3Serialization } from 'src/common/aws/serializations/aws.s3.serialization';
-import { AwsS3Service } from 'src/common/aws/services/aws.s3.service';
+import { AwsS3Service } from '../../src/common/aws/services/aws.s3.service';
+import { AwsS3Serialization } from '../../src/common/aws/serializations/aws.s3.serialization';
+import { IAwsS3PutItemOptions } from '../../src/common/aws/interfaces/aws.interface';
 
 describe('AwsS3Service', () => {
     const bucket = 'test-bucket';
@@ -190,9 +190,8 @@ describe('AwsS3Service', () => {
                 },
             ];
 
-            const result: AwsS3Serialization[] = await service.listItemInBucket(
-                'folder1'
-            );
+            const result: AwsS3Serialization[] =
+                await service.listItemInBucket('folder1');
 
             expect(service['s3Client'].send).toHaveBeenCalled();
             expect(result).toEqual(expected);

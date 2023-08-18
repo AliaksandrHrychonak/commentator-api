@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { DashboardService } from 'src/common/dashboard/services/dashboard.service';
-import { HelperDateService } from 'src/common/helper/services/helper.date.service';
-import { HelperNumberService } from 'src/common/helper/services/helper.number.service';
+import { DashboardService } from '../../src/common/dashboard/services/dashboard.service';
+import { HelperNumberService } from '../../src/common/helper/services/helper.number.service';
+import { HelperDateService } from '../../src/common/helper/services/helper.date.service';
 
 describe('DashboardService', () => {
     let service: DashboardService;

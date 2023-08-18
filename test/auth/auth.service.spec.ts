@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
-import { HelperDateService } from 'src/common/helper/services/helper.date.service';
-import { HelperEncryptionService } from 'src/common/helper/services/helper.encryption.service';
-import { HelperHashService } from 'src/common/helper/services/helper.hash.service';
-import { AuthService } from 'src/common/auth/services/auth.service';
+import { AuthService } from '../../src/common/auth/services/auth.service';
+import { HelperEncryptionService } from '../../src/common/helper/services/helper.encryption.service';
+import { HelperHashService } from '../../src/common/helper/services/helper.hash.service';
+import { HelperDateService } from '../../src/common/helper/services/helper.date.service';
+import { HelperStringService } from '../../src/common/helper/services/helper.string.service';
 import { JwtService } from '@nestjs/jwt';
-import { HelperStringService } from 'src/common/helper/services/helper.string.service';
-import { ENUM_AUTH_LOGIN_WITH } from 'src/common/auth/constants/auth.enum.constant';
+import { ENUM_AUTH_LOGIN_WITH } from '../../src/common/auth/constants/auth.enum.constant';
 
 describe('AuthService', () => {
     let service: AuthService;
@@ -152,9 +152,8 @@ describe('AuthService', () => {
                 'jwtEncrypt'
             ).mockReturnValueOnce(expectedToken);
             const payloadHashed = 'test-payload-hash';
-            const refreshToken = await service.createRefreshToken(
-                payloadHashed
-            );
+            const refreshToken =
+                await service.createRefreshToken(payloadHashed);
             expect(refreshToken).toEqual(expectedToken);
         });
     });

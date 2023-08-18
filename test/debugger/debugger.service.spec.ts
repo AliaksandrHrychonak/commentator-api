@@ -1,8 +1,9 @@
 import { Test } from '@nestjs/testing';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { IDebuggerLog } from 'src/common/debugger/interfaces/debugger.interface';
-import { DebuggerService } from 'src/common/debugger/services/debugger.service';
+
 import { Logger } from 'winston';
+import { DebuggerService } from '../../src/common/debugger/services/debugger.service';
+import { IDebuggerLog } from '../../src/common/debugger/interfaces/debugger.interface';
 
 describe('DebuggerService', () => {
     let service: DebuggerService;

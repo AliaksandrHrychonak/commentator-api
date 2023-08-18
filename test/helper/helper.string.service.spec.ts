@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
-import { IHelperStringRandomOptions } from 'src/common/helper/interfaces/helper.interface';
-import { HelperStringService } from 'src/common/helper/services/helper.string.service';
+import { HelperStringService } from '../../src/common/helper/services/helper.string.service';
+import { IHelperStringRandomOptions } from '../../src/common/helper/interfaces/helper.interface';
 
 describe('HelperStringService', () => {
     let service: HelperStringService;

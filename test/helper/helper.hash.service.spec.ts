@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { genSaltSync, hashSync } from 'bcryptjs';
-import { HelperHashService } from 'src/common/helper/services/helper.hash.service';
+import { HelperHashService } from '../../src/common/helper/services/helper.hash.service';
 
 describe('HelperHashService', () => {
     let service: HelperHashService;

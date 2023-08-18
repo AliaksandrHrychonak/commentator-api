@@ -1,7 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { IHelperArrayRemove } from 'src/common/helper/interfaces/helper.interface';
-import { HelperArrayService } from 'src/common/helper/services/helper.array.service';
+
 import _ from 'lodash';
+import { HelperArrayService } from '../../src/common/helper/services/helper.array.service';
+import { IHelperArrayRemove } from '../../src/common/helper/interfaces/helper.interface';
 
 describe('HelperArrayService', () => {
     let service: HelperArrayService;

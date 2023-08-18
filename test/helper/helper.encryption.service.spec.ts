@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { JwtService } from '@nestjs/jwt';
-import { HelperEncryptionService } from 'src/common/helper/services/helper.encryption.service';
+import { HelperEncryptionService } from '../../src/common/helper/services/helper.encryption.service';
 
 describe('HelperEncryptionService', () => {
     let service: HelperEncryptionService;
