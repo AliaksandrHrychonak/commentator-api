@@ -12,7 +12,7 @@ import {
     Post,
 } from '@nestjs/common';
 import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
-import { ClientSession, Connection } from 'mongoose';
+import { Connection } from 'mongoose';
 import { ENUM_AUTH_LOGIN_WITH } from 'src/common/auth/constants/auth.enum.constant';
 import {
     AuthGoogleOAuth2LoginProtected,
@@ -20,10 +20,14 @@ import {
 } from 'src/common/auth/decorators/auth.google.decorator';
 import {
     AuthYandexOAuth2LoginProtected,
-    AuthYandexOAuth2SignUpProtected
-} from "../../../common/auth/decorators/auth.yandex.decorator";
+    AuthYandexOAuth2SignUpProtected,
+} from '../../../common/auth/decorators/auth.yandex.decorator';
 import { AuthJwtPayload } from 'src/common/auth/decorators/auth.jwt.decorator';
-import {IAuthGithubPayload, IAuthGooglePayload, IAuthYandexPayload} from 'src/common/auth/interfaces/auth.interface';
+import {
+    IAuthGithubPayload,
+    IAuthGooglePayload,
+    IAuthYandexPayload,
+} from 'src/common/auth/interfaces/auth.interface';
 import { AuthService } from 'src/common/auth/services/auth.service';
 import { DatabaseConnection } from 'src/common/database/decorators/database.decorator';
 import { ENUM_ERROR_STATUS_CODE_ERROR } from 'src/common/error/constants/error.status-code.constant';
@@ -50,9 +54,8 @@ import { UserPayloadSerialization } from 'src/modules/user/serializations/user.p
 import { UserService } from 'src/modules/user/services/user.service';
 import {
     AuthGithubOAuth2LoginProtected,
-    AuthGithubOAuth2SignUpProtected
-} from "../../../common/auth/decorators/auth.github.decorator";
-
+    AuthGithubOAuth2SignUpProtected,
+} from '../../../common/auth/decorators/auth.github.decorator';
 
 @ApiTags('modules.public.user')
 @Controller({
@@ -125,9 +128,8 @@ export class UserPublicController {
             });
         }
 
-        const userWithRole: IUserDoc = await this.userService.joinWithRole(
-            user
-        );
+        const userWithRole: IUserDoc =
+            await this.userService.joinWithRole(user);
         if (!userWithRole.role.isActive) {
             throw new ForbiddenException({
                 statusCode: ENUM_ROLE_STATUS_CODE_ERROR.ROLE_INACTIVE_ERROR,
@@ -207,9 +209,8 @@ export class UserPublicController {
             promises.push(this.userService.existByMobileNumber(mobileNumber));
         }
 
-        const [role, emailExist, mobileNumberExist] = await Promise.all(
-            promises
-        );
+        const [role, emailExist, mobileNumberExist] =
+            await Promise.all(promises);
 
         if (emailExist) {
             throw new ConflictException({
@@ -287,9 +288,8 @@ export class UserPublicController {
             });
         }
 
-        const userWithRole: IUserDoc = await this.userService.joinWithRole(
-            user
-        );
+        const userWithRole: IUserDoc =
+            await this.userService.joinWithRole(user);
         if (!userWithRole.role.isActive) {
             throw new ForbiddenException({
                 statusCode: ENUM_ROLE_STATUS_CODE_ERROR.ROLE_INACTIVE_ERROR,
@@ -390,9 +390,8 @@ export class UserPublicController {
         try {
             const passwordString =
                 await this.authService.createPasswordRandom();
-            const password = await this.authService.createPassword(
-                passwordString
-            );
+            const password =
+                await this.authService.createPassword(passwordString);
 
             const user: UserDoc = await this.userService.create(
                 {
@@ -403,7 +402,7 @@ export class UserPublicController {
                     role: role._id,
                     signUpFrom: ENUM_USER_SIGN_UP_FROM.GOOGLE,
                 },
-                password,
+                password
                 // { session }
             );
 
@@ -412,7 +411,7 @@ export class UserPublicController {
                 {
                     accessToken: googleAccessToken,
                     refreshToken: googleRefreshToken,
-                },
+                }
                 // { session }
             );
 
@@ -432,8 +431,7 @@ export class UserPublicController {
         return;
     }
 
-
-// YANDEX AUTH
+    // YANDEX AUTH
 
     @ApiExcludeEndpoint()
     @Response('user.loginYandex')
@@ -449,11 +447,11 @@ export class UserPublicController {
     @Get('/login/yandex/callback')
     async loginYandexCallback(
         @AuthJwtPayload()
-    {
-        email,
+        {
+            email,
             accessToken: yandexAccessToken,
-        refreshToken: yandexRefreshToken,
-    }: IAuthYandexPayload
+            refreshToken: yandexRefreshToken,
+        }: IAuthYandexPayload
     ): Promise<IResponse> {
         const user: UserDoc = await this.userService.findOneByEmail(email);
 
@@ -470,7 +468,7 @@ export class UserPublicController {
         } else if (user.inactivePermanent) {
             throw new ForbiddenException({
                 statusCode:
-                ENUM_USER_STATUS_CODE_ERROR.USER_INACTIVE_PERMANENT_ERROR,
+                    ENUM_USER_STATUS_CODE_ERROR.USER_INACTIVE_PERMANENT_ERROR,
                 message: 'user.error.inactivePermanent',
             });
         } else if (!user.isActive) {
@@ -480,9 +478,8 @@ export class UserPublicController {
             });
         }
 
-        const userWithRole: IUserDoc = await this.userService.joinWithRole(
-            user
-        );
+        const userWithRole: IUserDoc =
+            await this.userService.joinWithRole(user);
         if (!userWithRole.role.isActive) {
             throw new ForbiddenException({
                 statusCode: ENUM_ROLE_STATUS_CODE_ERROR.ROLE_INACTIVE_ERROR,
@@ -553,15 +550,15 @@ export class UserPublicController {
     @Get('/sign-up/yandex/callback')
     async signUpYandexCallback(
         @AuthJwtPayload()
-    {
-        email,
+        {
+            email,
             firstName,
             lastName,
             accessToken: yandexAccessToken,
-        refreshToken: yandexRefreshToken,
-    }: IAuthYandexPayload
+            refreshToken: yandexRefreshToken,
+        }: IAuthYandexPayload
     ): Promise<void> {
-    // sign up
+        // sign up
         const promises: Promise<any>[] = [
             this.roleService.findOneByName('user'),
             this.userService.existByEmail(email),
@@ -583,9 +580,8 @@ export class UserPublicController {
         try {
             const passwordString =
                 await this.authService.createPasswordRandom();
-            const password = await this.authService.createPassword(
-                passwordString
-            );
+            const password =
+                await this.authService.createPassword(passwordString);
 
             const user: UserDoc = await this.userService.create(
                 {
@@ -596,7 +592,7 @@ export class UserPublicController {
                     role: role._id,
                     signUpFrom: ENUM_USER_SIGN_UP_FROM.YANDEX,
                 },
-                password,
+                password
                 // { session }
             );
 
@@ -605,7 +601,7 @@ export class UserPublicController {
                 {
                     accessToken: yandexAccessToken,
                     refreshToken: yandexRefreshToken,
-                },
+                }
                 // { session }
             );
 
@@ -640,11 +636,11 @@ export class UserPublicController {
     @Get('/login/github/callback')
     async loginGithubCallback(
         @AuthJwtPayload()
-            {
-                email,
-                accessToken: githubAccessToken,
-                refreshToken: githubRefreshToken,
-            }: IAuthGithubPayload
+        {
+            email,
+            accessToken: githubAccessToken,
+            refreshToken: githubRefreshToken,
+        }: IAuthGithubPayload
     ): Promise<IResponse> {
         const user: UserDoc = await this.userService.findOneByEmail(email);
 
@@ -661,7 +657,7 @@ export class UserPublicController {
         } else if (user.inactivePermanent) {
             throw new ForbiddenException({
                 statusCode:
-                ENUM_USER_STATUS_CODE_ERROR.USER_INACTIVE_PERMANENT_ERROR,
+                    ENUM_USER_STATUS_CODE_ERROR.USER_INACTIVE_PERMANENT_ERROR,
                 message: 'user.error.inactivePermanent',
             });
         } else if (!user.isActive) {
@@ -671,9 +667,8 @@ export class UserPublicController {
             });
         }
 
-        const userWithRole: IUserDoc = await this.userService.joinWithRole(
-            user
-        );
+        const userWithRole: IUserDoc =
+            await this.userService.joinWithRole(user);
         if (!userWithRole.role.isActive) {
             throw new ForbiddenException({
                 statusCode: ENUM_ROLE_STATUS_CODE_ERROR.ROLE_INACTIVE_ERROR,
@@ -744,13 +739,13 @@ export class UserPublicController {
     @Get('/sign-up/github/callback')
     async signUpGithubCallback(
         @AuthJwtPayload()
-            {
-                email,
-                firstName,
-                lastName,
-                accessToken: githubAccessToken,
-                refreshToken: githubRefreshToken,
-            }: IAuthGithubPayload
+        {
+            email,
+            firstName,
+            lastName,
+            accessToken: githubAccessToken,
+            refreshToken: githubRefreshToken,
+        }: IAuthGithubPayload
     ): Promise<void> {
         // sign up
         const promises: Promise<any>[] = [
@@ -774,9 +769,8 @@ export class UserPublicController {
         try {
             const passwordString =
                 await this.authService.createPasswordRandom();
-            const password = await this.authService.createPassword(
-                passwordString
-            );
+            const password =
+                await this.authService.createPassword(passwordString);
 
             const user: UserDoc = await this.userService.create(
                 {
@@ -787,7 +781,7 @@ export class UserPublicController {
                     role: role._id,
                     signUpFrom: ENUM_USER_SIGN_UP_FROM.GITHUB,
                 },
-                password,
+                password
                 // { session }
             );
 
@@ -796,7 +790,7 @@ export class UserPublicController {
                 {
                     accessToken: githubAccessToken,
                     refreshToken: githubRefreshToken,
-                },
+                }
                 // { session }
             );
 
@@ -815,8 +809,4 @@ export class UserPublicController {
 
         return;
     }
-
-
 }
-
-

@@ -53,7 +53,7 @@ export class AppController {
 
     @AppHelloApiKeyDoc()
     @Response('app.hello', { serialization: AppHelloSerialization })
-    @Logger(ENUM_LOGGER_ACTION.TEST, { tags: ['test'] })
+    // @Logger(ENUM_LOGGER_ACTION.TEST, { tags: ['test'] }) TODO fix service crash
     @ApiKeyPublicProtected()
     @Get('/hello/api-key')
     async helloApiKey(

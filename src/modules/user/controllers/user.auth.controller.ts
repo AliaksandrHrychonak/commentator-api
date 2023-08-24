@@ -81,9 +81,8 @@ export class UserAuthController {
         @AuthJwtToken() refreshToken: string,
         @GetUser() user: UserDoc
     ): Promise<IResponse> {
-        const userWithRole: IUserDoc = await this.userService.joinWithRole(
-            user
-        );
+        const userWithRole: IUserDoc =
+            await this.userService.joinWithRole(user);
         if (!userWithRole.role.isActive) {
             throw new ForbiddenException({
                 statusCode: ENUM_ROLE_STATUS_CODE_ERROR.ROLE_INACTIVE_ERROR,
@@ -210,9 +209,8 @@ export class UserAuthController {
     @AuthJwtAccessProtected()
     @Get('/profile')
     async profile(@GetUser() user: UserDoc): Promise<IResponse> {
-        const userWithRole: IUserDoc = await this.userService.joinWithRole(
-            user
-        );
+        const userWithRole: IUserDoc =
+            await this.userService.joinWithRole(user);
         return { data: userWithRole.toObject() };
     }
 
@@ -239,9 +237,8 @@ export class UserAuthController {
         @GetUser() user: UserDoc,
         @Body() { username }: UserUpdateUsernameDto
     ): Promise<void> {
-        const checkUsername: boolean = await this.userService.existByUsername(
-            username
-        );
+        const checkUsername: boolean =
+            await this.userService.existByUsername(username);
         if (checkUsername) {
             throw new ConflictException({
                 statusCode:
