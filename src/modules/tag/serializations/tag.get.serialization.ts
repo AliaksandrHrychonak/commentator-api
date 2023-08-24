@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker';
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
 import { ResponseIdSerialization } from 'src/common/response/serializations/response.id.serialization';
 import { UserProfileSerialization } from '../../user/serializations/user.profile.serialization';
+import { Type } from 'class-transformer';
 
 export class TagGetSerialization extends ResponseIdSerialization {
     @ApiProperty({

@@ -1,5 +1,3 @@
-// TODO @PolicyAbilityProtected, guards
-
 import { ApiTags } from '@nestjs/swagger';
 import {
     Body,
@@ -8,16 +6,15 @@ import {
     Get,
     HttpCode,
     HttpStatus,
-    NotFoundException,
     Post,
     Put,
+    SerializeOptions,
     UploadedFile,
 } from '@nestjs/common';
 import { AuthService } from '../../../common/auth/services/auth.service';
 import { PaginationService } from '../../../common/pagination/services/pagination.service';
 import { TagService } from '../services/tag.service';
 import { Response } from 'src/common/response/decorators/response.decorator';
-import { UserService } from '../../user/services/user.service';
 import {
     ResponseFile,
     ResponsePaging,
@@ -48,7 +45,7 @@ import {
     IResponse,
     IResponsePaging,
 } from '../../../common/response/interfaces/response.interface';
-import { ITagDoc, ITagEntity } from '../interfaces/tag.interface';
+import { ITagEntity } from '../interfaces/tag.interface';
 import {
     TagAdminCreateDoc,
     TagAdminDeleteDoc,
@@ -58,8 +55,8 @@ import {
     TagAdminListDoc,
     TagAdminUpdateDoc,
 } from '../docs/tag.admin.doc';
-import { TagGetSerialization } from '../serializations/tag.get.serialization';
 import {
+    TagAdminCreateGuard,
     TagAdminDeleteGuard,
     TagAdminGetGuard,
     TagAdminUpdateGuard,
@@ -78,12 +75,12 @@ import { FileValidationPipe } from '../../../common/file/pipes/file.validation.p
 import { TagImportDto } from '../dtos/tag.import.dto';
 import { IFileExtract } from '../../../common/file/interfaces/file.interface';
 import { UploadFileSingle } from '../../../common/file/decorators/file.decorator';
-import { TagCreateDto } from '../dtos/tag.create.dto';
-import { ENUM_USER_STATUS_CODE_ERROR } from '../../user/constants/user.status-code.constant';
 import { TagUpdateDto } from '../dtos/tag.update.dto';
-import { IUserDoc } from '../../user/interfaces/user.interface';
-import { join } from 'lodash';
 import { TagListExportSerialization } from '../serializations/tag.list-export.serialization';
+import { UserDoc } from '../../user/repository/entities/user.entity';
+import { GetUser } from '../../user/decorators/user.decorator';
+import { UserRequestDto } from '../../user/dtos/user.request.dto';
+import { TagUserCreateDto } from '../dtos/tag.user-create.dto';
 
 @ApiTags('modules.admin.tag')
 @Controller({
@@ -94,8 +91,7 @@ export class TagAdminController {
     constructor(
         private readonly authService: AuthService,
         private readonly paginationService: PaginationService,
-        private readonly tagService: TagService,
-        private readonly userService: UserService
+        private readonly tagService: TagService
     ) {}
 
     @TagAdminListDoc()
@@ -132,7 +128,6 @@ export class TagAdminController {
             },
             order: _order,
         });
-        console.log(tags);
         const total: number = await this.tagService.getTotal(find);
         const totalPage: number = this.paginationService.totalPage(
             total,
@@ -146,9 +141,8 @@ export class TagAdminController {
     }
 
     @TagAdminGetDoc()
-    // @Response('tag.get', {
-    //     serialization: TagGetSerialization,
-    // }
+    // TODO add Serialize (fix bug "RangeError: Maximum call stack size exceeded")
+    @SerializeOptions({})
     @Response('tag.get')
     @TagAdminGetGuard()
     @PolicyAbilityProtected({
@@ -166,29 +160,24 @@ export class TagAdminController {
     @Response('tag.create', {
         serialization: ResponseIdSerialization,
     })
+    @TagAdminCreateGuard()
     @PolicyAbilityProtected({
         subject: ENUM_POLICY_SUBJECT.TAG,
         action: [ENUM_POLICY_ACTION.READ, ENUM_POLICY_ACTION.CREATE],
     })
     @AuthJwtAdminAccessProtected()
-    @Post('/create')
+    @RequestParamGuard(UserRequestDto)
+    @Post('/create/:user')
     async create(
         @Body()
-        { name, description, owner }: TagCreateDto
+        { name, description }: TagUserCreateDto,
+        @GetUser() user: UserDoc
     ): Promise<IResponse> {
-        const user: Promise<any> = this.userService.findOneById(owner);
-
-        if (!user) {
-            throw new NotFoundException({
-                statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_NOT_FOUND_ERROR,
-                message: 'user.error.notFound',
-            });
-        }
-
+        console.log(name, description, user._id);
         const created: TagDoc = await this.tagService.create({
             name,
             description,
-            owner,
+            owner: user._id,
         });
 
         return {
@@ -206,7 +195,6 @@ export class TagAdminController {
         action: [ENUM_POLICY_ACTION.READ, ENUM_POLICY_ACTION.UPDATE],
     })
     @AuthJwtAdminAccessProtected()
-    @RequestParamGuard(TagRequestDto)
     @Put('/update/:tag')
     async update(
         @GetTag() tag: TagDoc,

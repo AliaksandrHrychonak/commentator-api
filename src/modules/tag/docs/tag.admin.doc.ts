@@ -71,7 +71,10 @@ export function TagAdminCreateDoc(): MethodDecorator {
         DocAuth({
             jwtAccessToken: true,
         }),
-        DocRequest({ bodyType: ENUM_DOC_REQUEST_BODY_TYPE.JSON }),
+        DocRequest({
+            params: UserDocParamsId,
+            bodyType: ENUM_DOC_REQUEST_BODY_TYPE.JSON,
+        }),
         DocGuard({ role: true, policy: true }),
         DocResponse<ResponseIdSerialization>('tag.create', {
             httpStatus: HttpStatus.CREATED,

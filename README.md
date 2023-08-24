@@ -4,7 +4,7 @@
 - [x] Google auth
 - [x] GitHub auth
 - [x] Yandex.Cloud Object Storage
-- [ ] Tags module
+- [x] Tags module
 - [ ] Categories module
 - [ ] Comments module
 - [ ] User frontend UI variables
@@ -17,5 +17,5 @@
 - [ ] Validation 
   - [ ] W3C
   - [ ] BEM
-- [ ] Postman
+- [x] Postman
 

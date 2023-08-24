@@ -91,7 +91,7 @@ export class TagService implements ITagService {
 
     async joinWithOwner(repository: TagDoc): Promise<ITagDoc> {
         return repository.populate({
-            path: 'user',
+            path: 'owner',
             localField: 'user',
             foreignField: '_id',
             model: UserEntity.name,
