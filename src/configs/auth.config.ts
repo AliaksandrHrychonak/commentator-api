@@ -30,7 +30,8 @@ export default registerAs(
         },
 
         subject: process.env.AUTH_JWT_SUBJECT ?? 'commentatorDev',
-        audience: process.env.AUTH_JWT_AUDIENCE ?? 'https://example.com',
+        audience:
+            process.env.AUTH_JWT_AUDIENCE ?? 'https://commentator.monster',
         issuer: process.env.AUTH_JWT_ISSUER ?? 'commentator',
         prefixAuthorization: 'Bearer',
         payloadEncryption:

@@ -54,9 +54,9 @@ export default registerAs(
                 ENUM_REQUEST_METHOD.PATCH,
                 ENUM_REQUEST_METHOD.POST,
             ],
-            allowOrigin: '*', // allow all origin
+            // allowOrigin: '*', // allow all origin
             // allowOrigin: [/example\.com(\:\d{1,4})?$/], // allow all subdomain, and all port
-            // allowOrigin: [/example\.com$/], // allow all subdomain without port
+            allowOrigin: [/commentator\.monster$/], // allow all subdomain without port
             allowHeader: [
                 'Accept',
                 'Accept-Language',
