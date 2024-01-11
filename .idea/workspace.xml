@@ -1,0 +1,962 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="4f9788fb-1a80-4eb6-87a2-79f9e1ee9b19" name="Changes" comment="init">
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cspell.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nest-cli.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/app.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/constants/app.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/constants/app.enum.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/controllers/app.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/docs/app.doc.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/serializations/app.hello.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/cli.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/api-key.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/constants/api-key.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/constants/api-key.doc.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/constants/api-key.enum.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/constants/api-key.list.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/constants/api-key.status-code.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/controllers/api-key.admin.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/decorators/api-key.admin.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/decorators/api-key.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/docs/api-key.admin.doc.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/docs/api-key.user.doc.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/dtos/api-key.active.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/dtos/api-key.create.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/dtos/api-key.request.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/dtos/api-key.update-date.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/dtos/api-key.update.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/guards/api-key.active.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/guards/api-key.expired.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/guards/api-key.not-found.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/guards/api-key.put-to-request.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/guards/payload/api-key.payload.type.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/guards/x-api-key/api-key.x-api-key.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/guards/x-api-key/api-key.x-api-key.strategy.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/interfaces/api-key.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/interfaces/api-key.service.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/repository/api-key.repository.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/repository/entities/api-key.entity.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/repository/repositories/api-key.repository.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/serializations/api-key.create.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/serializations/api-key.get.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/serializations/api-key.list.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/serializations/api-key.reset.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/api-key/services/api-key.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/auth.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/constants/auth.enum.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/constants/auth.status-code.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/decorators/auth.github.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/decorators/auth.google.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/decorators/auth.jwt.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/decorators/auth.yandex.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/guards/github-oauth2/auth.github-oauth2-login.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/guards/github-oauth2/auth.github-oauth2-login.strategy.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/guards/github-oauth2/auth.github-oauth2-sign-up.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/guards/github-oauth2/auth.github-oauth2-sign-up.strategy.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/guards/google-oauth2/auth.google-oauth2-login.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/guards/google-oauth2/auth.google-oauth2-login.strategy.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/guards/google-oauth2/auth.google-oauth2-sign-up.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/guards/google-oauth2/auth.google-oauth2-sign-up.strategy.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/guards/jwt-access/auth.jwt-access.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/guards/jwt-access/auth.jwt-access.strategy.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/guards/jwt-refresh/auth.jwt-refresh.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/guards/jwt-refresh/auth.jwt-refresh.strategy.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/guards/yandex-oauth2/auth.yandex-oauth2-login.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/guards/yandex-oauth2/auth.yandex-oauth2-login.strategy.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/guards/yandex-oauth2/auth.yandex-oauth2-sign-up.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/guards/yandex-oauth2/auth.yandex-oauth2-sign-up.strategy.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/interfaces/auth.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/interfaces/auth.service.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/auth/services/auth.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/aws/aws.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/aws/constants/aws.s3.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/aws/interfaces/aws.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/aws/interfaces/aws.s3-service.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/aws/serializations/aws.s3-multipart.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/aws/serializations/aws.s3.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/aws/services/aws.s3.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/common.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/dashboard/constants/dashboard.doc.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/dashboard/dashboard.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/dashboard/dtos/dashboard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/dashboard/interfaces/dashboard.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/dashboard/interfaces/dashboard.service.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/dashboard/serializations/dashboard.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/dashboard/services/dashboard.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/database/abstracts/database.base-entity.abstract.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/database/abstracts/database.base-repository.abstract.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/database/abstracts/mongo/entities/database.mongo.object-id.entity.abstract.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/database/abstracts/mongo/entities/database.mongo.uuid.entity.abstract.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/database/abstracts/mongo/repositories/database.mongo.object-id.repository.abstract.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/database/abstracts/mongo/repositories/database.mongo.uuid.repository.abstract.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/database/constants/database.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/database/constants/database.function.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/database/database.options.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/database/decorators/database.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/database/interfaces/database.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/database/interfaces/database.options-service.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/database/services/database.options.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/debugger/constants/debugger.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/debugger/debugger.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/debugger/debugger.options.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/debugger/interfaces/debugger.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/debugger/interfaces/debugger.options-service.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/debugger/interfaces/debugger.service.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/debugger/middleware/debugger.middleware.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/debugger/middleware/http/debugger.http.middleware.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/debugger/services/debugger.options.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/debugger/services/debugger.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/doc/constants/doc.enum.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/doc/decorators/doc.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/doc/interfaces/doc.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/error/constants/error.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/error/constants/error.enum.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/error/constants/error.status-code.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/error/decorators/error.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/error/error.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/error/filters/error.http.filter.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/error/guards/error.meta.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/error/interfaces/error.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/error/serializations/error.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/file/constants/file.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/file/constants/file.enum.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/file/constants/file.status-code.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/file/decorators/file.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/file/dtos/file.multiple.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/file/dtos/file.single.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/file/interceptors/file.custom-max-files.interceptor.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/file/interceptors/file.custom-max-size.interceptor.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/file/interfaces/file.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/file/pipes/file.extract.pipe.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/file/pipes/file.max-files.pipe.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/file/pipes/file.required.pipe.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/file/pipes/file.size.pipe.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/file/pipes/file.type.pipe.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/file/pipes/file.validation.pipe.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/helper/constants/helper.enum.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/helper/constants/helper.function.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/helper/helper.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/helper/interfaces/helper.array-service.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/helper/interfaces/helper.date-service.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/helper/interfaces/helper.encryption-service.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/helper/interfaces/helper.file-service.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/helper/interfaces/helper.hash-service.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/helper/interfaces/helper.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/helper/interfaces/helper.number-service.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/helper/interfaces/helper.string-service.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/helper/services/helper.array.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/helper/services/helper.date.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/helper/services/helper.encryption.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/helper/services/helper.file.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/helper/services/helper.hash.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/helper/services/helper.number.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/helper/services/helper.string.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/logger/constants/logger.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/logger/constants/logger.enum.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/logger/decorators/logger.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/logger/dtos/logger.create.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/logger/interceptors/logger.interceptor.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/logger/interfaces/logger.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/logger/interfaces/logger.service.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/logger/logger.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/logger/repository/entities/logger.entity.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/logger/repository/logger.repository.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/logger/repository/repositories/logger.repository.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/logger/services/logger.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/message/constants/message.enum.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/message/controllers/message.public.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/message/docs/message.public.doc.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/message/interfaces/message.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/message/interfaces/message.service.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/message/message.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/message/middleware/custom-language/message.custom-language.middleware.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/message/middleware/message.middleware.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/message/serializations/message.language.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/message/services/message.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/pagination/constants/pagination.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/pagination/constants/pagination.enum.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/pagination/decorators/pagination.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/pagination/dtos/pagination.list.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/pagination/interfaces/pagination.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/pagination/interfaces/pagination.service.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/pagination/pagination.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/pagination/pipes/pagination.filter-contain.pipe.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/pagination/pipes/pagination.filter-date.pipe.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/pagination/pipes/pagination.filter-equal-object-id.pipe.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/pagination/pipes/pagination.filter-equal.pipe.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/pagination/pipes/pagination.filter-in-boolean.pipe.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/pagination/pipes/pagination.filter-in-enum.pipe.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/pagination/pipes/pagination.order.pipe.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/pagination/pipes/pagination.paging.pipe.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/pagination/pipes/pagination.search.pipe.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/pagination/services/pagination.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/policy/constants/policy.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/policy/constants/policy.enum.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/policy/constants/policy.status-code.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/policy/decorators/policy.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/policy/factories/policy.ability.factory.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/policy/guards/policy.ability.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/policy/interfaces/policy.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/policy/policy.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/constants/request.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/constants/request.enum.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/constants/request.status-code.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/decorators/request.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/guards/request.param.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/interceptors/request.timeout.interceptor.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/interceptors/request.timestamp.interceptor.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/interceptors/request.user-agent.interceptor.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/interfaces/request.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/middleware/body-parser/request.body-parser.middleware.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/middleware/cors/request.cors.middleware.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/middleware/helmet/request.helmet.middleware.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/middleware/id/request.id.middleware.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/middleware/request.middleware.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/middleware/timestamp/request.timestamp.middleware.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/middleware/timezone/request.timezone.middleware.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/middleware/user-agent/request.user-agent.middleware.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/middleware/version/request.version.middleware.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/request.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/serializations/request.pagination.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/validations/request.is-password-medium.validation.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/validations/request.is-password-strong.validation.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/validations/request.is-password-weak.validation.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/validations/request.is-start-with.validation.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/validations/request.max-binary-file.validation.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/validations/request.max-date-today.validation.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/validations/request.max-greater-than-equal.validation.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/validations/request.max-greater-than.validation.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/validations/request.min-date-today.validation.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/validations/request.min-greater-than-equal.validation.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/validations/request.min-greater-than.validation.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/validations/request.mobile-number-allowed.validation.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/validations/request.only-digits.validation.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/request/validations/request.safe-string.validation.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/response/constants/response.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/response/decorators/response.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/response/interceptors/response.custom-headers.interceptor.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/response/interceptors/response.default.interceptor.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/response/interceptors/response.file.interceptor.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/response/interceptors/response.paging.interceptor.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/response/interfaces/response.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/response/middleware/response.middleware.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/response/middleware/time/response.time.middleware.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/response/response.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/response/serializations/response.default.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/response/serializations/response.id.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/response/serializations/response.paging.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/constants/setting.doc.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/constants/setting.enum.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/constants/setting.list.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/constants/setting.status-code.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/controllers/setting.admin.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/controllers/setting.public.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/decorators/setting.admin.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/decorators/setting.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/decorators/setting.public.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/docs/setting.admin.doc.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/docs/setting.public.doc.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/dtos/setting.create.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/dtos/setting.request.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/dtos/setting.update-value.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/guards/setting.not-found.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/guards/setting.put-to-request.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/interfaces/setting.service.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/middleware/maintenance/setting.maintenance.middleware.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/middleware/setting.middleware.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/repository/entities/setting.entity.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/repository/repositories/setting.repository.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/repository/setting.repository.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/serializations/setting.get.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/serializations/setting.list.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/services/setting.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/common/setting/setting.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/configs/app.config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/configs/auth.config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/configs/aws.config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/configs/database.config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/configs/debugger.config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/configs/doc.config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/configs/file.config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/configs/helper.config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/configs/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/configs/message.config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/configs/request.config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/configs/user.config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/health/controllers/health.public.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/health/docs/health.doc.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/health/health.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/health/indicators/health.aws-s3.indicator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/health/serializations/health.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/jobs/jobs.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/jobs/router/jobs.router.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/languages/en/apiKey.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/languages/en/app.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/languages/en/auth.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/languages/en/file.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/languages/en/health.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/languages/en/http.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/languages/en/message.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/languages/en/request.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/languages/en/role.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/languages/en/setting.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/languages/en/user.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/languages/id/app.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/languages/id/request.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/migration/migration.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/migration/seeds/migration.api-key.seed.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/migration/seeds/migration.role.seed.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/migration/seeds/migration.setting.seed.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/migration/seeds/migration.user.seed.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/category.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/constants/category.doc.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/constants/category.list.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/constants/category.status-code.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/controllers/category.admin.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/controllers/category.auth.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/decorators/category.admin.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/decorators/category.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/docs/category.admin.doc.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/docs/category.auth.doc.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/dtos/category.create.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/dtos/category.import.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/dtos/category.request.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/dtos/category.update.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/dtos/category.user-create.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/guards/category.not-found.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/guards/category.not-owner.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/guards/payload/category.payload.put-to-request.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/interfaces/category.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/interfaces/category.service.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/repository/category.repository.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/repository/entities/category.entity.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/repository/repositories/category.repository.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/serializations/category.get.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/serializations/category.list-export.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/serializations/category.list.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/category/services/category.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/comment/comment.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/comment/constants/comment.doc.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/comment/constants/comment.list.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/comment/constants/comment.status-code.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/comment/controllers/comment.auth.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/comment/decorators/comment.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/comment/dtos/comment.create.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/comment/dtos/comment.import.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/comment/dtos/comment.request.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/comment/dtos/comment.update.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/comment/dtos/comment.user-create.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/comment/guards/comment.not-found.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/comment/guards/comment.not-owner.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/comment/guards/payload/comment.payload.put-to-request.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/comment/interfaces/comment.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/comment/interfaces/comment.service.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/comment/repository/comment.repository.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/comment/repository/entities/comment.entity.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/comment/repository/repositories/comment.repository.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/comment/serializations/comment.get.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/comment/serializations/comment.list-export.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/comment/serializations/comment.list.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/comment/services/comment.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/role/constants/role.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/role/constants/role.doc.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/role/constants/role.enum.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/role/constants/role.list.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/role/constants/role.status-code.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/role/controllers/role.admin.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/role/decorators/role.admin.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/role/decorators/role.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/role/docs/role.admin.doc.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/role/dtos/role.create.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/role/dtos/role.request.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/role/dtos/role.update-permission.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/role/dtos/role.update.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/role/guards/payload/role.payload.type.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/role/guards/role.active.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/role/guards/role.not-found.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/role/guards/role.put-to-request.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/role/interfaces/role.service.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/role/repository/entities/role.entity.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/role/repository/repositories/role.repository.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/role/repository/role.repository.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/role/role.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/role/serializations/role.get.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/role/serializations/role.list.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/role/services/role.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/constants/tag.doc.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/constants/tag.list.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/constants/tag.status-code.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/controllers/tag.admin.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/controllers/tag.auth.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/decorators/tag.admin.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/decorators/tag.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/docs/tag.admin.doc.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/docs/tag.auth.doc.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/dtos/tag.create.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/dtos/tag.import.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/dtos/tag.request.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/dtos/tag.update.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/dtos/tag.user-create.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/guards/payload/tag.payload.put-to-request.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/guards/tag.not-found.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/guards/tag.not-owner.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/interfaces/tag.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/interfaces/tag.service.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/repository/entities/tag.entity.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/repository/repositories/tag.repository.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/repository/tag.repository.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/serializations/tag.get.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/serializations/tag.list-export.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/serializations/tag.list.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/services/tag.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/tag/tag.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/constants/user.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/constants/user.doc.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/constants/user.enum.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/constants/user.list.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/constants/user.status-code.constant.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/controllers/user.admin.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/controllers/user.auth.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/controllers/user.public.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/controllers/user.user.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/decorators/user.admin.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/decorators/user.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/docs/user.admin.doc.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/docs/user.auth.doc.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/docs/user.public.doc.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/docs/user.user.doc.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/dtos/user.change-password.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/dtos/user.create.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/dtos/user.import.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/dtos/user.login.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/dtos/user.request.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/dtos/user.sign-up.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/dtos/user.update-github-sso.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/dtos/user.update-google-sso.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/dtos/user.update-name.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/dtos/user.update-username.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/dtos/user.update-yandex-sso.dto.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/guards/payload/user.payload.put-to-request.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/guards/user.active.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/guards/user.blocked.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/guards/user.can-not-ourself.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/guards/user.inactive-permanent.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/guards/user.not-found.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/guards/user.put-to-request.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/interfaces/user.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/interfaces/user.service.interface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/repository/entities/user.entity.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/repository/repositories/user.repository.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/repository/user.repository.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/serializations/user.get.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/serializations/user.list.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/serializations/user.login.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/serializations/user.payload.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/serializations/user.profile.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/serializations/user.refresh.serialization.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/services/user.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modules/user/user.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/router/router.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/router/routes/routes.admin.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/router/routes/routes.auth.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/router/routes/routes.public.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/router/routes/routes.user.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/swagger.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/api-key/api-key.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/auth/auth.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/aws/aws.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/dashboard/dashboard.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/database/database.options.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/debugger/debugger.options.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/debugger/debugger.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/helper/helper.array.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/helper/helper.date.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/helper/helper.encryption.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/helper/helper.file.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/helper/helper.hash.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/helper/helper.number.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/helper/helper.string.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/jest.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/logger/logger.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/message/message.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/pagination/pagination.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/setting/setting.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tsconfig.build.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.ts" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="dev" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
+  <component name="ProjectId" id="2LZAVRFsSTzaVUr0147AGZxOziu" />
+  <component name="ProjectViewState">
+    <option name="autoscrollToSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "TODO_SCOPE": "All Places",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "dev",
+    "ignore_missing_gitignore": "true",
+    "last_opened_file_path": "/Users/aliaksandrhrychonak/Documents/dev/commentator-api/src/modules/comment/guards",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.standard": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "yarn",
+    "prettierjs.PrettierConfiguration.Package": "/Users/aliaksandrhrychonak/Documents/dev/commentator-api/node_modules/prettier",
+    "settings.editor.selected.configurable": "settings.javascript.prettier",
+    "ts.external.directory.path": "/Applications/WebStorm.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/modules/comment/guards" />
+      <recent name="$PROJECT_DIR$/src/modules/comment/serializations" />
+      <recent name="$PROJECT_DIR$/src/modules/comment/constants" />
+      <recent name="$PROJECT_DIR$/src/modules/comment/dtos" />
+      <recent name="$PROJECT_DIR$/src/modules/comment/interfaces" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/modules/comment" />
+      <recent name="$PROJECT_DIR$/src/modules/tag/dtos" />
+      <recent name="$PROJECT_DIR$/src/modules/tag/guards" />
+      <recent name="$PROJECT_DIR$/src/modules/role/dtos" />
+      <recent name="$PROJECT_DIR$/src/common/message" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
+      <deployment type="docker-compose.yml">
+        <settings />
+      </deployment>
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4f9788fb-1a80-4eb6-87a2-79f9e1ee9b19" name="Changes" comment="" />
+      <created>1676068253765</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1676068253765</updated>
+      <workItem from="1676068254932" duration="32000" />
+      <workItem from="1676076710919" duration="268000" />
+      <workItem from="1680427201504" duration="93000" />
+      <workItem from="1680696611877" duration="351000" />
+      <workItem from="1680696969933" duration="632000" />
+      <workItem from="1680714020014" duration="4290000" />
+      <workItem from="1680794816739" duration="714000" />
+      <workItem from="1680974911384" duration="602000" />
+      <workItem from="1680984917513" duration="2467000" />
+      <workItem from="1681465811992" duration="19000" />
+      <workItem from="1681478633691" duration="4000" />
+      <workItem from="1681483502448" duration="14000" />
+      <workItem from="1683195922150" duration="483000" />
+      <workItem from="1683196949073" duration="60000" />
+      <workItem from="1684765520272" duration="134000" />
+      <workItem from="1688630108201" duration="306000" />
+      <workItem from="1688718963738" duration="1821000" />
+      <workItem from="1688735688965" duration="13126000" />
+      <workItem from="1688749089005" duration="598000" />
+      <workItem from="1688831347216" duration="4320000" />
+      <workItem from="1688853875147" duration="9000" />
+      <workItem from="1688903869774" duration="1763000" />
+      <workItem from="1688905680232" duration="2321000" />
+      <workItem from="1688911837276" duration="4576000" />
+      <workItem from="1688929540899" duration="3941000" />
+      <workItem from="1689242546809" duration="281000" />
+      <workItem from="1689275179031" duration="397000" />
+      <workItem from="1689275584605" duration="45000" />
+      <workItem from="1689275637023" duration="26000" />
+      <workItem from="1689275710939" duration="723000" />
+      <workItem from="1689282130476" duration="994000" />
+      <workItem from="1689367421213" duration="2550000" />
+      <workItem from="1689371437433" duration="1387000" />
+      <workItem from="1689452479116" duration="423000" />
+      <workItem from="1689455384317" duration="19579000" />
+      <workItem from="1689529427228" duration="165000" />
+      <workItem from="1689529605550" duration="324000" />
+      <workItem from="1689539977922" duration="416000" />
+      <workItem from="1689540400715" duration="5000" />
+      <workItem from="1689577195286" duration="2214000" />
+      <workItem from="1689579803241" duration="601000" />
+      <workItem from="1689603529696" duration="599000" />
+      <workItem from="1689614635948" duration="6954000" />
+      <workItem from="1689632479017" duration="1114000" />
+      <workItem from="1689665580137" duration="10773000" />
+      <workItem from="1689678338831" duration="1243000" />
+      <workItem from="1689717708361" duration="2000" />
+      <workItem from="1689755376903" duration="1325000" />
+      <workItem from="1689775487693" duration="510000" />
+      <workItem from="1689790146496" duration="2000" />
+      <workItem from="1689838265451" duration="460000" />
+      <workItem from="1689840932782" duration="3337000" />
+      <workItem from="1690208060857" duration="598000" />
+      <workItem from="1690538762407" duration="1000" />
+      <workItem from="1690702646732" duration="1603000" />
+      <workItem from="1690715923012" duration="2255000" />
+      <workItem from="1690789995028" duration="1562000" />
+      <workItem from="1690874465536" duration="52000" />
+      <workItem from="1691667860256" duration="602000" />
+      <workItem from="1691761971788" duration="27000" />
+      <workItem from="1691786856139" duration="7510000" />
+      <workItem from="1691831851863" duration="1309000" />
+      <workItem from="1692044542999" duration="6685000" />
+      <workItem from="1692105855529" duration="1362000" />
+      <workItem from="1692174069654" duration="2807000" />
+      <workItem from="1692256484056" duration="2338000" />
+      <workItem from="1692260492802" duration="902000" />
+      <workItem from="1692341118783" duration="1415000" />
+      <workItem from="1692346746794" duration="1537000" />
+      <workItem from="1692354188229" duration="1555000" />
+      <workItem from="1692355760197" duration="10819000" />
+      <workItem from="1692370755043" duration="1585000" />
+      <workItem from="1692432701575" duration="1814000" />
+      <workItem from="1692434883098" duration="627000" />
+      <workItem from="1692470402512" duration="397000" />
+      <workItem from="1692470807797" duration="2000" />
+      <workItem from="1692470819624" duration="56000" />
+      <workItem from="1692640098640" duration="333000" />
+      <workItem from="1692643535651" duration="2150000" />
+      <workItem from="1692648792838" duration="1740000" />
+      <workItem from="1692655922772" duration="1045000" />
+      <workItem from="1692684454011" duration="4824000" />
+      <workItem from="1692726525717" duration="1810000" />
+      <workItem from="1692778676179" duration="1338000" />
+      <workItem from="1692796873249" duration="4644000" />
+      <workItem from="1692829751433" duration="2961000" />
+      <workItem from="1692869575574" duration="606000" />
+      <workItem from="1692907933969" duration="1371000" />
+      <workItem from="1692912291363" duration="1926000" />
+      <workItem from="1692920077386" duration="903000" />
+      <workItem from="1692955953861" duration="95000" />
+      <workItem from="1692974381527" duration="1287000" />
+      <workItem from="1692987588146" duration="639000" />
+      <workItem from="1692994294816" duration="541000" />
+      <workItem from="1693004170096" duration="969000" />
+      <workItem from="1693039236503" duration="81000" />
+      <workItem from="1693040657489" duration="853000" />
+      <workItem from="1693042888189" duration="3000" />
+      <workItem from="1693045958012" duration="599000" />
+      <workItem from="1693084211131" duration="5448000" />
+      <workItem from="1693147572683" duration="403000" />
+      <workItem from="1693204592743" duration="2620000" />
+      <workItem from="1693208123728" duration="2184000" />
+      <workItem from="1693343137588" duration="1482000" />
+      <workItem from="1693347990914" duration="5084000" />
+      <workItem from="1693397057610" duration="599000" />
+      <workItem from="1693402678770" duration="3000" />
+      <workItem from="1693404357397" duration="1682000" />
+      <workItem from="1693976708470" duration="31000" />
+      <workItem from="1694200099586" duration="3520000" />
+      <workItem from="1694207984741" duration="2494000" />
+      <workItem from="1694212092990" duration="3216000" />
+      <workItem from="1694248210461" duration="695000" />
+      <workItem from="1694268721003" duration="2380000" />
+      <workItem from="1694271258196" duration="686000" />
+      <workItem from="1694273629737" duration="478000" />
+      <workItem from="1694277142145" duration="2052000" />
+      <workItem from="1694625239062" duration="22000" />
+      <workItem from="1695099517843" duration="152000" />
+      <workItem from="1695815943215" duration="2441000" />
+      <workItem from="1695841694373" duration="2000" />
+      <workItem from="1696286034482" duration="36000" />
+      <workItem from="1696286482977" duration="928000" />
+      <workItem from="1696339312186" duration="598000" />
+      <workItem from="1698097382928" duration="54000" />
+      <workItem from="1700732742028" duration="627000" />
+      <workItem from="1700870451715" duration="6000" />
+      <workItem from="1700870465439" duration="618000" />
+      <workItem from="1700913400339" duration="9000" />
+      <workItem from="1700941601360" duration="598000" />
+      <workItem from="1701003136058" duration="598000" />
+      <workItem from="1701010921899" duration="599000" />
+      <workItem from="1701014799117" duration="598000" />
+      <workItem from="1701167377241" duration="1667000" />
+      <workItem from="1701973004594" duration="1284000" />
+      <workItem from="1701975440600" duration="241000" />
+      <workItem from="1701979862403" duration="598000" />
+      <workItem from="1702034238867" duration="381000" />
+      <workItem from="1702034990787" duration="1832000" />
+      <workItem from="1702049204310" duration="1202000" />
+      <workItem from="1702065369047" duration="722000" />
+      <workItem from="1702117162860" duration="616000" />
+      <workItem from="1702123010715" duration="608000" />
+      <workItem from="1702132637463" duration="613000" />
+      <workItem from="1702138833278" duration="602000" />
+      <workItem from="1702200028920" duration="606000" />
+      <workItem from="1702204548819" duration="661000" />
+      <workItem from="1702212187930" duration="614000" />
+      <workItem from="1702218448427" duration="603000" />
+      <workItem from="1702292666796" duration="606000" />
+      <workItem from="1702313882333" duration="1326000" />
+      <workItem from="1702372568457" duration="3412000" />
+      <workItem from="1702380866912" duration="1198000" />
+      <workItem from="1702387486493" duration="359000" />
+      <workItem from="1702404916860" duration="1861000" />
+      <workItem from="1702486357901" duration="607000" />
+      <workItem from="1702502332883" duration="1199000" />
+      <workItem from="1702505673123" duration="603000" />
+      <workItem from="1702532723041" duration="599000" />
+      <workItem from="1702584332024" duration="607000" />
+      <workItem from="1702908594372" duration="985000" />
+      <workItem from="1702911411805" duration="603000" />
+      <workItem from="1702934221087" duration="607000" />
+      <workItem from="1702942228891" duration="141000" />
+      <workItem from="1703013509552" duration="277000" />
+      <workItem from="1703111615322" duration="14000" />
+      <workItem from="1703111637473" duration="149000" />
+      <workItem from="1703111794258" duration="610000" />
+      <workItem from="1703156051224" duration="1000000" />
+      <workItem from="1703178240864" duration="604000" />
+      <workItem from="1703274636403" duration="5000" />
+      <workItem from="1703784819046" duration="4000" />
+      <workItem from="1703800859876" duration="616000" />
+      <workItem from="1703802869822" duration="609000" />
+      <workItem from="1703930934716" duration="319000" />
+      <workItem from="1703933279601" duration="608000" />
+      <workItem from="1704000625711" duration="610000" />
+      <workItem from="1704011256558" duration="597000" />
+      <workItem from="1704317989104" duration="599000" />
+      <workItem from="1704372345077" duration="635000" />
+      <workItem from="1704374623431" duration="1079000" />
+      <workItem from="1704452316167" duration="603000" />
+      <workItem from="1704461418078" duration="776000" />
+      <workItem from="1704495864515" duration="628000" />
+      <workItem from="1704535081619" duration="9000" />
+      <workItem from="1704535123462" duration="609000" />
+      <workItem from="1704539000057" duration="625000" />
+      <workItem from="1704569082390" duration="857000" />
+      <workItem from="1704573060094" duration="1199000" />
+      <workItem from="1704578623547" duration="2290000" />
+      <workItem from="1704620629149" duration="27000" />
+      <workItem from="1704625812033" duration="5698000" />
+      <workItem from="1704649881006" duration="1545000" />
+      <workItem from="1704660083633" duration="1200000" />
+      <workItem from="1704699895904" duration="1776000" />
+      <workItem from="1704707771149" duration="1345000" />
+      <workItem from="1704725596241" duration="925000" />
+      <workItem from="1704736537406" duration="611000" />
+      <workItem from="1704783525223" duration="1032000" />
+      <workItem from="1704790493639" duration="820000" />
+      <workItem from="1704800608702" duration="641000" />
+      <workItem from="1704809824849" duration="1693000" />
+      <workItem from="1704881869054" duration="3570000" />
+      <workItem from="1704896687651" duration="17000" />
+      <workItem from="1704897086025" duration="619000" />
+      <workItem from="1704920549116" duration="2004000" />
+      <workItem from="1704923946330" duration="559000" />
+      <workItem from="1705003941731" duration="2213000" />
+    </task>
+    <task id="LOCAL-00001" summary="add list all tags endp">
+      <created>1683196385113</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1683196385113</updated>
+    </task>
+    <task id="LOCAL-00002" summary="init">
+      <option name="closed" value="true" />
+      <created>1689666890725</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1689666890725</updated>
+    </task>
+    <task id="LOCAL-00003" summary="init">
+      <option name="closed" value="true" />
+      <created>1689667039026</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1689667039026</updated>
+    </task>
+    <task id="LOCAL-00004" summary="add yandex/github auth">
+      <option name="closed" value="true" />
+      <created>1689667109135</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1689667109135</updated>
+    </task>
+    <task id="LOCAL-00005" summary="_">
+      <option name="closed" value="true" />
+      <created>1689667483545</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1689667483545</updated>
+    </task>
+    <task id="LOCAL-00006" summary="_">
+      <option name="closed" value="true" />
+      <created>1689667705707</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1689667705707</updated>
+    </task>
+    <task id="LOCAL-00007" summary="feature/auth-user-tag">
+      <option name="closed" value="true" />
+      <created>1692051219560</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1692051219560</updated>
+    </task>
+    <task id="LOCAL-00008" summary="fix/error-export-bd">
+      <option name="closed" value="true" />
+      <created>1692356034793</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1692356034793</updated>
+    </task>
+    <task id="LOCAL-00009" summary="feature/admin-tag-controller">
+      <option name="closed" value="true" />
+      <created>1692369056492</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1692369056492</updated>
+    </task>
+    <task id="LOCAL-00010" summary="fix/export-tag">
+      <option name="closed" value="true" />
+      <created>1692372334870</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1692372334870</updated>
+    </task>
+    <task id="LOCAL-00011" summary="fix/export-tag">
+      <option name="closed" value="true" />
+      <created>1692920357132</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1692920357132</updated>
+    </task>
+    <task id="LOCAL-00012" summary="some fix">
+      <option name="closed" value="true" />
+      <created>1692920374449</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1692920374449</updated>
+    </task>
+    <task id="LOCAL-00013" summary="some fix">
+      <option name="closed" value="true" />
+      <created>1705004072867</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1705004072867</updated>
+    </task>
+    <task id="LOCAL-00014" summary="clear">
+      <option name="closed" value="true" />
+      <created>1705004474209</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1705004474209</updated>
+    </task>
+    <task id="LOCAL-00015" summary="clear">
+      <option name="closed" value="true" />
+      <created>1705005760782</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1705005760782</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+        <option value="Space.CommitStatus" />
+      </list>
+    </option>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="add list all tags endp" />
+    <MESSAGE value="add yandex/github auth" />
+    <MESSAGE value="_" />
+    <MESSAGE value="feature/auth-user-tag" />
+    <MESSAGE value="fix/error-export-bd" />
+    <MESSAGE value="feature/admin-tag-controller" />
+    <MESSAGE value="fix/export-tag" />
+    <MESSAGE value="some fix" />
+    <MESSAGE value="clear" />
+    <MESSAGE value="init" />
+    <option name="LAST_COMMIT_MESSAGE" value="init" />
+  </component>
+</project>
