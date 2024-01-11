@@ -9,9 +9,9 @@ import {
     DocResponsePaging,
 } from 'src/common/doc/decorators/doc.decorator';
 import { ResponseIdSerialization } from '../../../common/response/serializations/response.id.serialization';
-import { TagListSerialization } from '../serializations/tag.list.serialization';
+import { CategoryListSerialization } from '../serializations/category.list.serialization';
 
-export function TagAuthUserCreateDoc(): MethodDecorator {
+export function CategoryAuthUserCreateDoc(): MethodDecorator {
     return applyDecorators(
         Doc({
             operation: 'modules.auth.tag',
@@ -27,7 +27,7 @@ export function TagAuthUserCreateDoc(): MethodDecorator {
         })
     );
 }
-export function TagAuthUserListDoc(): MethodDecorator {
+export function CategoryAuthUserListDoc(): MethodDecorator {
     return applyDecorators(
         Doc({
             operation: 'modules.auth.tag',
@@ -36,13 +36,13 @@ export function TagAuthUserListDoc(): MethodDecorator {
             jwtAccessToken: true,
         }),
         DocGuard({ role: true, policy: true }),
-        DocResponsePaging<TagListSerialization>('tag.list', {
-            serialization: TagListSerialization,
+        DocResponsePaging<CategoryListSerialization>('tag.list', {
+            serialization: CategoryListSerialization,
         })
     );
 }
 
-export function TagAuthUserUpdateDoc(): MethodDecorator {
+export function CategoryAuthUserUpdateDoc(): MethodDecorator {
     return applyDecorators(
         Doc({
             operation: 'modules.auth.tag',
@@ -57,7 +57,7 @@ export function TagAuthUserUpdateDoc(): MethodDecorator {
     );
 }
 
-export function TagAuthUserDeleteDoc(): MethodDecorator {
+export function CategoryAuthUserDeleteDoc(): MethodDecorator {
     return applyDecorators(
         Doc({
             operation: 'modules.auth.tag',

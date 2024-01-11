@@ -5,7 +5,7 @@
 - [x] GitHub auth
 - [x] Yandex.Cloud Object Storage
 - [x] Tags module
-- [ ] Categories module
+- [x] Categories module
 - [ ] Comments module
 - [ ] User frontend UI variables
 - [ ] Docker

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
     IDatabaseCreateManyOptions,
     IDatabaseCreateOptions,
+    IDatabaseExistOptions,
     IDatabaseFindAllOptions,
     IDatabaseFindOneOptions,
     IDatabaseGetTotalOptions,
@@ -96,6 +97,25 @@ export class TagService implements ITagService {
             foreignField: '_id',
             model: UserEntity.name,
         });
+    }
+
+    async belongByOwnerId(
+        tags: string[],
+        owner: string,
+        options?: IDatabaseExistOptions
+    ): Promise<boolean> {
+        if (!tags) {
+            return undefined;
+        }
+
+        const search: Record<string, any> = tags.map((i) => {
+            return { _id: i };
+        });
+        const find: Record<string, any> = {
+            $or: search,
+            owner,
+        };
+        return this.tagRepository.exists(find, options);
     }
 
     async deleteMany(

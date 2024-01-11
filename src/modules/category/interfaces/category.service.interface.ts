@@ -1,24 +1,24 @@
+import { ICategoryDoc, ICategoryEntity } from './category.interface';
 import {
+    IDatabaseCreateManyOptions,
     IDatabaseCreateOptions,
+    IDatabaseExistOptions,
     IDatabaseFindAllOptions,
     IDatabaseFindOneOptions,
-    IDatabaseManyOptions,
-    IDatabaseCreateManyOptions,
     IDatabaseGetTotalOptions,
+    IDatabaseManyOptions,
     IDatabaseSaveOptions,
-    IDatabaseExistOptions,
-} from 'src/common/database/interfaces/database.interface';
-import { TagCreateDto } from '../dtos/tag.create.dto';
-import { TagDoc } from '../repository/entities/tag.entity';
-import { TagUpdateDto } from '../dtos/tag.update.dto';
-import { ITagDoc, ITagEntity } from './tag.interface';
-import { TagImportDto } from '../dtos/tag.import.dto';
+} from '../../../common/database/interfaces/database.interface';
+import { CategoryCreateDto } from '../dtos/category.create.dto';
+import { CategoryUpdateDto } from '../dtos/category.update.dto';
+import { CategoryImportDto } from '../dtos/category.import.dto';
+import { CategoryDoc } from '../repository/entities/category.entity';
 
-export interface ITagService {
+export interface ICategoryService {
     findAll(
         find?: Record<string, any>,
         options?: IDatabaseFindAllOptions
-    ): Promise<ITagEntity[]>;
+    ): Promise<ICategoryEntity[]>;
     findOneById<T>(_id: string, options?: IDatabaseFindOneOptions): Promise<T>;
     findOne<T>(
         find: Record<string, any>,
@@ -33,23 +33,26 @@ export interface ITagService {
         options?: IDatabaseGetTotalOptions
     ): Promise<number>;
     create(
-        { name, description, owner }: TagCreateDto,
+        { name, description, owner }: CategoryCreateDto,
         options?: IDatabaseCreateOptions
-    ): Promise<TagDoc>;
-    delete(repository: TagDoc, options?: IDatabaseSaveOptions): Promise<TagDoc>;
-    update(
-        repository: TagDoc,
-        { name, description }: TagUpdateDto,
+    ): Promise<CategoryDoc>;
+    delete(
+        repository: CategoryDoc,
         options?: IDatabaseSaveOptions
-    ): Promise<TagDoc>;
-    joinWithOwner(repository: TagDoc): Promise<ITagDoc>;
+    ): Promise<CategoryDoc>;
+    update(
+        repository: CategoryDoc,
+        { name, description }: CategoryUpdateDto,
+        options?: IDatabaseSaveOptions
+    ): Promise<CategoryDoc>;
+    joinWithOwner(repository: CategoryDoc): Promise<ICategoryDoc>;
     belongByOwnerId(
-        tags: string[],
+        categories: string[],
         owner: string,
         options?: IDatabaseExistOptions
     ): Promise<boolean>;
     import(
-        data: TagImportDto[],
+        data: CategoryImportDto[],
         options?: IDatabaseCreateManyOptions
     ): Promise<boolean>;
     deleteMany(

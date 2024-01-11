@@ -5,11 +5,27 @@ import { UserAuthController } from 'src/modules/user/controllers/user.auth.contr
 import { UserModule } from 'src/modules/user/user.module';
 import { TagAuthController } from '../../modules/tag/controllers/tag.auth.controller';
 import { TagModule } from '../../modules/tag/tag.module';
+import { CategoryModule } from '../../modules/category/category.module';
+import { CategoryAuthController } from '../../modules/category/controllers/category.auth.controller';
+import { CommentModule } from '../../modules/comment/comment.module';
+import { CommentAuthController } from '../../modules/comment/controllers/comment.auth.controller';
 
 @Module({
-    controllers: [UserAuthController, TagAuthController],
+    controllers: [
+        UserAuthController,
+        TagAuthController,
+        CategoryAuthController,
+        CommentAuthController,
+    ],
     providers: [],
     exports: [],
-    imports: [UserModule, AuthModule, AwsModule, TagModule],
+    imports: [
+        UserModule,
+        AuthModule,
+        AwsModule,
+        TagModule,
+        CategoryModule,
+        CommentModule,
+    ],
 })
 export class RoutesAuthModule {}

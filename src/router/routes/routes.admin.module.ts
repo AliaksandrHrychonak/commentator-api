@@ -9,6 +9,9 @@ import { UserAdminController } from 'src/modules/user/controllers/user.admin.con
 import { UserModule } from 'src/modules/user/user.module';
 import { TagAdminController } from '../../modules/tag/controllers/tag.admin.controller';
 import { TagModule } from '../../modules/tag/tag.module';
+import { CategoryAdminController } from '../../modules/category/controllers/category.admin.controller';
+import { CategoryModule } from '../../modules/category/category.module';
+import { CommentModule } from '../../modules/comment/comment.module';
 
 @Module({
     controllers: [
@@ -17,9 +20,18 @@ import { TagModule } from '../../modules/tag/tag.module';
         RoleAdminController,
         UserAdminController,
         TagAdminController,
+        CategoryAdminController,
     ],
     providers: [],
     exports: [],
-    imports: [ApiKeyModule, RoleModule, UserModule, AuthModule, TagModule],
+    imports: [
+        ApiKeyModule,
+        RoleModule,
+        UserModule,
+        AuthModule,
+        TagModule,
+        CategoryModule,
+        CommentModule,
+    ],
 })
 export class RoutesAdminModule {}

@@ -11,13 +11,7 @@ import {
     DocResponseFile,
 } from 'src/common/doc/decorators/doc.decorator';
 import { ResponseIdSerialization } from 'src/common/response/serializations/response.id.serialization';
-import {
-    UserDocParamsId,
-    UserDocQueryBlocked,
-    UserDocQueryInactivePermanent,
-    UserDocQueryIsActive,
-    UserDocQueryRole,
-} from 'src/modules/user/constants/user.doc.constant';
+import { UserDocParamsId } from 'src/modules/user/constants/user.doc.constant';
 import { TagListSerialization } from '../serializations/tag.list.serialization';
 import { TagGetSerialization } from '../serializations/tag.get.serialization';
 import { TagDocParamsId } from '../constants/tag.doc.constant';
@@ -26,14 +20,6 @@ export function TagAdminListDoc(): MethodDecorator {
     return applyDecorators(
         Doc({
             operation: 'modules.admin.tag',
-        }),
-        DocRequest({
-            queries: [
-                ...UserDocQueryIsActive,
-                ...UserDocQueryBlocked,
-                ...UserDocQueryInactivePermanent,
-                ...UserDocQueryRole,
-            ],
         }),
         DocAuth({
             jwtAccessToken: true,

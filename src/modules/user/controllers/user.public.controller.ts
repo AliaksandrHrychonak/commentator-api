@@ -4,33 +4,16 @@ import {
     ConflictException,
     Controller,
     ForbiddenException,
-    Get,
     HttpCode,
     HttpStatus,
-    InternalServerErrorException,
     NotFoundException,
     Post,
 } from '@nestjs/common';
-import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { Connection } from 'mongoose';
 import { ENUM_AUTH_LOGIN_WITH } from 'src/common/auth/constants/auth.enum.constant';
-import {
-    AuthGoogleOAuth2LoginProtected,
-    AuthGoogleOAuth2SignUpProtected,
-} from 'src/common/auth/decorators/auth.google.decorator';
-import {
-    AuthYandexOAuth2LoginProtected,
-    AuthYandexOAuth2SignUpProtected,
-} from '../../../common/auth/decorators/auth.yandex.decorator';
-import { AuthJwtPayload } from 'src/common/auth/decorators/auth.jwt.decorator';
-import {
-    IAuthGithubPayload,
-    IAuthGooglePayload,
-    IAuthYandexPayload,
-} from 'src/common/auth/interfaces/auth.interface';
 import { AuthService } from 'src/common/auth/services/auth.service';
 import { DatabaseConnection } from 'src/common/database/decorators/database.decorator';
-import { ENUM_ERROR_STATUS_CODE_ERROR } from 'src/common/error/constants/error.status-code.constant';
 import { Response } from 'src/common/response/decorators/response.decorator';
 import { IResponse } from 'src/common/response/interfaces/response.interface';
 import { ENUM_ROLE_STATUS_CODE_ERROR } from 'src/modules/role/constants/role.status-code.constant';
@@ -52,10 +35,6 @@ import { UserDoc } from 'src/modules/user/repository/entities/user.entity';
 import { UserLoginSerialization } from 'src/modules/user/serializations/user.login.serialization';
 import { UserPayloadSerialization } from 'src/modules/user/serializations/user.payload.serialization';
 import { UserService } from 'src/modules/user/services/user.service';
-import {
-    AuthGithubOAuth2LoginProtected,
-    AuthGithubOAuth2SignUpProtected,
-} from '../../../common/auth/decorators/auth.github.decorator';
 
 @ApiTags('modules.public.user')
 @Controller({
@@ -241,572 +220,571 @@ export class UserPublicController {
         return;
     }
 
-    // GOOGLE AUTH
-
-    @ApiExcludeEndpoint()
-    @Response('user.loginGoogle')
-    @AuthGoogleOAuth2LoginProtected()
-    @Get('/login/google')
-    async loginGoogle(): Promise<void> {
-        return;
-    }
-
-    @ApiExcludeEndpoint()
-    @Response('user.loginGoogleCallback')
-    @AuthGoogleOAuth2LoginProtected()
-    @Get('/login/google/callback')
-    async loginGoogleCallback(
-        @AuthJwtPayload()
-        {
-            email,
-            accessToken: googleAccessToken,
-            refreshToken: googleRefreshToken,
-        }: IAuthGooglePayload
-    ): Promise<IResponse> {
-        const user: UserDoc = await this.userService.findOneByEmail(email);
-
-        if (!user) {
-            throw new NotFoundException({
-                statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_NOT_FOUND_ERROR,
-                message: 'user.error.notFound',
-            });
-        } else if (user.blocked) {
-            throw new ForbiddenException({
-                statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_BLOCKED_ERROR,
-                message: 'user.error.blocked',
-            });
-        } else if (user.inactivePermanent) {
-            throw new ForbiddenException({
-                statusCode:
-                    ENUM_USER_STATUS_CODE_ERROR.USER_INACTIVE_PERMANENT_ERROR,
-                message: 'user.error.inactivePermanent',
-            });
-        } else if (!user.isActive) {
-            throw new ForbiddenException({
-                statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_INACTIVE_ERROR,
-                message: 'user.error.inactive',
-            });
-        }
-
-        const userWithRole: IUserDoc =
-            await this.userService.joinWithRole(user);
-        if (!userWithRole.role.isActive) {
-            throw new ForbiddenException({
-                statusCode: ENUM_ROLE_STATUS_CODE_ERROR.ROLE_INACTIVE_ERROR,
-                message: 'role.error.inactive',
-            });
-        }
-
-        await this.userService.updateGoogleSSO(user, {
-            accessToken: googleAccessToken,
-            refreshToken: googleRefreshToken,
-        });
-
-        const payload: UserPayloadSerialization =
-            await this.userService.payloadSerialization(userWithRole);
-        const tokenType: string = await this.authService.getTokenType();
-        const expiresIn: number =
-            await this.authService.getAccessTokenExpirationTime();
-        const payloadAccessToken: Record<string, any> =
-            await this.authService.createPayloadAccessToken(payload);
-        const payloadRefreshToken: Record<string, any> =
-            await this.authService.createPayloadRefreshToken(payload._id, {
-                loginWith: ENUM_AUTH_LOGIN_WITH.GOOGLE,
-            });
-
-        const payloadEncryption = await this.authService.getPayloadEncryption();
-        let payloadHashedAccessToken: Record<string, any> | string =
-            payloadAccessToken;
-        let payloadHashedRefreshToken: Record<string, any> | string =
-            payloadRefreshToken;
-
-        if (payloadEncryption) {
-            payloadHashedAccessToken =
-                await this.authService.encryptAccessToken(payloadAccessToken);
-            payloadHashedRefreshToken =
-                await this.authService.encryptRefreshToken(payloadRefreshToken);
-        }
-
-        const accessToken: string = await this.authService.createAccessToken(
-            payloadHashedAccessToken
-        );
-
-        const refreshToken: string = await this.authService.createRefreshToken(
-            payloadHashedRefreshToken
-        );
-
-        return {
-            data: {
-                tokenType,
-                expiresIn,
-                accessToken,
-                refreshToken,
-            },
-        };
-    }
-
-    @ApiExcludeEndpoint()
-    @Response('user.signUpGoogle')
-    @AuthGoogleOAuth2SignUpProtected()
-    @Get('/sign-up/google')
-    async signUpGoogle(): Promise<void> {
-        return;
-    }
-
-    @ApiExcludeEndpoint()
-    @Response('user.signUpGoogleCallback')
-    @AuthGoogleOAuth2SignUpProtected()
-    @HttpCode(HttpStatus.CREATED)
-    @Get('/sign-up/google/callback')
-    async signUpGoogleCallback(
-        @AuthJwtPayload()
-        {
-            email,
-            firstName,
-            lastName,
-            accessToken: googleAccessToken,
-            refreshToken: googleRefreshToken,
-        }: IAuthGooglePayload
-    ): Promise<void> {
-        // sign up
-        const promises: Promise<any>[] = [
-            this.roleService.findOneByName('user'),
-            this.userService.existByEmail(email),
-        ];
-
-        const [role, emailExist] = await Promise.all(promises);
-
-        if (emailExist) {
-            throw new ConflictException({
-                statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_EMAIL_EXIST_ERROR,
-                message: 'user.error.emailExist',
-            });
-        }
-
-        // const session: ClientSession =
-        //     await this.databaseConnection.startSession();
-        // session.startTransaction();
-
-        try {
-            const passwordString =
-                await this.authService.createPasswordRandom();
-            const password =
-                await this.authService.createPassword(passwordString);
-
-            const user: UserDoc = await this.userService.create(
-                {
-                    email,
-                    firstName,
-                    lastName,
-                    password: passwordString,
-                    role: role._id,
-                    signUpFrom: ENUM_USER_SIGN_UP_FROM.GOOGLE,
-                },
-                password
-                // { session }
-            );
-
-            await this.userService.updateGoogleSSO(
-                user,
-                {
-                    accessToken: googleAccessToken,
-                    refreshToken: googleRefreshToken,
-                }
-                // { session }
-            );
-
-            // await session.commitTransaction();
-            // await session.endSession();
-        } catch (err: any) {
-            // await session.abortTransaction();
-            // await session.endSession();
-
-            throw new InternalServerErrorException({
-                statusCode: ENUM_ERROR_STATUS_CODE_ERROR.ERROR_UNKNOWN,
-                message: 'http.serverError.internalServerError',
-                _error: err.message,
-            });
-        }
-
-        return;
-    }
-
-    // YANDEX AUTH
-
-    @ApiExcludeEndpoint()
-    @Response('user.loginYandex')
-    @AuthYandexOAuth2LoginProtected()
-    @Get('/login/yandex')
-    async loginYandex(): Promise<void> {
-        return;
-    }
-
-    @ApiExcludeEndpoint()
-    @Response('user.loginYandexCallback')
-    @AuthYandexOAuth2LoginProtected()
-    @Get('/login/yandex/callback')
-    async loginYandexCallback(
-        @AuthJwtPayload()
-        {
-            email,
-            accessToken: yandexAccessToken,
-            refreshToken: yandexRefreshToken,
-        }: IAuthYandexPayload
-    ): Promise<IResponse> {
-        const user: UserDoc = await this.userService.findOneByEmail(email);
-
-        if (!user) {
-            throw new NotFoundException({
-                statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_NOT_FOUND_ERROR,
-                message: 'user.error.notFound',
-            });
-        } else if (user.blocked) {
-            throw new ForbiddenException({
-                statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_BLOCKED_ERROR,
-                message: 'user.error.blocked',
-            });
-        } else if (user.inactivePermanent) {
-            throw new ForbiddenException({
-                statusCode:
-                    ENUM_USER_STATUS_CODE_ERROR.USER_INACTIVE_PERMANENT_ERROR,
-                message: 'user.error.inactivePermanent',
-            });
-        } else if (!user.isActive) {
-            throw new ForbiddenException({
-                statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_INACTIVE_ERROR,
-                message: 'user.error.inactive',
-            });
-        }
-
-        const userWithRole: IUserDoc =
-            await this.userService.joinWithRole(user);
-        if (!userWithRole.role.isActive) {
-            throw new ForbiddenException({
-                statusCode: ENUM_ROLE_STATUS_CODE_ERROR.ROLE_INACTIVE_ERROR,
-                message: 'role.error.inactive',
-            });
-        }
-
-        await this.userService.updateYandexSSO(user, {
-            accessToken: yandexAccessToken,
-            refreshToken: yandexRefreshToken,
-        });
-
-        const payload: UserPayloadSerialization =
-            await this.userService.payloadSerialization(userWithRole);
-        const tokenType: string = await this.authService.getTokenType();
-        const expiresIn: number =
-            await this.authService.getAccessTokenExpirationTime();
-        const payloadAccessToken: Record<string, any> =
-            await this.authService.createPayloadAccessToken(payload);
-        const payloadRefreshToken: Record<string, any> =
-            await this.authService.createPayloadRefreshToken(payload._id, {
-                loginWith: ENUM_AUTH_LOGIN_WITH.YANDEX,
-            });
-
-        const payloadEncryption = await this.authService.getPayloadEncryption();
-        let payloadHashedAccessToken: Record<string, any> | string =
-            payloadAccessToken;
-        let payloadHashedRefreshToken: Record<string, any> | string =
-            payloadRefreshToken;
-
-        if (payloadEncryption) {
-            payloadHashedAccessToken =
-                await this.authService.encryptAccessToken(payloadAccessToken);
-            payloadHashedRefreshToken =
-                await this.authService.encryptRefreshToken(payloadRefreshToken);
-        }
-
-        const accessToken: string = await this.authService.createAccessToken(
-            payloadHashedAccessToken
-        );
-
-        const refreshToken: string = await this.authService.createRefreshToken(
-            payloadHashedRefreshToken
-        );
-
-        return {
-            data: {
-                tokenType,
-                expiresIn,
-                accessToken,
-                refreshToken,
-            },
-        };
-    }
-
-    @ApiExcludeEndpoint()
-    @Response('user.signUpYandex')
-    @AuthYandexOAuth2SignUpProtected()
-    @Get('/sign-up/yandex')
-    async signUpYandex(): Promise<void> {
-        return;
-    }
-
-    @ApiExcludeEndpoint()
-    @Response('user.signUpYandexCallback')
-    @AuthYandexOAuth2SignUpProtected()
-    @HttpCode(HttpStatus.CREATED)
-    @Get('/sign-up/yandex/callback')
-    async signUpYandexCallback(
-        @AuthJwtPayload()
-        {
-            email,
-            firstName,
-            lastName,
-            accessToken: yandexAccessToken,
-            refreshToken: yandexRefreshToken,
-        }: IAuthYandexPayload
-    ): Promise<void> {
-        // sign up
-        const promises: Promise<any>[] = [
-            this.roleService.findOneByName('user'),
-            this.userService.existByEmail(email),
-        ];
-
-        const [role, emailExist] = await Promise.all(promises);
-
-        if (emailExist) {
-            throw new ConflictException({
-                statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_EMAIL_EXIST_ERROR,
-                message: 'user.error.emailExist',
-            });
-        }
-
-        // const session: ClientSession =
-        //     await this.databaseConnection.startSession();
-        // session.startTransaction();
-
-        try {
-            const passwordString =
-                await this.authService.createPasswordRandom();
-            const password =
-                await this.authService.createPassword(passwordString);
-
-            const user: UserDoc = await this.userService.create(
-                {
-                    email,
-                    firstName,
-                    lastName,
-                    password: passwordString,
-                    role: role._id,
-                    signUpFrom: ENUM_USER_SIGN_UP_FROM.YANDEX,
-                },
-                password
-                // { session }
-            );
-
-            await this.userService.updateYandexSSO(
-                user,
-                {
-                    accessToken: yandexAccessToken,
-                    refreshToken: yandexRefreshToken,
-                }
-                // { session }
-            );
-
-            // await session.commitTransaction();
-            // await session.endSession();
-        } catch (err: any) {
-            // await session.abortTransaction();
-            // await session.endSession();
-
-            throw new InternalServerErrorException({
-                statusCode: ENUM_ERROR_STATUS_CODE_ERROR.ERROR_UNKNOWN,
-                message: 'http.serverError.internalServerError',
-                _error: err.message,
-            });
-        }
-
-        return;
-    }
-
-    // GITHUB AUTH
-    @ApiExcludeEndpoint()
-    @Response('user.githubYandex')
-    @AuthGithubOAuth2LoginProtected()
-    @Get('/login/github')
-    async loginGithub(): Promise<void> {
-        return;
-    }
-
-    @ApiExcludeEndpoint()
-    @Response('user.loginGithubCallback')
-    @AuthGithubOAuth2LoginProtected()
-    @Get('/login/github/callback')
-    async loginGithubCallback(
-        @AuthJwtPayload()
-        {
-            email,
-            accessToken: githubAccessToken,
-            refreshToken: githubRefreshToken,
-        }: IAuthGithubPayload
-    ): Promise<IResponse> {
-        const user: UserDoc = await this.userService.findOneByEmail(email);
-
-        if (!user) {
-            throw new NotFoundException({
-                statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_NOT_FOUND_ERROR,
-                message: 'user.error.notFound',
-            });
-        } else if (user.blocked) {
-            throw new ForbiddenException({
-                statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_BLOCKED_ERROR,
-                message: 'user.error.blocked',
-            });
-        } else if (user.inactivePermanent) {
-            throw new ForbiddenException({
-                statusCode:
-                    ENUM_USER_STATUS_CODE_ERROR.USER_INACTIVE_PERMANENT_ERROR,
-                message: 'user.error.inactivePermanent',
-            });
-        } else if (!user.isActive) {
-            throw new ForbiddenException({
-                statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_INACTIVE_ERROR,
-                message: 'user.error.inactive',
-            });
-        }
-
-        const userWithRole: IUserDoc =
-            await this.userService.joinWithRole(user);
-        if (!userWithRole.role.isActive) {
-            throw new ForbiddenException({
-                statusCode: ENUM_ROLE_STATUS_CODE_ERROR.ROLE_INACTIVE_ERROR,
-                message: 'role.error.inactive',
-            });
-        }
-
-        await this.userService.updateGithubSSO(user, {
-            accessToken: githubAccessToken,
-            refreshToken: githubRefreshToken,
-        });
-
-        const payload: UserPayloadSerialization =
-            await this.userService.payloadSerialization(userWithRole);
-        const tokenType: string = await this.authService.getTokenType();
-        const expiresIn: number =
-            await this.authService.getAccessTokenExpirationTime();
-        const payloadAccessToken: Record<string, any> =
-            await this.authService.createPayloadAccessToken(payload);
-        const payloadRefreshToken: Record<string, any> =
-            await this.authService.createPayloadRefreshToken(payload._id, {
-                loginWith: ENUM_AUTH_LOGIN_WITH.GITHUB,
-            });
-
-        const payloadEncryption = await this.authService.getPayloadEncryption();
-        let payloadHashedAccessToken: Record<string, any> | string =
-            payloadAccessToken;
-        let payloadHashedRefreshToken: Record<string, any> | string =
-            payloadRefreshToken;
-
-        if (payloadEncryption) {
-            payloadHashedAccessToken =
-                await this.authService.encryptAccessToken(payloadAccessToken);
-            payloadHashedRefreshToken =
-                await this.authService.encryptRefreshToken(payloadRefreshToken);
-        }
-
-        const accessToken: string = await this.authService.createAccessToken(
-            payloadHashedAccessToken
-        );
-
-        const refreshToken: string = await this.authService.createRefreshToken(
-            payloadHashedRefreshToken
-        );
-
-        return {
-            data: {
-                tokenType,
-                expiresIn,
-                accessToken,
-                refreshToken,
-            },
-        };
-    }
-
-    @ApiExcludeEndpoint()
-    @Response('user.signUpGithub')
-    @AuthGithubOAuth2SignUpProtected()
-    @Get('/sign-up/github')
-    async signUpGithub(): Promise<void> {
-        return;
-    }
-
-    @ApiExcludeEndpoint()
-    @Response('user.signUpGithubCallback')
-    @AuthGithubOAuth2SignUpProtected()
-    @HttpCode(HttpStatus.CREATED)
-    @Get('/sign-up/github/callback')
-    async signUpGithubCallback(
-        @AuthJwtPayload()
-        {
-            email,
-            firstName,
-            lastName,
-            accessToken: githubAccessToken,
-            refreshToken: githubRefreshToken,
-        }: IAuthGithubPayload
-    ): Promise<void> {
-        // sign up
-        const promises: Promise<any>[] = [
-            this.roleService.findOneByName('user'),
-            this.userService.existByEmail(email),
-        ];
-
-        const [role, emailExist] = await Promise.all(promises);
-
-        if (emailExist) {
-            throw new ConflictException({
-                statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_EMAIL_EXIST_ERROR,
-                message: 'user.error.emailExist',
-            });
-        }
-
-        // const session: ClientSession =
-        //     await this.databaseConnection.startSession();
-        // session.startTransaction();
-
-        try {
-            const passwordString =
-                await this.authService.createPasswordRandom();
-            const password =
-                await this.authService.createPassword(passwordString);
-
-            const user: UserDoc = await this.userService.create(
-                {
-                    email,
-                    firstName,
-                    lastName,
-                    password: passwordString,
-                    role: role._id,
-                    signUpFrom: ENUM_USER_SIGN_UP_FROM.GITHUB,
-                },
-                password
-                // { session }
-            );
-
-            await this.userService.updateGithubSSO(
-                user,
-                {
-                    accessToken: githubAccessToken,
-                    refreshToken: githubRefreshToken,
-                }
-                // { session }
-            );
-
-            // await session.commitTransaction();
-            // await session.endSession();
-        } catch (err: any) {
-            // await session.abortTransaction();
-            // await session.endSession();
-
-            throw new InternalServerErrorException({
-                statusCode: ENUM_ERROR_STATUS_CODE_ERROR.ERROR_UNKNOWN,
-                message: 'http.serverError.internalServerError',
-                _error: err.message,
-            });
-        }
-
-        return;
-    }
+    // // GOOGLE AUTH
+    //
+    // @ApiExcludeEndpoint()
+    // @Response('user.loginGoogle')
+    // @AuthGoogleOAuth2LoginProtected()
+    // @Get('/login/google')
+    // async loginGoogle(): Promise<void> {
+    //     return;
+    // }
+    //
+    // @ApiExcludeEndpoint()
+    // @Response('user.loginGoogleCallback')
+    // @AuthGoogleOAuth2LoginProtected()
+    // @Get('/login/google/callback')
+    // async loginGoogleCallback(
+    //     @AuthJwtPayload()
+    //     {
+    //         email,
+    //         accessToken: googleAccessToken,
+    //         refreshToken: googleRefreshToken,
+    //     }: IAuthGooglePayload
+    // ): Promise<IResponse> {
+    //     const user: UserDoc = await this.userService.findOneByEmail(email);
+    //
+    //     if (!user) {
+    //         throw new NotFoundException({
+    //             statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_NOT_FOUND_ERROR,
+    //             message: 'user.error.notFound',
+    //         });
+    //     } else if (user.blocked) {
+    //         throw new ForbiddenException({
+    //             statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_BLOCKED_ERROR,
+    //             message: 'user.error.blocked',
+    //         });
+    //     } else if (user.inactivePermanent) {
+    //         throw new ForbiddenException({
+    //             statusCode:
+    //                 ENUM_USER_STATUS_CODE_ERROR.USER_INACTIVE_PERMANENT_ERROR,
+    //             message: 'user.error.inactivePermanent',
+    //         });
+    //     } else if (!user.isActive) {
+    //         throw new ForbiddenException({
+    //             statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_INACTIVE_ERROR,
+    //             message: 'user.error.inactive',
+    //         });
+    //     }
+    //
+    //     const userWithRole: IUserDoc =
+    //         await this.userService.joinWithRole(user);
+    //     if (!userWithRole.role.isActive) {
+    //         throw new ForbiddenException({
+    //             statusCode: ENUM_ROLE_STATUS_CODE_ERROR.ROLE_INACTIVE_ERROR,
+    //             message: 'role.error.inactive',
+    //         });
+    //     }
+    //
+    //     await this.userService.updateGoogleSSO(user, {
+    //         accessToken: googleAccessToken,
+    //         refreshToken: googleRefreshToken,
+    //     });
+    //
+    //     const payload: UserPayloadSerialization =
+    //         await this.userService.payloadSerialization(userWithRole);
+    //     const tokenType: string = await this.authService.getTokenType();
+    //     const expiresIn: number =
+    //         await this.authService.getAccessTokenExpirationTime();
+    //     const payloadAccessToken: Record<string, any> =
+    //         await this.authService.createPayloadAccessToken(payload);
+    //     const payloadRefreshToken: Record<string, any> =
+    //         await this.authService.createPayloadRefreshToken(payload._id, {
+    //             loginWith: ENUM_AUTH_LOGIN_WITH.GOOGLE,
+    //         });
+    //
+    //     const payloadEncryption = await this.authService.getPayloadEncryption();
+    //     let payloadHashedAccessToken: Record<string, any> | string =
+    //         payloadAccessToken;
+    //     let payloadHashedRefreshToken: Record<string, any> | string =
+    //         payloadRefreshToken;
+    //
+    //     if (payloadEncryption) {
+    //         payloadHashedAccessToken =
+    //             await this.authService.encryptAccessToken(payloadAccessToken);
+    //         payloadHashedRefreshToken =
+    //             await this.authService.encryptRefreshToken(payloadRefreshToken);
+    //     }
+    //
+    //     const accessToken: string = await this.authService.createAccessToken(
+    //         payloadHashedAccessToken
+    //     );
+    //
+    //     const refreshToken: string = await this.authService.createRefreshToken(
+    //         payloadHashedRefreshToken
+    //     );
+    //
+    //     return {
+    //         data: {
+    //             tokenType,
+    //             expiresIn,
+    //             accessToken,
+    //             refreshToken,
+    //         },
+    //     };
+    // }
+    //
+    // @ApiExcludeEndpoint()
+    // @Response('user.signUpGoogle')
+    // @AuthGoogleOAuth2SignUpProtected()
+    // @Get('/sign-up/google')
+    // async signUpGoogle(): Promise<void> {
+    //     return;
+    // }
+
+    // @ApiExcludeEndpoint()
+    // @Response('user.signUpGoogleCallback')
+    // @AuthGoogleOAuth2SignUpProtected()
+    // @HttpCode(HttpStatus.CREATED)
+    // @Get('/sign-up/google/callback')
+    // async signUpGoogleCallback(
+    //     @AuthJwtPayload()
+    //     {
+    //         email,
+    //         firstName,
+    //         lastName,
+    //         accessToken: googleAccessToken,
+    //         refreshToken: googleRefreshToken,
+    //     }: IAuthGooglePayload
+    // ): Promise<void> {
+    //     // sign up
+    //     const promises: Promise<any>[] = [
+    //         this.roleService.findOneByName('user'),
+    //         this.userService.existByEmail(email),
+    //     ];
+    //
+    //     const [role, emailExist] = await Promise.all(promises);
+    //
+    //     if (emailExist) {
+    //         throw new ConflictException({
+    //             statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_EMAIL_EXIST_ERROR,
+    //             message: 'user.error.emailExist',
+    //         });
+    //     }
+    //
+    //     // const session: ClientSession =
+    //     //     await this.databaseConnection.startSession();
+    //     // session.startTransaction();
+    //
+    //     try {
+    //         const passwordString =
+    //             await this.authService.createPasswordRandom();
+    //         const password =
+    //             await this.authService.createPassword(passwordString);
+    //
+    //         const user: UserDoc = await this.userService.create(
+    //             {
+    //                 email,
+    //                 firstName,
+    //                 lastName,
+    //                 password: passwordString,
+    //                 role: role._id,
+    //                 signUpFrom: ENUM_USER_SIGN_UP_FROM.GOOGLE,
+    //             },
+    //             password
+    //             // { session }
+    //         );
+    //
+    //         await this.userService.updateGoogleSSO(
+    //             user,
+    //             {
+    //                 accessToken: googleAccessToken,
+    //                 refreshToken: googleRefreshToken,
+    //             }
+    //             // { session }
+    //         );
+    //
+    //         // await session.commitTransaction();
+    //         // await session.endSession();
+    //     } catch (err: any) {
+    //         // await session.abortTransaction();
+    //         // await session.endSession();
+    //
+    //         throw new InternalServerErrorException({
+    //             statusCode: ENUM_ERROR_STATUS_CODE_ERROR.ERROR_UNKNOWN,
+    //             message: 'http.serverError.internalServerError',
+    //             _error: err.message,
+    //         });
+    //     }
+    //
+    //     return;
+    // }
+    //
+    // // YANDEX AUTH
+    // @ApiExcludeEndpoint()
+    // @Response('user.loginYandex')
+    // @AuthYandexOAuth2LoginProtected()
+    // @Get('/login/yandex')
+    // async loginYandex(): Promise<void> {
+    //     return;
+    // }
+    // @ApiExcludeEndpoint()
+    // @Response('user.loginYandexCallback')
+    // @AuthYandexOAuth2LoginProtected()
+    // @Get('/login/yandex/callback')
+    // async loginYandexCallback(
+    //     @AuthJwtPayload()
+    //     {
+    //         email,
+    //         accessToken: yandexAccessToken,
+    //         refreshToken: yandexRefreshToken,
+    //     }: IAuthYandexPayload
+    // ): Promise<IResponse> {
+    //     const user: UserDoc = await this.userService.findOneByEmail(email);
+    //
+    //     if (!user) {
+    //         throw new NotFoundException({
+    //             statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_NOT_FOUND_ERROR,
+    //             message: 'user.error.notFound',
+    //         });
+    //     } else if (user.blocked) {
+    //         throw new ForbiddenException({
+    //             statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_BLOCKED_ERROR,
+    //             message: 'user.error.blocked',
+    //         });
+    //     } else if (user.inactivePermanent) {
+    //         throw new ForbiddenException({
+    //             statusCode:
+    //                 ENUM_USER_STATUS_CODE_ERROR.USER_INACTIVE_PERMANENT_ERROR,
+    //             message: 'user.error.inactivePermanent',
+    //         });
+    //     } else if (!user.isActive) {
+    //         throw new ForbiddenException({
+    //             statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_INACTIVE_ERROR,
+    //             message: 'user.error.inactive',
+    //         });
+    //     }
+    //
+    //     const userWithRole: IUserDoc =
+    //         await this.userService.joinWithRole(user);
+    //     if (!userWithRole.role.isActive) {
+    //         throw new ForbiddenException({
+    //             statusCode: ENUM_ROLE_STATUS_CODE_ERROR.ROLE_INACTIVE_ERROR,
+    //             message: 'role.error.inactive',
+    //         });
+    //     }
+    //
+    //     await this.userService.updateYandexSSO(user, {
+    //         accessToken: yandexAccessToken,
+    //         refreshToken: yandexRefreshToken,
+    //     });
+    //
+    //     const payload: UserPayloadSerialization =
+    //         await this.userService.payloadSerialization(userWithRole);
+    //     const tokenType: string = await this.authService.getTokenType();
+    //     const expiresIn: number =
+    //         await this.authService.getAccessTokenExpirationTime();
+    //     const payloadAccessToken: Record<string, any> =
+    //         await this.authService.createPayloadAccessToken(payload);
+    //     const payloadRefreshToken: Record<string, any> =
+    //         await this.authService.createPayloadRefreshToken(payload._id, {
+    //             loginWith: ENUM_AUTH_LOGIN_WITH.YANDEX,
+    //         });
+    //
+    //     const payloadEncryption = await this.authService.getPayloadEncryption();
+    //     let payloadHashedAccessToken: Record<string, any> | string =
+    //         payloadAccessToken;
+    //     let payloadHashedRefreshToken: Record<string, any> | string =
+    //         payloadRefreshToken;
+    //
+    //     if (payloadEncryption) {
+    //         payloadHashedAccessToken =
+    //             await this.authService.encryptAccessToken(payloadAccessToken);
+    //         payloadHashedRefreshToken =
+    //             await this.authService.encryptRefreshToken(payloadRefreshToken);
+    //     }
+    //
+    //     const accessToken: string = await this.authService.createAccessToken(
+    //         payloadHashedAccessToken
+    //     );
+    //
+    //     const refreshToken: string = await this.authService.createRefreshToken(
+    //         payloadHashedRefreshToken
+    //     );
+    //
+    //     return {
+    //         data: {
+    //             tokenType,
+    //             expiresIn,
+    //             accessToken,
+    //             refreshToken,
+    //         },
+    //     };
+    // }
+    // @ApiExcludeEndpoint()
+    // @Response('user.signUpYandex')
+    // @AuthYandexOAuth2SignUpProtected()
+    // @Get('/sign-up/yandex')
+    // async signUpYandex(): Promise<void> {
+    //     return;
+    // }
+    //
+    // @ApiExcludeEndpoint()
+    // @Response('user.signUpYandexCallback')
+    // @AuthYandexOAuth2SignUpProtected()
+    // @HttpCode(HttpStatus.CREATED)
+    // @Get('/sign-up/yandex/callback')
+    // async signUpYandexCallback(
+    //     @AuthJwtPayload()
+    //     {
+    //         email,
+    //         firstName,
+    //         lastName,
+    //         accessToken: yandexAccessToken,
+    //         refreshToken: yandexRefreshToken,
+    //     }: IAuthYandexPayload
+    // ): Promise<void> {
+    //     // sign up
+    //     const promises: Promise<any>[] = [
+    //         this.roleService.findOneByName('user'),
+    //         this.userService.existByEmail(email),
+    //     ];
+    //
+    //     const [role, emailExist] = await Promise.all(promises);
+    //
+    //     if (emailExist) {
+    //         throw new ConflictException({
+    //             statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_EMAIL_EXIST_ERROR,
+    //             message: 'user.error.emailExist',
+    //         });
+    //     }
+    //
+    //     // const session: ClientSession =
+    //     //     await this.databaseConnection.startSession();
+    //     // session.startTransaction();
+    //
+    //     try {
+    //         const passwordString =
+    //             await this.authService.createPasswordRandom();
+    //         const password =
+    //             await this.authService.createPassword(passwordString);
+    //
+    //         const user: UserDoc = await this.userService.create(
+    //             {
+    //                 email,
+    //                 firstName,
+    //                 lastName,
+    //                 password: passwordString,
+    //                 role: role._id,
+    //                 signUpFrom: ENUM_USER_SIGN_UP_FROM.YANDEX,
+    //             },
+    //             password
+    //             // { session }
+    //         );
+    //
+    //         await this.userService.updateYandexSSO(
+    //             user,
+    //             {
+    //                 accessToken: yandexAccessToken,
+    //                 refreshToken: yandexRefreshToken,
+    //             }
+    //             // { session }
+    //         );
+    //
+    //         // await session.commitTransaction();
+    //         // await session.endSession();
+    //     } catch (err: any) {
+    //         // await session.abortTransaction();
+    //         // await session.endSession();
+    //
+    //         throw new InternalServerErrorException({
+    //             statusCode: ENUM_ERROR_STATUS_CODE_ERROR.ERROR_UNKNOWN,
+    //             message: 'http.serverError.internalServerError',
+    //             _error: err.message,
+    //         });
+    //     }
+    //
+    //     return;
+    // }
+    //
+    // // GITHUB AUTH
+    // @ApiExcludeEndpoint()
+    // @Response('user.githubYandex')
+    // @AuthGithubOAuth2LoginProtected()
+    // @Get('/login/github')
+    // async loginGithub(): Promise<void> {
+    //     return;
+    // }
+    //
+    //
+    // @ApiExcludeEndpoint()
+    // @Response('user.loginGithubCallback')
+    // @AuthGithubOAuth2LoginProtected()
+    // @Get('/login/github/callback')
+    // async loginGithubCallback(
+    //     @AuthJwtPayload()
+    //     {
+    //         email,
+    //         accessToken: githubAccessToken,
+    //         refreshToken: githubRefreshToken,
+    //     }: IAuthGithubPayload
+    // ): Promise<IResponse> {
+    //     const user: UserDoc = await this.userService.findOneByEmail(email);
+    //
+    //     if (!user) {
+    //         throw new NotFoundException({
+    //             statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_NOT_FOUND_ERROR,
+    //             message: 'user.error.notFound',
+    //         });
+    //     } else if (user.blocked) {
+    //         throw new ForbiddenException({
+    //             statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_BLOCKED_ERROR,
+    //             message: 'user.error.blocked',
+    //         });
+    //     } else if (user.inactivePermanent) {
+    //         throw new ForbiddenException({
+    //             statusCode:
+    //                 ENUM_USER_STATUS_CODE_ERROR.USER_INACTIVE_PERMANENT_ERROR,
+    //             message: 'user.error.inactivePermanent',
+    //         });
+    //     } else if (!user.isActive) {
+    //         throw new ForbiddenException({
+    //             statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_INACTIVE_ERROR,
+    //             message: 'user.error.inactive',
+    //         });
+    //     }
+    //
+    //     const userWithRole: IUserDoc =
+    //         await this.userService.joinWithRole(user);
+    //     if (!userWithRole.role.isActive) {
+    //         throw new ForbiddenException({
+    //             statusCode: ENUM_ROLE_STATUS_CODE_ERROR.ROLE_INACTIVE_ERROR,
+    //             message: 'role.error.inactive',
+    //         });
+    //     }
+    //
+    //     await this.userService.updateGithubSSO(user, {
+    //         accessToken: githubAccessToken,
+    //         refreshToken: githubRefreshToken,
+    //     });
+    //
+    //     const payload: UserPayloadSerialization =
+    //         await this.userService.payloadSerialization(userWithRole);
+    //     const tokenType: string = await this.authService.getTokenType();
+    //     const expiresIn: number =
+    //         await this.authService.getAccessTokenExpirationTime();
+    //     const payloadAccessToken: Record<string, any> =
+    //         await this.authService.createPayloadAccessToken(payload);
+    //     const payloadRefreshToken: Record<string, any> =
+    //         await this.authService.createPayloadRefreshToken(payload._id, {
+    //             loginWith: ENUM_AUTH_LOGIN_WITH.GITHUB,
+    //         });
+    //
+    //     const payloadEncryption = await this.authService.getPayloadEncryption();
+    //     let payloadHashedAccessToken: Record<string, any> | string =
+    //         payloadAccessToken;
+    //     let payloadHashedRefreshToken: Record<string, any> | string =
+    //         payloadRefreshToken;
+    //
+    //     if (payloadEncryption) {
+    //         payloadHashedAccessToken =
+    //             await this.authService.encryptAccessToken(payloadAccessToken);
+    //         payloadHashedRefreshToken =
+    //             await this.authService.encryptRefreshToken(payloadRefreshToken);
+    //     }
+    //
+    //     const accessToken: string = await this.authService.createAccessToken(
+    //         payloadHashedAccessToken
+    //     );
+    //
+    //     const refreshToken: string = await this.authService.createRefreshToken(
+    //         payloadHashedRefreshToken
+    //     );
+    //
+    //     return {
+    //         data: {
+    //             tokenType,
+    //             expiresIn,
+    //             accessToken,
+    //             refreshToken,
+    //         },
+    //     };
+    // }
+    //
+    //
+    // @ApiExcludeEndpoint()
+    // @Response('user.signUpGithub')
+    // @AuthGithubOAuth2SignUpProtected()
+    // @Get('/sign-up/github')
+    // async signUpGithub(): Promise<void> {
+    //     return;
+    // }
+    //
+    // @ApiExcludeEndpoint()
+    // @Response('user.signUpGithubCallback')
+    // @AuthGithubOAuth2SignUpProtected()
+    // @HttpCode(HttpStatus.CREATED)
+    // @Get('/sign-up/github/callback')
+    // async signUpGithubCallback(
+    //     @AuthJwtPayload()
+    //     {
+    //         email,
+    //         firstName,
+    //         lastName,
+    //         accessToken: githubAccessToken,
+    //         refreshToken: githubRefreshToken,
+    //     }: IAuthGithubPayload
+    // ): Promise<void> {
+    //     // sign up
+    //     const promises: Promise<any>[] = [
+    //         this.roleService.findOneByName('user'),
+    //         this.userService.existByEmail(email),
+    //     ];
+    //
+    //     const [role, emailExist] = await Promise.all(promises);
+    //
+    //     if (emailExist) {
+    //         throw new ConflictException({
+    //             statusCode: ENUM_USER_STATUS_CODE_ERROR.USER_EMAIL_EXIST_ERROR,
+    //             message: 'user.error.emailExist',
+    //         });
+    //     }
+    //
+    //     // const session: ClientSession =
+    //     //     await this.databaseConnection.startSession();
+    //     // session.startTransaction();
+    //
+    //     try {
+    //         const passwordString =
+    //             await this.authService.createPasswordRandom();
+    //         const password =
+    //             await this.authService.createPassword(passwordString);
+    //
+    //         const user: UserDoc = await this.userService.create(
+    //             {
+    //                 email,
+    //                 firstName,
+    //                 lastName,
+    //                 password: passwordString,
+    //                 role: role._id,
+    //                 signUpFrom: ENUM_USER_SIGN_UP_FROM.GITHUB,
+    //             },
+    //             password
+    //             // { session }
+    //         );
+    //
+    //         await this.userService.updateGithubSSO(
+    //             user,
+    //             {
+    //                 accessToken: githubAccessToken,
+    //                 refreshToken: githubRefreshToken,
+    //             }
+    //             // { session }
+    //         );
+    //
+    //         // await session.commitTransaction();
+    //         // await session.endSession();
+    //     } catch (err: any) {
+    //         // await session.abortTransaction();
+    //         // await session.endSession();
+    //
+    //         throw new InternalServerErrorException({
+    //             statusCode: ENUM_ERROR_STATUS_CODE_ERROR.ERROR_UNKNOWN,
+    //             message: 'http.serverError.internalServerError',
+    //             _error: err.message,
+    //         });
+    //     }
+    //
+    //     return;
+    // }
 }

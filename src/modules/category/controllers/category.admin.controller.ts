@@ -1,4 +1,3 @@
-import { ApiTags } from '@nestjs/swagger';
 import {
     Body,
     Controller,
@@ -13,13 +12,21 @@ import {
 } from '@nestjs/common';
 import { AuthService } from '../../../common/auth/services/auth.service';
 import { PaginationService } from '../../../common/pagination/services/pagination.service';
-import { TagService } from '../services/tag.service';
-import { Response } from 'src/common/response/decorators/response.decorator';
+import { CategoryService } from '../services/category.service';
 import {
+    CategoryAdminCreateDoc,
+    CategoryAdminDeleteDoc,
+    CategoryAdminExportDoc,
+    CategoryAdminGetDoc,
+    CategoryAdminImportDoc,
+    CategoryAdminListDoc,
+    CategoryAdminUpdateDoc,
+} from '../docs/category.admin.doc';
+import {
+    Response,
     ResponseFile,
     ResponsePaging,
 } from '../../../common/response/decorators/response.decorator';
-import { TagListSerialization } from '../serializations/tag.list.serialization';
 import { PolicyAbilityProtected } from '../../../common/policy/decorators/policy.decorator';
 import {
     ENUM_POLICY_ACTION,
@@ -34,83 +41,76 @@ import {
     PaginationQueryFilterEqualObjectId,
 } from '../../../common/pagination/decorators/pagination.decorator';
 import {
-    TAG_DEFAULT_AVAILABLE_ORDER_BY,
-    TAG_DEFAULT_AVAILABLE_SEARCH,
-    TAG_DEFAULT_ORDER_BY,
-    TAG_DEFAULT_ORDER_DIRECTION,
-    TAG_DEFAULT_PER_PAGE,
-} from '../constants/tag.list.constant';
+    CATEGORY_DEFAULT_AVAILABLE_ORDER_BY,
+    CATEGORY_DEFAULT_AVAILABLE_SEARCH,
+    CATEGORY_DEFAULT_ORDER_BY,
+    CATEGORY_DEFAULT_ORDER_DIRECTION,
+    CATEGORY_DEFAULT_PER_PAGE,
+} from '../constants/category.list.constant';
 import { PaginationListDto } from '../../../common/pagination/dtos/pagination.list.dto';
 import {
     IResponse,
     IResponsePaging,
 } from '../../../common/response/interfaces/response.interface';
-import { ITagEntity } from '../interfaces/tag.interface';
+import { ICategoryEntity } from '../interfaces/category.interface';
 import {
-    TagAdminCreateDoc,
-    TagAdminDeleteDoc,
-    TagAdminExportDoc,
-    TagAdminGetDoc,
-    TagAdminImportDoc,
-    TagAdminListDoc,
-    TagAdminUpdateDoc,
-} from '../docs/tag.admin.doc';
-import {
-    TagAdminCreateGuard,
-    TagAdminDeleteGuard,
-    TagAdminGetGuard,
-    TagAdminUpdateGuard,
-} from '../decorators/tag.admin.decorator';
+    CategoryAdminCreateGuard,
+    CategoryAdminDeleteGuard,
+    CategoryAdminGetGuard,
+    CategoryAdminUpdateGuard,
+} from '../decorators/category.admin.decorator';
 import { RequestParamGuard } from '../../../common/request/decorators/request.decorator';
-import { TagRequestDto } from '../dtos/tag.request.dto';
-import { GetTag } from '../decorators/tag.decorator';
-import { TagDoc } from '../repository/entities/tag.entity';
+import { CategoryRequestDto } from '../dtos/category.request.dto';
+import { GetCategory } from '../decorators/category.decorator';
 import { ResponseIdSerialization } from '../../../common/response/serializations/response.id.serialization';
-import { ENUM_HELPER_FILE_TYPE } from '../../../common/helper/constants/helper.enum.constant';
+import { UserRequestDto } from '../../user/dtos/user.request.dto';
+import { CategoryUserCreateDto } from '../dtos/category.user-create.dto';
+import { GetUser } from '../../user/decorators/user.decorator';
+import { UserDoc } from '../../user/repository/entities/user.entity';
+import { CategoryUpdateDto } from '../dtos/category.update.dto';
+import { UploadFileSingle } from '../../../common/file/decorators/file.decorator';
 import { FileRequiredPipe } from '../../../common/file/pipes/file.required.pipe';
 import { FileSizeExcelPipe } from '../../../common/file/pipes/file.size.pipe';
 import { FileTypeExcelPipe } from '../../../common/file/pipes/file.type.pipe';
 import { FileExtractPipe } from '../../../common/file/pipes/file.extract.pipe';
 import { FileValidationPipe } from '../../../common/file/pipes/file.validation.pipe';
-import { TagImportDto } from '../dtos/tag.import.dto';
+import { CategoryImportDto } from '../dtos/category.import.dto';
 import { IFileExtract } from '../../../common/file/interfaces/file.interface';
-import { UploadFileSingle } from '../../../common/file/decorators/file.decorator';
-import { TagUpdateDto } from '../dtos/tag.update.dto';
-import { TagListExportSerialization } from '../serializations/tag.list-export.serialization';
-import { UserDoc } from '../../user/repository/entities/user.entity';
-import { GetUser } from '../../user/decorators/user.decorator';
-import { UserRequestDto } from '../../user/dtos/user.request.dto';
-import { TagUserCreateDto } from '../dtos/tag.user-create.dto';
+import { CategoryListExportSerialization } from '../serializations/category.list-export.serialization';
+import { ENUM_HELPER_FILE_TYPE } from '../../../common/helper/constants/helper.enum.constant';
+import { CategoryListSerialization } from '../serializations/category.list.serialization';
+import { ApiTags } from '@nestjs/swagger';
+import { CategoryDoc } from '../repository/entities/category.entity';
 
-@ApiTags('modules.admin.tag')
+@ApiTags('modules.admin.category')
 @Controller({
     version: '1',
-    path: '/tag',
+    path: '/category',
 })
-export class TagAdminController {
+export class CategoryAdminController {
     constructor(
         private readonly authService: AuthService,
         private readonly paginationService: PaginationService,
-        private readonly tagService: TagService
+        private readonly categoryService: CategoryService
     ) {}
 
-    @TagAdminListDoc()
-    @ResponsePaging('tag.list', {
-        serialization: TagListSerialization,
+    @CategoryAdminListDoc()
+    @ResponsePaging('category.list', {
+        serialization: CategoryListSerialization,
     })
     @PolicyAbilityProtected({
-        subject: ENUM_POLICY_SUBJECT.TAG,
+        subject: ENUM_POLICY_SUBJECT.CATEGORY,
         action: [ENUM_POLICY_ACTION.READ],
     })
     @AuthJwtAccessProtected()
     @Get('/list')
     async list(
         @PaginationQuery(
-            TAG_DEFAULT_PER_PAGE,
-            TAG_DEFAULT_ORDER_BY,
-            TAG_DEFAULT_ORDER_DIRECTION,
-            TAG_DEFAULT_AVAILABLE_SEARCH,
-            TAG_DEFAULT_AVAILABLE_ORDER_BY
+            CATEGORY_DEFAULT_PER_PAGE,
+            CATEGORY_DEFAULT_ORDER_BY,
+            CATEGORY_DEFAULT_ORDER_DIRECTION,
+            CATEGORY_DEFAULT_AVAILABLE_SEARCH,
+            CATEGORY_DEFAULT_AVAILABLE_ORDER_BY
         )
         { _search, _limit, _offset, _order }: PaginationListDto,
         @PaginationQueryFilterEqualObjectId('owner')
@@ -121,14 +121,15 @@ export class TagAdminController {
             ...owner,
         };
 
-        const tags: ITagEntity[] = await this.tagService.findAll(find, {
-            paging: {
-                limit: _limit,
-                offset: _offset,
-            },
-            order: _order,
-        });
-        const total: number = await this.tagService.getTotal(find);
+        const categories: ICategoryEntity[] =
+            await this.categoryService.findAll(find, {
+                paging: {
+                    limit: _limit,
+                    offset: _offset,
+                },
+                order: _order,
+            });
+        const total: number = await this.categoryService.getTotal(find);
         const totalPage: number = this.paginationService.totalPage(
             total,
             _limit
@@ -136,33 +137,33 @@ export class TagAdminController {
 
         return {
             _pagination: { total, totalPage },
-            data: tags,
+            data: categories,
         };
     }
 
-    @TagAdminGetDoc()
+    @CategoryAdminGetDoc()
     // TODO add Serialize (fix bug "RangeError: Maximum call stack size exceeded")
     @SerializeOptions({})
-    @Response('tag.get')
-    @TagAdminGetGuard()
+    @Response('category.get')
+    @CategoryAdminGetGuard()
     @PolicyAbilityProtected({
-        subject: ENUM_POLICY_SUBJECT.TAG,
+        subject: ENUM_POLICY_SUBJECT.CATEGORY,
         action: [ENUM_POLICY_ACTION.READ],
     })
     @AuthJwtAdminAccessProtected()
-    @RequestParamGuard(TagRequestDto)
-    @Get('/get/:tag')
-    async get(@GetTag() tag: TagDoc): Promise<IResponse> {
-        return { data: tag };
+    @RequestParamGuard(CategoryRequestDto)
+    @Get('/get/:category')
+    async get(@GetCategory() category: CategoryDoc): Promise<IResponse> {
+        return { data: category };
     }
 
-    @TagAdminCreateDoc()
-    @Response('tag.create', {
+    @CategoryAdminCreateDoc()
+    @Response('category.create', {
         serialization: ResponseIdSerialization,
     })
-    @TagAdminCreateGuard()
+    @CategoryAdminCreateGuard()
     @PolicyAbilityProtected({
-        subject: ENUM_POLICY_SUBJECT.TAG,
+        subject: ENUM_POLICY_SUBJECT.CATEGORY,
         action: [ENUM_POLICY_ACTION.READ, ENUM_POLICY_ACTION.CREATE],
     })
     @AuthJwtAdminAccessProtected()
@@ -170,10 +171,10 @@ export class TagAdminController {
     @Post('/create/:user')
     async create(
         @Body()
-        { name, description }: TagUserCreateDto,
+        { name, description }: CategoryUserCreateDto,
         @GetUser() user: UserDoc
     ): Promise<IResponse> {
-        const created: TagDoc = await this.tagService.create({
+        const created: CategoryDoc = await this.categoryService.create({
             name,
             description,
             owner: user._id,
@@ -184,51 +185,51 @@ export class TagAdminController {
         };
     }
 
-    @TagAdminUpdateDoc()
-    @Response('tag.update', {
+    @CategoryAdminUpdateDoc()
+    @Response('category.update', {
         serialization: ResponseIdSerialization,
     })
-    @TagAdminUpdateGuard()
+    @CategoryAdminUpdateGuard()
     @PolicyAbilityProtected({
-        subject: ENUM_POLICY_SUBJECT.TAG,
+        subject: ENUM_POLICY_SUBJECT.CATEGORY,
         action: [ENUM_POLICY_ACTION.READ, ENUM_POLICY_ACTION.UPDATE],
     })
     @AuthJwtAdminAccessProtected()
-    @RequestParamGuard(TagRequestDto)
-    @Put('/update/:tag')
+    @RequestParamGuard(CategoryRequestDto)
+    @Put('/update/:category')
     async update(
-        @GetTag() tag: TagDoc,
+        @GetCategory() category: CategoryDoc,
         @Body()
-        body: TagUpdateDto
+        body: CategoryUpdateDto
     ): Promise<IResponse> {
-        await this.tagService.update(tag, body);
+        await this.categoryService.update(category, body);
 
         return {
-            data: { _id: tag._id },
+            data: { _id: category._id },
         };
     }
 
-    @TagAdminDeleteDoc()
-    @Response('tag.delete')
-    @TagAdminDeleteGuard()
+    @CategoryAdminDeleteDoc()
+    @Response('category.delete')
+    @CategoryAdminDeleteGuard()
     @PolicyAbilityProtected({
-        subject: ENUM_POLICY_SUBJECT.TAG,
+        subject: ENUM_POLICY_SUBJECT.CATEGORY,
         action: [ENUM_POLICY_ACTION.READ, ENUM_POLICY_ACTION.DELETE],
     })
     @AuthJwtAdminAccessProtected()
-    @RequestParamGuard(TagRequestDto)
-    @Delete('/delete/:tag')
-    async delete(@GetTag() tag: TagDoc): Promise<void> {
-        await this.tagService.delete(tag);
+    @RequestParamGuard(CategoryRequestDto)
+    @Delete('/delete/:category')
+    async delete(@GetCategory() category: CategoryDoc): Promise<void> {
+        await this.categoryService.delete(category);
 
         return;
     }
 
-    @TagAdminImportDoc()
-    @Response('tag.import')
+    @CategoryAdminImportDoc()
+    @Response('category.import')
     @UploadFileSingle('file')
     @PolicyAbilityProtected({
-        subject: ENUM_POLICY_SUBJECT.TAG,
+        subject: ENUM_POLICY_SUBJECT.CATEGORY,
         action: [
             ENUM_POLICY_ACTION.READ,
             ENUM_POLICY_ACTION.CREATE,
@@ -243,30 +244,31 @@ export class TagAdminController {
             FileSizeExcelPipe,
             FileTypeExcelPipe,
             FileExtractPipe,
-            new FileValidationPipe<TagImportDto>(TagImportDto)
+            new FileValidationPipe<CategoryImportDto>(CategoryImportDto)
         )
-        file: IFileExtract<TagImportDto>
+        file: IFileExtract<CategoryImportDto>
     ): Promise<void> {
-        await this.tagService.import(file.dto);
+        await this.categoryService.import(file.dto);
 
         return;
     }
 
-    @TagAdminExportDoc()
+    @CategoryAdminExportDoc()
     @ResponseFile({
-        serialization: TagListExportSerialization,
+        serialization: CategoryListExportSerialization,
         fileType: ENUM_HELPER_FILE_TYPE.CSV,
     })
     @PolicyAbilityProtected({
-        subject: ENUM_POLICY_SUBJECT.TAG,
+        subject: ENUM_POLICY_SUBJECT.CATEGORY,
         action: [ENUM_POLICY_ACTION.READ, ENUM_POLICY_ACTION.EXPORT],
     })
     @AuthJwtAdminAccessProtected()
     @HttpCode(HttpStatus.OK)
     @Post('/export')
     async export(): Promise<IResponse> {
-        const tags: ITagEntity[] = await this.tagService.findAll({});
+        const categories: ICategoryEntity[] =
+            await this.categoryService.findAll({});
 
-        return { data: tags };
+        return { data: categories };
     }
 }

@@ -1,24 +1,23 @@
+import { ICommentDoc, ICommentEntity } from './comment.interface';
 import {
+    IDatabaseCreateManyOptions,
     IDatabaseCreateOptions,
     IDatabaseFindAllOptions,
     IDatabaseFindOneOptions,
-    IDatabaseManyOptions,
-    IDatabaseCreateManyOptions,
     IDatabaseGetTotalOptions,
+    IDatabaseManyOptions,
     IDatabaseSaveOptions,
-    IDatabaseExistOptions,
-} from 'src/common/database/interfaces/database.interface';
-import { TagCreateDto } from '../dtos/tag.create.dto';
-import { TagDoc } from '../repository/entities/tag.entity';
-import { TagUpdateDto } from '../dtos/tag.update.dto';
-import { ITagDoc, ITagEntity } from './tag.interface';
-import { TagImportDto } from '../dtos/tag.import.dto';
+} from '../../../common/database/interfaces/database.interface';
+import { CommentCreateDto } from '../dtos/comment.create.dto';
+import { CommentDoc } from '../repository/entities/comment.entity';
+import { CommentUpdateDto } from '../dtos/comment.update.dto';
+import { CommentImportDto } from '../dtos/comment.import.dto';
 
-export interface ITagService {
+export interface ICommentService {
     findAll(
         find?: Record<string, any>,
         options?: IDatabaseFindAllOptions
-    ): Promise<ITagEntity[]>;
+    ): Promise<ICommentEntity[]>;
     findOneById<T>(_id: string, options?: IDatabaseFindOneOptions): Promise<T>;
     findOne<T>(
         find: Record<string, any>,
@@ -33,23 +32,21 @@ export interface ITagService {
         options?: IDatabaseGetTotalOptions
     ): Promise<number>;
     create(
-        { name, description, owner }: TagCreateDto,
+        { name, value, owner, tags, categories }: CommentCreateDto,
         options?: IDatabaseCreateOptions
-    ): Promise<TagDoc>;
-    delete(repository: TagDoc, options?: IDatabaseSaveOptions): Promise<TagDoc>;
-    update(
-        repository: TagDoc,
-        { name, description }: TagUpdateDto,
+    ): Promise<CommentDoc>;
+    delete(
+        repository: CommentDoc,
         options?: IDatabaseSaveOptions
-    ): Promise<TagDoc>;
-    joinWithOwner(repository: TagDoc): Promise<ITagDoc>;
-    belongByOwnerId(
-        tags: string[],
-        owner: string,
-        options?: IDatabaseExistOptions
-    ): Promise<boolean>;
+    ): Promise<CommentDoc>;
+    update(
+        repository: CommentDoc,
+        { name, value }: CommentUpdateDto,
+        options?: IDatabaseSaveOptions
+    ): Promise<CommentDoc>;
+    joinWithData(repository: CommentDoc): Promise<ICommentDoc>;
     import(
-        data: TagImportDto[],
+        data: CommentImportDto[],
         options?: IDatabaseCreateManyOptions
     ): Promise<boolean>;
     deleteMany(
