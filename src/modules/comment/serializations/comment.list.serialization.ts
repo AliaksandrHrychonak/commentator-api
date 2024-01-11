@@ -1,4 +1,7 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CommentGetSerialization, } from './comment.get.serialization';
+import { CommentGetSerialization } from './comment.get.serialization';
+import { OmitType } from '@nestjs/swagger';
 
-export class CommentListSerialization extends PartialType(CommentGetSerialization) {}
+export class CommentListSerialization extends OmitType(
+    CommentGetSerialization,
+    [] as const
+) {}

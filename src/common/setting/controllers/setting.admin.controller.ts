@@ -1,22 +1,25 @@
+import { BadRequestException, Body, Controller, Put } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { AuthJwtAdminAccessProtected } from 'src/common/auth/decorators/auth.jwt.decorator';
 import {
-    Body,
-    Controller,
-    InternalServerErrorException,
-    Put,
-} from '@nestjs/common';
-import { ENUM_AUTH_PERMISSIONS } from 'src/common/auth/constants/auth.enum.permission.constant';
-import { AuthAdminJwtGuard } from 'src/common/auth/decorators/auth.jwt.decorator';
-import { ENUM_ERROR_STATUS_CODE_ERROR } from 'src/common/error/constants/error.status-code.constant';
+    ENUM_POLICY_ACTION,
+    ENUM_POLICY_SUBJECT,
+} from 'src/common/policy/constants/policy.enum.constant';
+import { PolicyAbilityProtected } from 'src/common/policy/decorators/policy.decorator';
 import { RequestParamGuard } from 'src/common/request/decorators/request.decorator';
 import { Response } from 'src/common/response/decorators/response.decorator';
-import { IResponse } from 'src/common/response/response.interface';
-import { SettingUpdateGuard } from '../decorators/setting.admin.decorator';
-import { GetSetting } from '../decorators/setting.decorator';
-import { SettingRequestDto } from '../dtos/setting.request.dto';
-import { SettingUpdateDto } from '../dtos/setting.update.dto';
-import { SettingDocument } from '../schemas/setting.schema';
-import { SettingService } from '../services/setting.service';
+import { IResponse } from 'src/common/response/interfaces/response.interface';
+import { ResponseIdSerialization } from 'src/common/response/serializations/response.id.serialization';
+import { ENUM_SETTING_STATUS_CODE_ERROR } from 'src/common/setting/constants/setting.status-code.constant';
+import { SettingAdminUpdateGuard } from 'src/common/setting/decorators/setting.admin.decorator';
+import { GetSetting } from 'src/common/setting/decorators/setting.decorator';
+import { SettingAdminUpdateDoc } from 'src/common/setting/docs/setting.admin.doc';
+import { SettingRequestDto } from 'src/common/setting/dtos/setting.request.dto';
+import { SettingUpdateValueDto } from 'src/common/setting/dtos/setting.update-value.dto';
+import { SettingDoc } from 'src/common/setting/repository/entities/setting.entity';
+import { SettingService } from 'src/common/setting/services/setting.service';
 
+@ApiTags('common.admin.setting')
 @Controller({
     version: '1',
     path: '/setting',
@@ -24,31 +27,39 @@ import { SettingService } from '../services/setting.service';
 export class SettingAdminController {
     constructor(private readonly settingService: SettingService) {}
 
-    @Response('setting.update')
-    @SettingUpdateGuard()
+    @SettingAdminUpdateDoc()
+    @Response('setting.update', {
+        serialization: ResponseIdSerialization,
+    })
+    @SettingAdminUpdateGuard()
+    @PolicyAbilityProtected({
+        subject: ENUM_POLICY_SUBJECT.SETTING,
+        action: [ENUM_POLICY_ACTION.READ, ENUM_POLICY_ACTION.UPDATE],
+    })
+    @AuthJwtAdminAccessProtected()
     @RequestParamGuard(SettingRequestDto)
-    @AuthAdminJwtGuard(
-        ENUM_AUTH_PERMISSIONS.SETTING_READ,
-        ENUM_AUTH_PERMISSIONS.SETTING_UPDATE
-    )
     @Put('/update/:setting')
     async update(
-        @GetSetting() setting: SettingDocument,
+        @GetSetting() setting: SettingDoc,
         @Body()
-        body: SettingUpdateDto
+        body: SettingUpdateValueDto
     ): Promise<IResponse> {
-        try {
-            await this.settingService.updateOneById(setting._id, body);
-        } catch (err: any) {
-            throw new InternalServerErrorException({
-                statusCode: ENUM_ERROR_STATUS_CODE_ERROR.ERROR_UNKNOWN,
-                message: 'http.serverError.internalServerError',
-                error: err.message,
+        const check = await this.settingService.checkValue(
+            body.value,
+            body.type
+        );
+        if (!check) {
+            throw new BadRequestException({
+                statusCode:
+                    ENUM_SETTING_STATUS_CODE_ERROR.SETTING_VALUE_NOT_ALLOWED_ERROR,
+                message: 'setting.error.valueNotAllowed',
             });
         }
 
+        await this.settingService.updateValue(setting, body);
+
         return {
-            _id: setting._id,
+            data: { _id: setting._id },
         };
     }
 }

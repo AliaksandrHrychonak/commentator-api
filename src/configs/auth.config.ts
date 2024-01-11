@@ -1,52 +1,65 @@
 import { registerAs } from '@nestjs/config';
-import ms from 'ms';
+import { seconds } from 'src/common/helper/constants/helper.function.constant';
 
 export default registerAs(
     'auth',
     (): Record<string, any> => ({
-        jwt: {
-            accessToken: {
-                secretKey:
-                    process.env.AUTH_JWT_ACCESS_TOKEN_SECRET_KEY || '123456',
-                expirationTime: process.env.AUTH_JWT_ACCESS_TOKEN_EXPIRED
-                    ? ms(process.env.AUTH_JWT_ACCESS_TOKEN_EXPIRED)
-                    : ms('30m'), // recommendation for production is 30m
-                notBeforeExpirationTime: ms(0), // keep it in zero value
-            },
+        accessToken: {
+            secretKey: process.env.AUTH_JWT_ACCESS_TOKEN_SECRET_KEY ?? '123456',
+            expirationTime: seconds(
+                process.env.AUTH_JWT_ACCESS_TOKEN_EXPIRED ?? '1h'
+            ), // 1 hour
+            notBeforeExpirationTime: seconds('0'), // immediately
 
-            refreshToken: {
-                secretKey:
-                    process.env.AUTH_JWT_REFRESH_TOKEN_SECRET_KEY ||
-                    '123456000',
-                expirationTime: process.env.AUTH_JWT_REFRESH_TOKEN_EXPIRED
-                    ? ms(process.env.AUTH_JWT_REFRESH_TOKEN_EXPIRED)
-                    : ms('7d'), // recommendation for production is 7d
-                expirationTimeRememberMe: process.env
-                    .AUTH_JWT_REFRESH_TOKEN_REMEMBER_ME_EXPIRED
-                    ? ms(process.env.AUTH_JWT_REFRESH_TOKEN_REMEMBER_ME_EXPIRED)
-                    : ms('30d'), // recommendation for production is 30d
-                notBeforeExpirationTime: process.env
-                    .AUTH_JWT_REFRESH_TOKEN_NOT_BEFORE_EXPIRATION
-                    ? 
-                          process.env
-                              .AUTH_JWT_REFRESH_TOKEN_NOT_BEFORE_EXPIRATION
-                    
-                    : 1800, // recommendation for production is 30m
-            },
-
-            audience: process.env.AUTH_JWT_AUDIENCE || 'localhost',
-            issuer: process.env.AUTH_JWT_ISSUER || 'commentator',
-            prefixAuthorization: 'Bearer',
+            encryptKey: process.env.AUTH_JWT_PAYLOAD_ACCESS_TOKEN_ENCRYPT_KEY,
+            encryptIv: process.env.AUTH_JWT_PAYLOAD_ACCESS_TOKEN_ENCRYPT_IV,
         },
+
+        refreshToken: {
+            secretKey:
+                process.env.AUTH_JWT_REFRESH_TOKEN_SECRET_KEY ?? '123456000',
+            expirationTime: seconds(
+                process.env.AUTH_JWT_REFRESH_TOKEN_EXPIRED ?? '14d'
+            ), // 14 days
+            notBeforeExpirationTime: seconds(
+                process.env.AUTH_JWT_REFRESH_TOKEN_NOT_BEFORE_EXPIRATION ?? '1h'
+            ), // 1 hour
+
+            encryptKey: process.env.AUTH_JWT_PAYLOAD_REFRESH_TOKEN_ENCRYPT_KEY,
+            encryptIv: process.env.AUTH_JWT_PAYLOAD_REFRESH_TOKEN_ENCRYPT_IV,
+        },
+
+        subject: process.env.AUTH_JWT_SUBJECT ?? 'commentatorDev',
+        audience: process.env.AUTH_JWT_AUDIENCE ?? 'https://example.com',
+        issuer: process.env.AUTH_JWT_ISSUER ?? 'commentator',
+        prefixAuthorization: 'Bearer',
+        payloadEncryption:
+            process.env.AUTH_JWT_PAYLOAD_ENCRYPT === 'true' ? true : false,
 
         password: {
+            attempt: true,
+            maxAttempt: 5,
             saltLength: 8,
-            expiredInMs: ms('182d'), // recommendation for production is 182 days
+            expiredIn: seconds('182d'), // 182 days
         },
 
-        basicToken: {
-            clientId: process.env.AUTH_BASIC_TOKEN_CLIENT_ID,
-            clientSecret: process.env.AUTH_BASIC_TOKEN_CLIENT_SECRET,
+        googleOAuth2: {
+            clientId: process.env.SSO_GOOGLE_CLIENT_ID,
+            clientSecret: process.env.SSO_GOOGLE_CLIENT_SECRET,
+            callbackUrlLogin: process.env.SSO_GOOGLE_CALLBACK_URL_LOGIN,
+            callbackUrlSignUp: process.env.SSO_GOOGLE_CALLBACK_URL_SIGN_UP,
+        },
+        yandexOAuth2: {
+            clientId: process.env.SSO_YANDEX_CLIENT_ID,
+            clientSecret: process.env.SSO_YANDEX_CLIENT_SECRET,
+            callbackUrlLogin: process.env.SSO_YANDEX_CALLBACK_URL_LOGIN,
+            callbackUrlSignUp: process.env.SSO_YANDEX_CALLBACK_URL_SIGN_UP,
+        },
+        githubOAuth2: {
+            clientId: process.env.SSO_GITHUB_CLIENT_ID,
+            clientSecret: process.env.SSO_GITHUB_CLIENT_SECRET,
+            callbackUrlLogin: process.env.SSO_GITHUB_CALLBACK_URL_LOGIN,
+            callbackUrlSignUp: process.env.SSO_GITHUB_CALLBACK_URL_SIGN_UP,
         },
     })
 );

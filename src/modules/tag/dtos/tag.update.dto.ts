@@ -1,4 +1,7 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { PickType } from '@nestjs/swagger';
 import { TagCreateDto } from './tag.create.dto';
 
-export class RoleUpdateDto extends PartialType(TagCreateDto) {}
+export class TagUpdateDto extends PickType(TagCreateDto, [
+    'name',
+    'description',
+] as const) {}

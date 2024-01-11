@@ -1,147 +1,152 @@
+import { UserEntity } from '../../user/repository/entities/user.entity';
+import { TagEntity } from '../../tag/repository/entities/tag.entity';
+import { CategoryEntity } from '../../category/repository/entities/category.entity';
+import { ICommentService } from '../interfaces/comment.service.interface';
 import { Injectable } from '@nestjs/common';
-import { Model, Types } from 'mongoose';
-import { CommentDocument, CommentEntity } from '../schemas/comment.schema';
-import { HelperStringService } from 'src/common/helper/services/helper.string.service';
-import { DatabaseEntity } from 'src/common/database/decorators/database.decorator';
+import { CommentRepository } from '../repository/repositories/comment.repository';
 import {
+    IDatabaseCreateManyOptions,
+    IDatabaseCreateOptions,
     IDatabaseFindAllOptions,
     IDatabaseFindOneOptions,
-} from 'src/common/database/database.interface';
-import { TagEntity } from 'src/modules/tag/schemas/tag.schema';
-import { ICommentCreate } from '../comment.interface';
+    IDatabaseGetTotalOptions,
+    IDatabaseManyOptions,
+    IDatabaseSaveOptions,
+} from '../../../common/database/interfaces/database.interface';
+import { ICommentDoc, ICommentEntity } from '../interfaces/comment.interface';
 import { CommentCreateDto } from '../dtos/comment.create.dto';
+import {
+    CommentDoc,
+    CommentEntity,
+} from '../repository/entities/comment.entity';
+import { CommentUpdateDto } from '../dtos/comment.update.dto';
+import { CommentImportDto } from '../dtos/comment.import.dto';
 
 @Injectable()
-export class CommentService {
-    private readonly uploadPath: string;
+export class CommentService implements ICommentService {
+    constructor(private readonly commentRepository: CommentRepository) {}
 
-    constructor(
-        @DatabaseEntity(CommentEntity.name)
-        private readonly commentModel: Model<CommentDocument>,
-        private readonly helperStringService: HelperStringService
-    ) {}
     async findAll(
         find?: Record<string, any>,
         options?: IDatabaseFindAllOptions
-    ): Promise<CommentDocument[]> {
-        const comments = this.commentModel.find(find).populate({
-            path: 'tags',
-            model: TagEntity.name,
+    ): Promise<ICommentEntity[]> {
+        return this.commentRepository.findAll<ICommentEntity>(find, {
+            ...options,
+            join: true,
         });
-
-        if (
-            options &&
-            options.limit !== undefined &&
-            options.skip !== undefined
-        ) {
-            comments.limit(options.limit).skip(options.skip);
-        }
-
-        if (options && options.sort) {
-            comments.sort(options.sort);
-        }
-        return comments.lean();
-    }
-
-    async getTotal(find?: Record<string, any>): Promise<number> {
-        return this.commentModel.countDocuments(find);
     }
 
     async findOneById<T>(
         _id: string,
         options?: IDatabaseFindOneOptions
     ): Promise<T> {
-        const comment = this.commentModel.findById(_id);
-
-        if (options && options.populate && options.populate.tags) {
-            comment.populate({
-                path: 'tags',
-                model: TagEntity.name,
-            });
-        }
-
-        return comment.lean();
+        return this.commentRepository.findOneById<T>(_id, options);
     }
 
     async findOne<T>(
-        find?: Record<string, any>,
+        find: Record<string, any>,
         options?: IDatabaseFindOneOptions
     ): Promise<T> {
-        const comment = this.commentModel.findOne(find);
+        return this.commentRepository.findOne<T>(find, options);
+    }
 
-        if (options && options.populate && options.populate.tags) {
-            comment.populate({
-                path: 'tags',
-                model: TagEntity.name,
-            });
-        }
-
-        return comment.lean();
+    async findOneByName<T>(
+        name: string,
+        options?: IDatabaseFindOneOptions
+    ): Promise<T> {
+        return this.commentRepository.findOne<T>({ name }, options);
     }
 
     async create(
-        value: string,
-        owner: string,
-        tags?: Types.ObjectId[]
-    ): Promise<CommentDocument> {
-        const comment: ICommentCreate = {
-            value,
-            owner: new Types.ObjectId(owner),
-            tags: tags ? tags.map((val) => new Types.ObjectId(val)) : [],
-        };
+        { name, value, owner, tags, categories }: CommentCreateDto,
+        options?: IDatabaseCreateOptions
+    ): Promise<CommentDoc> {
+        const create: CommentEntity = new CommentEntity();
+        create.name = name;
+        create.value = value;
+        create.owner = owner;
+        create.tags = tags;
+        create.categories = categories;
 
-        const create: CommentDocument = new this.commentModel(comment);
-        return create.save();
+        return this.commentRepository.create<CommentEntity>(create, options);
     }
 
-    async deleteOneById(_id: string): Promise<CommentDocument> {
-        return this.commentModel.findByIdAndDelete(_id);
+    async delete(
+        repository: CommentDoc,
+        options?: IDatabaseSaveOptions
+    ): Promise<CommentDoc> {
+        return this.commentRepository.softDelete(repository, options);
     }
 
-    async deleteOne(find: Record<string, any>): Promise<CommentDocument> {
-        return this.commentModel.findOneAndDelete(find);
+    async update(
+        repository: CommentDoc,
+        { name, value, tags, categories }: CommentUpdateDto,
+        options?: IDatabaseSaveOptions
+    ): Promise<CommentDoc> {
+        repository.name = name;
+        repository.value = value;
+        repository.tags = tags;
+        repository.categories = categories;
+
+        return this.commentRepository.save(repository, options);
     }
 
-    async update(_id: string, value: string): Promise<CommentDocument> {
-        const update: CommentDocument = await this.commentModel.findById(_id);
-        update.value = value;
-        return update.save();
+    async getTotal(
+        find?: Record<string, any>,
+        options?: IDatabaseGetTotalOptions
+    ): Promise<number> {
+        return this.commentRepository.getTotal(find, {
+            ...options,
+            join: true,
+        });
     }
 
-    async updateTags(id: string, tag: string): Promise<CommentDocument> {
-        const update = await this.commentModel.findByIdAndUpdate(
-            id,
+    async joinWithData(repository: CommentDoc): Promise<ICommentDoc> {
+        return repository.populate([
             {
-                $addToSet: { tags: new Types.ObjectId(tag) },
+                path: 'owner',
+                localField: 'user',
+                foreignField: '_id',
+                model: UserEntity.name,
             },
-            { new: true }
-        );
-
-        return update;
-    }
-
-    async removeTags(id: string, tag: string): Promise<CommentDocument> {
-        const update = await this.commentModel.findByIdAndUpdate(
-            id,
             {
-                $pull: { tags: new Types.ObjectId(tag) },
+                path: 'tags',
+                localField: 'tag',
+                foreignField: '_id',
+                model: TagEntity.name,
             },
-            { new: true }
-        );
-
-        return update;
+            {
+                path: 'categories',
+                localField: 'category',
+                foreignField: '_id',
+                model: CategoryEntity.name,
+            },
+        ]);
     }
 
-    async insert(
-        data: CommentCreateDto[],
-        owner: string
-    ): Promise<CommentDocument[]> {
-        return this.commentModel.insertMany(
-            data.map(({ value, tags }) => ({
-                value,
-                owner: new Types.ObjectId(owner),
-                tags,
-            }))
+    async deleteMany(
+        find: Record<string, any>,
+        options?: IDatabaseManyOptions
+    ): Promise<boolean> {
+        return this.commentRepository.deleteMany(find, options);
+    }
+
+    async import(
+        data: CommentImportDto[],
+        options?: IDatabaseCreateManyOptions
+    ): Promise<boolean> {
+        const comments: CommentEntity[] = data.map(({ name, value, owner }) => {
+            const create: CommentEntity = new CommentEntity();
+            create.name = name;
+            create.value = value;
+            create.owner = owner;
+
+            return create;
+        });
+
+        return this.commentRepository.createMany<CommentEntity>(
+            comments,
+            options
         );
     }
 }

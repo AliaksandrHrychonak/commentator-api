@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { faker } from '@faker-js/faker';
+import { IHelperNumberService } from 'src/common/helper/interfaces/helper.number-service.interface';
 
 @Injectable()
-export class HelperNumberService {
+export class HelperNumberService implements IHelperNumberService {
     check(number: string): boolean {
         const regex = /^-?\d+$/;
         return regex.test(number);
@@ -19,6 +20,14 @@ export class HelperNumberService {
     }
 
     randomInRange(min: number, max: number): number {
-        return faker.datatype.number({ min, max });
+        return faker.number.int({ min, max });
+    }
+
+    percent(value: number, total: number): number {
+        let tValue = value / total;
+        if (Number.isNaN(tValue) || !Number.isFinite(tValue)) {
+            tValue = 0;
+        }
+        return Number.parseFloat((tValue * 100).toFixed(2));
     }
 }

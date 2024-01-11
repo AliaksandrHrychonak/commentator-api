@@ -2,12 +2,15 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
+    "plugins": ["@nestjs/swagger"],
     "assets": [
       { 
         "include": "languages/**/*", 
-        "outDir": "dist/src" 
+        "outDir": "dist/src"
       }
     ],
-    "watchAssets": true
+    "webpack": false,
+    "deleteOutDir": true,
+    "watchAssets": false
   }
 }

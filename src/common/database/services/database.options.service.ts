@@ -1,60 +1,46 @@
 import { Injectable } from '@nestjs/common';
-import {
-    MongooseOptionsFactory,
-    MongooseModuleOptions,
-} from '@nestjs/mongoose';
+import { MongooseModuleOptions } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { ConfigService } from '@nestjs/config';
+import { IDatabaseOptionsService } from 'src/common/database/interfaces/database.options-service.interface';
+import { ENUM_APP_ENVIRONMENT } from 'src/app/constants/app.enum.constant';
 
 @Injectable()
-export class DatabaseOptionsService implements MongooseOptionsFactory {
-    private readonly host: string;
-    private readonly database: string;
-    private readonly user: string;
-    private readonly password: string;
-    private readonly debug: boolean;
-    private readonly options: string;
-    private readonly env: string;
+export class DatabaseOptionsService implements IDatabaseOptionsService {
+    constructor(private readonly configService: ConfigService) {}
 
-    constructor(private readonly configService: ConfigService) {
-        this.env = this.configService.get<string>('app.env');
-        this.host = this.configService.get<string>('database.host');
-        this.database = this.configService.get<string>('database.name');
-        this.user = this.configService.get<string>('database.user');
-        this.password = this.configService.get<string>('database.password');
-        this.debug = this.configService.get<boolean>('database.debug');
+    createOptions(): MongooseModuleOptions {
+        const env = this.configService.get<string>('app.env');
+        const host = this.configService.get<string>('database.host');
+        const database = this.configService.get<string>('database.name');
+        const user = this.configService.get<string>('database.user');
+        const password = this.configService.get<string>('database.password');
+        const debug = this.configService.get<boolean>('database.debug');
 
-        /* istanbul ignore next */
-        this.options = this.configService.get<string>('database.options')
+        const options = this.configService.get<string>('database.options')
             ? `?${this.configService.get<string>('database.options')}`
             : '';
-    }
 
-    createMongooseOptions(): MongooseModuleOptions {
-        let uri = `${this.host}`;
+        let uri = `${host}`;
 
-        if (this.database) {
-            uri = `${uri}/${this.database}${this.options}`;
+        if (database) {
+            uri = `${uri}/${database}${options}`;
         }
 
-        /* istanbul ignore next */
-        if (this.env !== 'production') {
-            mongoose.set('debug', this.debug);
+        if (env !== ENUM_APP_ENVIRONMENT.PRODUCTION) {
+            mongoose.set('debug', debug);
         }
 
         const mongooseOptions: MongooseModuleOptions = {
             uri,
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
             serverSelectionTimeoutMS: 5000,
-            // useMongoClient: true
+            autoCreate: true,
         };
 
-        /* istanbul ignore next */
-        if (this.user && this.password) {
+        if (user && password) {
             mongooseOptions.auth = {
-                username: this.user,
-                password: this.password,
+                username: user,
+                password: password,
             };
         }
 

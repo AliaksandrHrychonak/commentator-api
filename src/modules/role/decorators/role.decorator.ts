@@ -1,9 +1,15 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { IRoleDocument } from '../role.interface';
+import { IRequestApp } from 'src/common/request/interfaces/request.interface';
+import {
+    RoleDoc,
+    RoleEntity,
+} from 'src/modules/role/repository/entities/role.entity';
 
 export const GetRole = createParamDecorator(
-    (data: string, ctx: ExecutionContext): IRoleDocument => {
-        const { __role } = ctx.switchToHttp().getRequest();
-        return __role;
+    (returnPlain: boolean, ctx: ExecutionContext): RoleDoc | RoleEntity => {
+        const { __role } = ctx
+            .switchToHttp()
+            .getRequest<IRequestApp & { __role: RoleDoc }>();
+        return returnPlain ? __role.toObject() : __role;
     }
 );

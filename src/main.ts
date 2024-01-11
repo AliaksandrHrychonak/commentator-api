@@ -3,23 +3,29 @@ import { Logger, VersioningType } from '@nestjs/common';
 import { AppModule } from 'src/app/app.module';
 import { ConfigService } from '@nestjs/config';
 import { useContainer } from 'class-validator';
+import swaggerInit from './swagger';
 
 async function bootstrap() {
     const app: NestApplication = await NestFactory.create(AppModule);
     const configService = app.get(ConfigService);
+    const databaseUri: string = configService.get<string>('database.host');
     const env: string = configService.get<string>('app.env');
-    const tz: string = configService.get<string>('app.timezone');
     const host: string = configService.get<string>('app.http.host');
     const port: number = configService.get<number>('app.http.port');
     const globalPrefix: string = configService.get<string>('app.globalPrefix');
-    const versioning: boolean = configService.get<boolean>('app.versioning.on');
     const versioningPrefix: string = configService.get<string>(
         'app.versioning.prefix'
     );
-    const version: string = configService.get<string>('app.version');
+    const version: string = configService.get<string>('app.versioning.version');
+
+    // enable
+    const httpEnable: boolean = configService.get<boolean>('app.http.enable');
+    const versionEnable: string = configService.get<string>(
+        'app.versioning.enable'
+    );
+    const jobEnable: boolean = configService.get<boolean>('app.jobEnable');
 
     const logger = new Logger();
-    process.env.TZ = tz;
     process.env.NODE_ENV = env;
 
     // Global
@@ -27,7 +33,7 @@ async function bootstrap() {
     useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
     // Versioning
-    if (versioning) {
+    if (versionEnable) {
         app.enableVersioning({
             type: VersioningType.URI,
             defaultVersion: version,
@@ -35,43 +41,33 @@ async function bootstrap() {
         });
     }
 
+    // Swagger
+    await swaggerInit(app);
+
     // Listen
     await app.listen(port, host);
 
     logger.log(`==========================================================`);
-    logger.log(`App Environment is ${env}`, 'NestApplication');
-    logger.log(
-        `App Language is ${configService.get<string>('app.language')}`,
-        'NestApplication'
-    );
-    logger.log(
-        `App Debug is ${configService.get<boolean>('app.debug')}`,
-        'NestApplication'
-    );
-    logger.log(`App Versioning is ${versioning}`, 'NestApplication');
-    logger.log(
-        `App Http is ${configService.get<boolean>('app.httpOn')}`,
-        'NestApplication'
-    );
-    logger.log(
-        `App Task is ${configService.get<boolean>('app.jobOn')}`,
-        'NestApplication'
-    );
-    logger.log(`App Timezone is ${tz}`, 'NestApplication');
-    logger.log(
-        `Database Debug is ${configService.get<boolean>('database.debug')}`,
-        'NestApplication'
-    );
+
+    logger.log(`Environment Variable`, 'NestApplication');
+    logger.log(JSON.parse(JSON.stringify(process.env)), 'NestApplication');
 
     logger.log(`==========================================================`);
 
+    logger.log(`Job is ${jobEnable}`, 'NestApplication');
     logger.log(
-        `Database running on ${configService.get<string>(
-            'database.host'
-        )}/${configService.get<string>('database.name')}`,
+        `Http is ${httpEnable}, ${
+            httpEnable ? 'routes registered' : 'no routes registered'
+        }`,
         'NestApplication'
     );
-    logger.log(`Server running on ${await app.getUrl() }`, 'NestApplication');
+    logger.log(`Http versioning is ${versionEnable}`, 'NestApplication');
+
+    logger.log(
+        `Http Server running on ${await app.getUrl()}`,
+        'NestApplication'
+    );
+    logger.log(`Database uri ${databaseUri}`, 'NestApplication');
 
     logger.log(`==========================================================`);
 }

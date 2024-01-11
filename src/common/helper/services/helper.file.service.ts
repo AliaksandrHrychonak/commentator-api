@@ -1,52 +1,92 @@
-/* istanbul ignore file */
-
 import { Injectable } from '@nestjs/common';
-import { IHelperFileExcelRows } from '../helper.interface';
-import XLSX from 'xlsx';
+import bytes from 'bytes';
+import { ENUM_HELPER_FILE_TYPE } from 'src/common/helper/constants/helper.enum.constant';
+import { IHelperFileService } from 'src/common/helper/interfaces/helper.file-service.interface';
+import {
+    IHelperFileWriteExcelOptions,
+    IHelperFileReadExcelOptions,
+    IHelperFileRows,
+    IHelperFileCreateExcelWorkbookOptions,
+} from 'src/common/helper/interfaces/helper.interface';
+import { utils, write, read, WorkBook } from 'xlsx';
+import { writeFileSync, readFileSync } from 'fs';
 
 @Injectable()
-export class HelperFileService {
-    async writeExcel(
-        rows: IHelperFileExcelRows[],
-        options?: Record<string, any>
-    ): Promise<Buffer> {
+export class HelperFileService implements IHelperFileService {
+    createExcelWorkbook(
+        rows: IHelperFileRows[],
+        options?: IHelperFileCreateExcelWorkbookOptions
+    ): WorkBook {
         // headers
         const headers = Object.keys(rows[0]);
 
         // worksheet
-        const worksheet = XLSX.utils.json_to_sheet(rows);
+        const worksheet = utils.json_to_sheet(rows);
 
         // workbook
-        const workbook = XLSX.utils.book_new();
+        const workbook = utils.book_new();
 
-        XLSX.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
-        XLSX.utils.book_append_sheet(
+        utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+        utils.book_append_sheet(
             workbook,
             worksheet,
-            options && options.sheetName ? options.sheetName : 'Sheet 1'
+            options?.sheetName ?? 'Sheet 1'
         );
 
+        return workbook;
+    }
+
+    writeExcelToBuffer(
+        workbook: WorkBook,
+        options?: IHelperFileWriteExcelOptions
+    ): Buffer {
         // create buffer
-        const buff: Buffer = XLSX.write(workbook, {
+        const buff: Buffer = write(workbook, {
             type: 'buffer',
-            bookType: 'xlsx',
+            bookType: options?.type ?? ENUM_HELPER_FILE_TYPE.CSV,
+            password: options?.password,
         });
 
         return buff;
     }
 
-    async readExcel(file: Buffer): Promise<IHelperFileExcelRows[]> {
+    readExcelFromBuffer(
+        file: Buffer,
+        options?: IHelperFileReadExcelOptions
+    ): IHelperFileRows[][] {
         // workbook
-        const workbook = XLSX.read(file);
+        const workbook = read(file, {
+            type: 'buffer',
+            password: options?.password,
+            sheets: options?.sheet,
+        });
 
         // worksheet
-        const worksheetName = workbook.SheetNames;
-        const worksheet = workbook.Sheets[worksheetName[0]];
+        const worksheetsName: string[] = workbook.SheetNames;
+        const sheets: IHelperFileRows[][] = [];
+        for (const worksheetName of worksheetsName) {
+            const worksheet = workbook.Sheets[worksheetName];
 
-        // rows=
-        const rows: IHelperFileExcelRows[] =
-            XLSX.utils.sheet_to_json(worksheet);
+            // rows
+            const rows: IHelperFileRows[] = utils.sheet_to_json(worksheet);
+            sheets.push(rows);
+        }
 
-        return rows;
+        return sheets;
+    }
+
+    convertToBytes(megabytes: string): number {
+        return bytes(megabytes);
+    }
+
+    createJson(path: string, data: Record<string, any>[]): boolean {
+        const sData = JSON.stringify(data);
+        writeFileSync(path, sData);
+
+        return true;
+    }
+    readJson(path: string): Record<string, any>[] {
+        const data: string = readFileSync(path, 'utf8');
+        return JSON.parse(data);
     }
 }

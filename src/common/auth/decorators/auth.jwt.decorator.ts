@@ -1,61 +1,53 @@
 import { applyDecorators, SetMetadata, UseGuards } from '@nestjs/common';
-import {
-    AUTH_ACCESS_FOR_META_KEY,
-    AUTH_PERMISSION_META_KEY,
-} from '../constants/auth.constant';
-import { ENUM_AUTH_ACCESS_FOR } from '../constants/auth.enum.constant';
-import { ENUM_AUTH_PERMISSIONS } from '../constants/auth.enum.permission.constant';
-import { JwtRefreshGuard } from '../guards/jwt-refresh/auth.jwt-refresh.guard';
-import { JwtGuard } from '../guards/jwt/auth.jwt.guard';
-import { AuthPayloadAccessForGuard } from '../guards/payload/auth.payload.access-for.guard';
-import { AuthPayloadDefaultGuard } from '../guards/payload/auth.payload.default.guard';
-import { AuthPayloadPasswordExpiredGuard } from '../guards/payload/auth.payload.password-expired.guard';
-import { AuthPayloadPermissionGuard } from '../guards/payload/auth.payload.permission.guard';
+import { AuthJwtAccessGuard } from 'src/common/auth/guards/jwt-access/auth.jwt-access.guard';
+import { AuthJwtRefreshGuard } from 'src/common/auth/guards/jwt-refresh/auth.jwt-refresh.guard';
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import { UserPayloadSerialization } from 'src/modules/user/serializations/user.payload.serialization';
+import { IRequestApp } from 'src/common/request/interfaces/request.interface';
+import { RolePayloadTypeGuard } from 'src/modules/role/guards/payload/role.payload.type.guard';
+import { ROLE_TYPE_META_KEY } from 'src/modules/role/constants/role.constant';
+import { ENUM_ROLE_TYPE } from 'src/modules/role/constants/role.enum.constant';
 
-export function AuthJwtGuard(...permissions: ENUM_AUTH_PERMISSIONS[]): any {
+export const AuthJwtPayload = createParamDecorator(
+    (data: string, ctx: ExecutionContext): Record<string, any> => {
+        const { user } = ctx
+            .switchToHttp()
+            .getRequest<IRequestApp & { user: UserPayloadSerialization }>();
+        return data ? user[data] : user;
+    }
+);
+
+export const AuthJwtToken = createParamDecorator(
+    (data: string, ctx: ExecutionContext): string => {
+        const { headers } = ctx.switchToHttp().getRequest<IRequestApp>();
+        const { authorization } = headers;
+        const authorizations: string[] = authorization.split(' ');
+
+        return authorizations.length >= 2 ? authorizations[1] : undefined;
+    }
+);
+
+export function AuthJwtAccessProtected(): MethodDecorator {
+    return applyDecorators(UseGuards(AuthJwtAccessGuard));
+}
+
+export function AuthJwtUserAccessProtected(): MethodDecorator {
     return applyDecorators(
-        UseGuards(
-            JwtGuard,
-            AuthPayloadDefaultGuard,
-            AuthPayloadPermissionGuard
-        ),
-        SetMetadata(AUTH_PERMISSION_META_KEY, permissions)
+        UseGuards(AuthJwtAccessGuard, RolePayloadTypeGuard),
+        SetMetadata(ROLE_TYPE_META_KEY, [ENUM_ROLE_TYPE.USER])
     );
 }
 
-export function AuthPublicJwtGuard(
-    ...permissions: ENUM_AUTH_PERMISSIONS[]
-): any {
+export function AuthJwtAdminAccessProtected(): MethodDecorator {
     return applyDecorators(
-        UseGuards(
-            JwtGuard,
-            AuthPayloadDefaultGuard,
-            AuthPayloadPasswordExpiredGuard,
-            AuthPayloadAccessForGuard,
-            AuthPayloadPermissionGuard
-        ),
-        SetMetadata(AUTH_PERMISSION_META_KEY, permissions),
-        SetMetadata(AUTH_ACCESS_FOR_META_KEY, [ENUM_AUTH_ACCESS_FOR.USER])
-    );
-}
-
-export function AuthAdminJwtGuard(...permissions: ENUM_AUTH_PERMISSIONS[]) {
-    return applyDecorators(
-        UseGuards(
-            JwtGuard,
-            AuthPayloadDefaultGuard,
-            AuthPayloadPasswordExpiredGuard,
-            AuthPayloadAccessForGuard,
-            AuthPayloadPermissionGuard
-        ),
-        SetMetadata(AUTH_PERMISSION_META_KEY, permissions),
-        SetMetadata(AUTH_ACCESS_FOR_META_KEY, [
-            ENUM_AUTH_ACCESS_FOR.SUPER_ADMIN,
-            ENUM_AUTH_ACCESS_FOR.ADMIN,
+        UseGuards(AuthJwtAccessGuard, RolePayloadTypeGuard),
+        SetMetadata(ROLE_TYPE_META_KEY, [
+            ENUM_ROLE_TYPE.SUPER_ADMIN,
+            ENUM_ROLE_TYPE.ADMIN,
         ])
     );
 }
 
-export function AuthRefreshJwtGuard(): any {
-    return applyDecorators(UseGuards(JwtRefreshGuard));
+export function AuthJwtRefreshProtected(): MethodDecorator {
+    return applyDecorators(UseGuards(AuthJwtRefreshGuard));
 }

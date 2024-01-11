@@ -1,19 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { faker } from '@faker-js/faker';
-import { IHelperStringRandomOptions } from '../helper.interface';
-import { HelperDateService } from './helper.date.service';
+import { IHelperStringRandomOptions } from 'src/common/helper/interfaces/helper.interface';
+import { IHelperStringService } from 'src/common/helper/interfaces/helper.string-service.interface';
 
 @Injectable()
-export class HelperStringService {
-    constructor(private readonly helperDateService: HelperDateService) {}
-
+export class HelperStringService implements IHelperStringService {
     checkEmail(email: string): boolean {
         const regex = /\S+@\S+\.\S+/;
         return regex.test(email);
     }
 
     randomReference(length: number, prefix?: string): string {
-        const timestamp = `${this.helperDateService.timestamp()}`;
+        const timestamp = `${new Date().getTime()}`;
         const randomString: string = this.random(length, {
             safe: true,
             upperCase: true,
@@ -25,60 +23,39 @@ export class HelperStringService {
     }
 
     random(length: number, options?: IHelperStringRandomOptions): string {
-        const rString =
-            options && options.safe
-                ? faker.internet.password(
-                      length,
-                      true,
-                      /[A-Z]/,
-                      options && options.prefix ? options.prefix : undefined
-                  )
-                : faker.internet.password(
-                      length,
-                      false,
-                      /\w/,
-                      options && options.prefix ? options.prefix : undefined
-                  );
+        const rString = options?.safe
+            ? faker.internet.password({
+                  length,
+                  memorable: true,
+                  pattern: /[A-Z]/,
+                  prefix: options?.prefix,
+              })
+            : faker.internet.password({
+                  length,
+                  memorable: false,
+                  pattern: /\w/,
+                  prefix: options?.prefix,
+              });
 
-        return options && options.upperCase ? rString.toUpperCase() : rString;
+        return options?.upperCase ? rString.toUpperCase() : rString;
     }
 
     censor(value: string): string {
+        value = value.replaceAll(' ', '');
         const length = value.length;
-        if (length === 1) {
+        if (length <= 3) {
             return value;
         }
 
-        const end = length > 4 ? length - 4 : 1;
+        const end = Math.ceil(length * 0.7);
         const censorString = '*'.repeat(end > 10 ? 10 : end);
         const visibleString = value.substring(end, length);
         return `${censorString}${visibleString}`;
     }
 
-    checkStringOrNumber(text: string) {
-        const regex = new RegExp(/^[\w.-]+$/);
-
-        return regex.test(text);
-    }
-
-    convertStringToNumberOrBooleanIfPossible(
-        text: string
-    ): string | number | boolean {
-        let convertValue: string | boolean | number = text;
-
-        const regexNumber = /^-?\d+$/;
-        if (text === 'true' || text === 'false') {
-            convertValue = text === 'true';
-        } else if (regexNumber.test(text)) {
-            convertValue = Number(text);
-        }
-
-        return convertValue;
-    }
-
     checkPasswordWeak(password: string, length?: number): boolean {
         const regex = new RegExp(
-            `^(?=.*?[A-Z])(?=.*?[a-z]).{${length || 8},}$`
+            `^(?=.*?[A-Z])(?=.*?[a-z]).{${length ?? 8},}$`
         );
 
         return regex.test(password);
@@ -86,7 +63,7 @@ export class HelperStringService {
 
     checkPasswordMedium(password: string, length?: number): boolean {
         const regex = new RegExp(
-            `^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{${length || 8},}$`
+            `^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{${length ?? 8},}$`
         );
 
         return regex.test(password);
@@ -95,7 +72,7 @@ export class HelperStringService {
     checkPasswordStrong(password: string, length?: number): boolean {
         const regex = new RegExp(
             `^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{${
-                length || 8
+                length ?? 8
             },}$`
         );
 

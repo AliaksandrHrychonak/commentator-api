@@ -1,64 +1,54 @@
-import { DynamicModule, Module } from '@nestjs/common';
+import { DynamicModule, ForwardReference, Module, Type } from '@nestjs/common';
 import { RouterModule as NestJsRouterModule } from '@nestjs/core';
 import { RoutesAdminModule } from './routes/routes.admin.module';
-import { RoutesCallbackModule } from './routes/routes.callback.module';
-import { RoutesEnumModule } from './routes/routes.enum.module';
-import { RoutesModule } from './routes/routes.module';
-import { RoutesPublicModule } from './routes/routes.public.module';
-import { RoutesTestModule } from './routes/routes.test.module';
+import { RoutesUserModule } from 'src/router/routes/routes.user.module';
+import { RoutesPublicModule } from 'src/router/routes/routes.public.module';
+import { AppController } from 'src/app/controllers/app.controller';
+import { RoutesAuthModule } from 'src/router/routes/routes.auth.module';
 
 @Module({})
 export class RouterModule {
-    static register(): DynamicModule {
-        if (process.env.APP_HTTP_ON === 'true') {
-            return {
-                module: RouterModule,
-                controllers: [],
-                providers: [],
-                exports: [],
-                imports: [
-                    RoutesModule,
-                    RoutesTestModule,
-                    RoutesEnumModule,
-                    RoutesPublicModule,
-                    RoutesAdminModule,
-                    RoutesCallbackModule,
-                    NestJsRouterModule.register([
-                        {
-                            path: '/',
-                            module: RoutesModule,
-                        },
-                        {
-                            path: '/test',
-                            module: RoutesTestModule,
-                        },
-                        {
-                            path: '/enum',
-                            module: RoutesEnumModule,
-                        },
-                        {
-                            path: '/public',
-                            module: RoutesPublicModule,
-                        },
-                        {
-                            path: '/admin',
-                            module: RoutesAdminModule,
-                        },
-                        {
-                            path: '/callback',
-                            module: RoutesCallbackModule,
-                        },
-                    ]),
-                ],
-            };
+    static forRoot(): DynamicModule {
+        const imports: (
+            | DynamicModule
+            | Type<any>
+            | Promise<DynamicModule>
+            | ForwardReference<any>
+        )[] = [];
+
+        if (process.env.HTTP_ENABLE === 'true') {
+            imports.push(
+                RoutesPublicModule,
+                RoutesUserModule,
+                RoutesAdminModule,
+                RoutesAuthModule,
+                NestJsRouterModule.register([
+                    {
+                        path: '/public',
+                        module: RoutesPublicModule,
+                    },
+                    {
+                        path: '/admin',
+                        module: RoutesAdminModule,
+                    },
+                    {
+                        path: '/user',
+                        module: RoutesUserModule,
+                    },
+                    {
+                        path: '/auth',
+                        module: RoutesAuthModule,
+                    },
+                ])
+            );
         }
 
         return {
             module: RouterModule,
             providers: [],
             exports: [],
-            controllers: [],
-            imports: [],
+            controllers: [AppController],
+            imports,
         };
     }
 }

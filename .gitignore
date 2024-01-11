@@ -1,6 +1,7 @@
 # compiled output
 /dist
 /node_modules
+.warmup/
 
 # Logs
 logs
@@ -15,8 +16,6 @@ lerna-debug.log*
 
 # Tests
 /coverage
-/e2e-coverage
-/integration-coverage
 /.nyc_output
 
 # IDEs and editors
@@ -46,7 +45,7 @@ lerna-debug.log*
 !.yarn/versions
 
 # environment
-.env
-.env.development
+.env*
+!.env.example
 config.yaml
 config.yml

@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AES, enc, mode, pad } from 'crypto-js';
+import { IHelperEncryptionService } from 'src/common/helper/interfaces/helper.encryption-service.interface';
 import {
     IHelperJwtOptions,
     IHelperJwtVerifyOptions,
-} from '../helper.interface';
+} from 'src/common/helper/interfaces/helper.interface';
 
 @Injectable()
-export class HelperEncryptionService {
+export class HelperEncryptionService implements IHelperEncryptionService {
     constructor(private readonly jwtService: JwtService) {}
 
     base64Encrypt(data: string): string {
@@ -39,7 +40,11 @@ export class HelperEncryptionService {
         return cipher.toString();
     }
 
-    aes256Decrypt(encrypted: string, key: string, iv: string): string {
+    aes256Decrypt(
+        encrypted: string,
+        key: string,
+        iv: string
+    ): string | Record<string, any> | Record<string, any>[] {
         const cIv = enc.Utf8.parse(iv);
         const cipher = AES.decrypt(encrypted, key, {
             mode: mode.CBC,
@@ -47,7 +52,7 @@ export class HelperEncryptionService {
             iv: cIv,
         });
 
-        return cipher.toString(enc.Utf8);
+        return JSON.parse(cipher.toString(enc.Utf8));
     }
 
     jwtEncrypt(
@@ -57,7 +62,7 @@ export class HelperEncryptionService {
         return this.jwtService.sign(payload, {
             secret: options.secretKey,
             expiresIn: options.expiredIn,
-            notBefore: options.notBefore || 0,
+            notBefore: options.notBefore ?? 0,
             audience: options.audience,
             issuer: options.issuer,
             subject: options.subject,
@@ -76,8 +81,9 @@ export class HelperEncryptionService {
                 issuer: options.issuer,
                 subject: options.subject,
             });
+
             return true;
-        } catch (err: any) {
+        } catch (err: unknown) {
             return false;
         }
     }

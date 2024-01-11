@@ -1,12 +1,9 @@
+import { PickType } from '@nestjs/swagger';
+import { CommentCreateDto } from './comment.create.dto';
 
-import { Type } from 'class-transformer';
-import { IsString, IsNotEmpty, MinLength, MaxLength } from 'class-validator';
-
-export class CommentUpdateDto {
-    @IsString()
-    @IsNotEmpty()
-    @MinLength(1)
-    @MaxLength(9999)
-    @Type(() => String)
-    readonly value: string;
-}
+export class CommentUpdateDto extends PickType(CommentCreateDto, [
+    'name',
+    'value',
+    'tags',
+    'categories',
+] as const) {}

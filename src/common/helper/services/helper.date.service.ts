@@ -1,307 +1,254 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import moment from 'moment-timezone';
+import moment, { ISO_8601 } from 'moment';
 import {
     ENUM_HELPER_DATE_DIFF,
     ENUM_HELPER_DATE_FORMAT,
-} from '../constants/helper.enum.constant';
+} from 'src/common/helper/constants/helper.enum.constant';
+import { IHelperDateService } from 'src/common/helper/interfaces/helper.date-service.interface';
 import {
-    IHelperDateOptions,
+    IHelperDateExtractDate,
     IHelperDateOptionsBackward,
     IHelperDateOptionsCreate,
     IHelperDateOptionsDiff,
     IHelperDateOptionsFormat,
     IHelperDateOptionsForward,
-    IHelperDateOptionsMonth,
-} from '../helper.interface';
+    IHelperDateOptionsRoundDown,
+    IHelperDateStartAndEnd,
+    IHelperDateStartAndEndDate,
+} from 'src/common/helper/interfaces/helper.interface';
 
 @Injectable()
-export class HelperDateService {
-    private readonly timezone: string;
+export class HelperDateService implements IHelperDateService {
+    calculateAge(dateOfBirth: Date, year?: number): number {
+        const m = moment();
 
-    constructor(private readonly configService: ConfigService) {
-        this.timezone = this.configService.get<string>('app.timezone');
-    }
+        if (year) {
+            m.set('year', year);
+        }
 
-    calculateAge(dateOfBirth: Date, options?: IHelperDateOptions): number {
-        return moment
-            .tz(options && options.timezone ? options.timezone : this.timezone)
-            .diff(dateOfBirth, 'years');
+        return m.diff(dateOfBirth, 'years');
     }
 
     diff(
         dateOne: Date,
-        dateTwo: Date,
+        dateTwoMoreThanDateOne: Date,
         options?: IHelperDateOptionsDiff
     ): number {
-        const mDateOne = moment.tz(
-            dateOne,
-            options && options.timezone ? options.timezone : this.timezone
-        );
-        const mDateTwo = moment.tz(
-            dateTwo,
-            options && options.timezone ? options.timezone : this.timezone
-        );
+        const mDateOne = moment(dateOne);
+        const mDateTwo = moment(dateTwoMoreThanDateOne);
         const diff = moment.duration(mDateTwo.diff(mDateOne));
 
-        if (options && options.format === ENUM_HELPER_DATE_DIFF.MILIS) {
+        if (options?.format === ENUM_HELPER_DATE_DIFF.MILIS) {
             return diff.asMilliseconds();
-        } else if (
-            options &&
-            options.format === ENUM_HELPER_DATE_DIFF.SECONDS
-        ) {
+        } else if (options?.format === ENUM_HELPER_DATE_DIFF.SECONDS) {
             return diff.asSeconds();
-        } else if (options && options.format === ENUM_HELPER_DATE_DIFF.HOURS) {
+        } else if (options?.format === ENUM_HELPER_DATE_DIFF.HOURS) {
             return diff.asHours();
-        } else if (
-            options &&
-            options.format === ENUM_HELPER_DATE_DIFF.MINUTES
-        ) {
+        } else if (options?.format === ENUM_HELPER_DATE_DIFF.MINUTES) {
             return diff.asMinutes();
         } else {
             return diff.asDays();
         }
     }
 
-    check(date: string | Date | number, options?: IHelperDateOptions): boolean {
-        return moment(date, true)
-            .tz(options && options.timezone ? options.timezone : this.timezone)
-            .isValid();
+    check(date: string | Date | number): boolean {
+        return moment(date, 'YYYY-MM-DD', true).isValid();
     }
 
-    checkTimestamp(timestamp: number, options?: IHelperDateOptions): boolean {
-        return moment(timestamp, true)
-            .tz(options && options.timezone ? options.timezone : this.timezone)
-            .isValid();
+    checkDateTime(date: string | Date | number): boolean {
+        return moment(date, ISO_8601, true).isValid();
     }
 
-    checkTimezone(timezone: string): boolean {
-        return !!moment.tz.zone(timezone);
+    checkTimestamp(timestamp: number): boolean {
+        return moment(timestamp, true).isValid();
     }
 
-    create(options?: IHelperDateOptionsCreate): Date {
-        return moment
-            .tz(
-                options && options.date ? options.date : undefined,
-                options && options.timezone ? options.timezone : this.timezone
-            )
-            .toDate();
+    create(
+        date?: string | number | Date,
+        options?: IHelperDateOptionsCreate
+    ): Date {
+        const mDate = moment(date ?? undefined);
+
+        if (options?.startOfDay) {
+            mDate.startOf('day');
+        }
+
+        return mDate.toDate();
     }
 
-    timestamp(options?: IHelperDateOptionsCreate): number {
-        return moment
-            .tz(
-                options && options.date ? options.date : undefined,
-                options && options.timezone ? options.timezone : this.timezone
-            )
-            .valueOf();
+    timestamp(
+        date?: string | number | Date,
+        options?: IHelperDateOptionsCreate
+    ): number {
+        const mDate = moment(date ?? undefined);
+
+        if (options?.startOfDay) {
+            mDate.startOf('day');
+        }
+
+        return mDate.valueOf();
     }
 
     format(date: Date, options?: IHelperDateOptionsFormat): string {
-        return moment
-            .tz(
-                date,
-                options && options.timezone ? options.timezone : this.timezone
-            )
-            .format(
-                options && options.format
-                    ? options.format
-                    : ENUM_HELPER_DATE_FORMAT.DATE
-            );
+        return moment(date).format(
+            options?.format ?? ENUM_HELPER_DATE_FORMAT.DATE
+        );
     }
 
     forwardInMilliseconds(
         milliseconds: number,
         options?: IHelperDateOptionsForward
     ): Date {
-        return moment
-            .tz(
-                options && options.fromDate ? options.fromDate : undefined,
-                options && options.timezone ? options.timezone : this.timezone
-            )
-            .add(milliseconds, 'ms')
-            .toDate();
+        return moment(options?.fromDate).add(milliseconds, 'ms').toDate();
     }
 
     backwardInMilliseconds(
         milliseconds: number,
         options?: IHelperDateOptionsBackward
     ): Date {
-        return moment
-            .tz(
-                options && options.fromDate ? options.fromDate : undefined,
-                options && options.timezone ? options.timezone : this.timezone
-            )
-            .subtract(milliseconds, 'ms')
-            .toDate();
+        return moment(options?.fromDate).subtract(milliseconds, 'ms').toDate();
     }
 
     forwardInSeconds(
         seconds: number,
         options?: IHelperDateOptionsForward
     ): Date {
-        return moment
-            .tz(
-                options && options.fromDate ? options.fromDate : undefined,
-                options && options.timezone ? options.timezone : this.timezone
-            )
-            .add(seconds, 's')
-            .toDate();
+        return moment(options?.fromDate).add(seconds, 's').toDate();
     }
 
     backwardInSeconds(
         seconds: number,
         options?: IHelperDateOptionsBackward
     ): Date {
-        return moment
-            .tz(
-                options && options.fromDate ? options.fromDate : undefined,
-                options && options.timezone ? options.timezone : this.timezone
-            )
-            .subtract(seconds, 's')
-            .toDate();
+        return moment(options?.fromDate).subtract(seconds, 's').toDate();
     }
 
     forwardInMinutes(
         minutes: number,
         options?: IHelperDateOptionsForward
     ): Date {
-        return moment
-            .tz(
-                options && options.fromDate ? options.fromDate : undefined,
-                options && options.timezone ? options.timezone : this.timezone
-            )
-            .add(minutes, 'm')
-            .toDate();
+        return moment(options?.fromDate).add(minutes, 'm').toDate();
     }
 
     backwardInMinutes(
         minutes: number,
         options?: IHelperDateOptionsBackward
     ): Date {
-        return moment
-            .tz(
-                options && options.fromDate ? options.fromDate : undefined,
-                options && options.timezone ? options.timezone : this.timezone
-            )
-            .subtract(minutes, 'm')
-            .toDate();
+        return moment(options?.fromDate).subtract(minutes, 'm').toDate();
+    }
+
+    forwardInHours(hours: number, options?: IHelperDateOptionsForward): Date {
+        return moment(options?.fromDate).add(hours, 'h').toDate();
+    }
+
+    backwardInHours(hours: number, options?: IHelperDateOptionsBackward): Date {
+        return moment(options?.fromDate).subtract(hours, 'h').toDate();
     }
 
     forwardInDays(days: number, options?: IHelperDateOptionsForward): Date {
-        return moment
-            .tz(
-                options && options.fromDate ? options.fromDate : undefined,
-                options && options.timezone ? options.timezone : this.timezone
-            )
-            .add(days, 'd')
-            .toDate();
+        return moment(options?.fromDate).add(days, 'd').toDate();
     }
 
     backwardInDays(days: number, options?: IHelperDateOptionsBackward): Date {
-        return moment
-            .tz(
-                options && options.fromDate ? options.fromDate : undefined,
-                options && options.timezone ? options.timezone : this.timezone
-            )
-            .subtract(days, 'd')
-            .toDate();
+        return moment(options?.fromDate).subtract(days, 'd').toDate();
     }
 
     forwardInMonths(months: number, options?: IHelperDateOptionsForward): Date {
-        return moment
-            .tz(
-                options && options.fromDate ? options.fromDate : undefined,
-                options && options.timezone ? options.timezone : this.timezone
-            )
-            .add(months, 'M')
-            .toDate();
+        return moment(options?.fromDate).add(months, 'M').toDate();
     }
 
     backwardInMonths(
         months: number,
         options?: IHelperDateOptionsBackward
     ): Date {
-        return moment
-            .tz(
-                options && options.fromDate ? options.fromDate : undefined,
-                options && options.timezone ? options.timezone : this.timezone
-            )
-            .subtract(months, 'M')
-            .toDate();
+        return moment(options?.fromDate).subtract(months, 'M').toDate();
     }
 
-    endOfMonth(month: number, options?: IHelperDateOptionsMonth): Date {
-        const year =
-            options && options.year
-                ? options.year
-                : moment
-                      .tz(
-                          options && options.timezone
-                              ? options.timezone
-                              : this.timezone
-                      )
-                      .year();
-        return moment
-            .tz(options && options.timezone ? options.timezone : this.timezone)
-            .year(year)
-            .month(month - 1)
-            .endOf('month')
-            .toDate();
+    endOfMonth(date?: Date): Date {
+        return moment(date).endOf('month').toDate();
     }
 
-    startOfMonth(month: number, options?: IHelperDateOptionsMonth): Date {
-        const year =
-            options && options.year
-                ? options.year
-                : moment
-                      .tz(
-                          options && options.timezone
-                              ? options.timezone
-                              : this.timezone
-                      )
-                      .year();
-        return moment
-            .tz(options && options.timezone ? options.timezone : this.timezone)
-            .year(year)
-            .month(month - 1)
-            .startOf('month')
-            .toDate();
+    startOfMonth(date?: Date): Date {
+        return moment(date).startOf('month').toDate();
     }
 
-    endOfYear(year: number, options?: IHelperDateOptions): Date {
-        return moment
-            .tz(options && options.timezone ? options.timezone : this.timezone)
-            .year(year)
-            .endOf('year')
-            .toDate();
+    endOfYear(date?: Date): Date {
+        return moment(date).endOf('year').toDate();
     }
 
-    startOfYear(year: number, options?: IHelperDateOptions): Date {
-        return moment
-            .tz(options && options.timezone ? options.timezone : this.timezone)
-            .year(year)
-            .startOf('year')
-            .toDate();
+    startOfYear(date?: Date): Date {
+        return moment(date).startOf('year').toDate();
     }
 
-    endOfDay(date?: Date, options?: IHelperDateOptions): Date {
-        return moment
-            .tz(
-                date,
-                options && options.timezone ? options.timezone : this.timezone
-            )
-            .endOf('day')
-            .toDate();
+    endOfDay(date?: Date): Date {
+        return moment(date).endOf('day').toDate();
     }
 
-    startOfDay(date?: Date, options?: IHelperDateOptions): Date {
-        return moment
-            .tz(
-                date,
-                options && options.timezone ? options.timezone : this.timezone
-            )
-            .startOf('day')
-            .toDate();
+    startOfDay(date?: Date): Date {
+        return moment(date).startOf('day').toDate();
+    }
+
+    extractDate(date: string | Date | number): IHelperDateExtractDate {
+        const newDate = this.create(date);
+        const day: string = this.format(newDate, {
+            format: ENUM_HELPER_DATE_FORMAT.ONLY_DATE,
+        });
+        const month: string = this.format(newDate, {
+            format: ENUM_HELPER_DATE_FORMAT.ONLY_MONTH,
+        });
+        const year: string = this.format(newDate, {
+            format: ENUM_HELPER_DATE_FORMAT.ONLY_YEAR,
+        });
+
+        return {
+            date: newDate,
+            day,
+            month,
+            year,
+        };
+    }
+
+    roundDown(date: Date, options?: IHelperDateOptionsRoundDown): Date {
+        const mDate = moment(date).set({ millisecond: 0 });
+
+        if (options?.hour) {
+            mDate.set({ hour: 0 });
+        }
+
+        if (options?.minute) {
+            mDate.set({ minute: 0 });
+        }
+
+        if (options?.second) {
+            mDate.set({ second: 0 });
+        }
+
+        return mDate.toDate();
+    }
+
+    getStartAndEndDate(
+        options?: IHelperDateStartAndEnd
+    ): IHelperDateStartAndEndDate {
+        const today = moment();
+        const todayMonth = today.format(ENUM_HELPER_DATE_FORMAT.ONLY_MONTH);
+        const todayYear = today.format(ENUM_HELPER_DATE_FORMAT.ONLY_YEAR);
+        // set month and year
+        const year = options?.year ?? todayYear;
+        const month = options?.month ?? todayMonth;
+
+        const date = moment(`${year}-${month}-02`, 'YYYY-MM-DD');
+        let startDate: Date = date.startOf('month').toDate();
+        let endDate: Date = date.endOf('month').toDate();
+
+        if (options?.month) {
+            const date = moment(`${year}-${month}-02`, 'YYYY-MM-DD');
+            startDate = date.startOf('month').toDate();
+            endDate = date.endOf('month').toDate();
+        }
+
+        return {
+            startDate,
+            endDate,
+        };
     }
 }

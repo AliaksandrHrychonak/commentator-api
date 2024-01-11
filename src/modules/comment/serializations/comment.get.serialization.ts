@@ -1,26 +1,45 @@
-import { Exclude, Transform, Type } from 'class-transformer';
-import { TagDocument } from 'src/modules/tag/schemas/tag.schema';
-import { ITagDocument } from 'src/modules/tag/tag.interface';
+import { faker } from '@faker-js/faker';
+import { ApiProperty } from '@nestjs/swagger';
+import { ResponseIdSerialization } from 'src/common/response/serializations/response.id.serialization';
+import { UserProfileSerialization } from '../../user/serializations/user.profile.serialization';
+import { Type } from 'class-transformer';
 
-export class CommentGetSerialization {
-    @Type(() => String)
-    readonly _id: string;
+export class CommentGetSerialization extends ResponseIdSerialization {
+    @ApiProperty({
+        required: true,
+        nullable: false,
+        type: () => UserProfileSerialization,
+    })
+    @Type(() => UserProfileSerialization)
+    readonly owner: UserProfileSerialization;
 
-    @Transform(({ obj }) =>
-        obj.tags.map((val: TagDocument) => ({
-            _id: `${val._id}`,
-            name: val.name,
-        }))
-    )
-    readonly tags: ITagDocument;
+    @ApiProperty({
+        required: true,
+        nullable: false,
+        example: faker.string.alphanumeric(50),
+    })
+    readonly name: string;
 
+    @ApiProperty({
+        required: true,
+        nullable: false,
+        example: faker.string.alphanumeric(300),
+    })
     readonly value: string;
 
-    @Type(() => String)
-    readonly owner: string;
-   
+    @ApiProperty({
+        description: 'Date created at',
+        example: faker.date.recent(),
+        required: true,
+        nullable: false,
+    })
     readonly createdAt: Date;
-    
-    @Exclude()
+
+    @ApiProperty({
+        description: 'Date updated at',
+        example: faker.date.recent(),
+        required: true,
+        nullable: false,
+    })
     readonly updatedAt: Date;
 }

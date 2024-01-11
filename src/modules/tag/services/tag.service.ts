@@ -1,114 +1,143 @@
 import { Injectable } from '@nestjs/common';
-import { Model, Types } from 'mongoose';
-import { IDatabaseFindAllOptions, IDatabaseFindOneOptions } from 'src/common/database/database.interface';
-import { DatabaseEntity } from 'src/common/database/decorators/database.decorator';
-import { UserEntity } from 'src/modules/user/schemas/user.schema';
-import { string } from 'yargs';
+import {
+    IDatabaseCreateManyOptions,
+    IDatabaseCreateOptions,
+    IDatabaseExistOptions,
+    IDatabaseFindAllOptions,
+    IDatabaseFindOneOptions,
+    IDatabaseGetTotalOptions,
+    IDatabaseManyOptions,
+    IDatabaseSaveOptions,
+} from 'src/common/database/interfaces/database.interface';
+import { UserEntity } from 'src/modules/user/repository/entities/user.entity';
+import { ITagService } from '../interfaces/tag.service.interface';
+import { TagRepository } from '../repository/repositories/tag.repository';
+import { TagDoc, TagEntity } from '../repository/entities/tag.entity';
 import { TagCreateDto } from '../dtos/tag.create.dto';
-import { TagDocument, TagEntity } from '../schemas/tag.schema';
-
+import { TagUpdateDto } from '../dtos/tag.update.dto';
+import { ITagDoc, ITagEntity } from '../interfaces/tag.interface';
+import { TagImportDto } from '../dtos/tag.import.dto';
 
 @Injectable()
-export class TagService {
-    constructor(
-        @DatabaseEntity(TagEntity.name)
-        private readonly tagModel: Model<TagDocument>
-    ) {}
+export class TagService implements ITagService {
+    constructor(private readonly tagRepository: TagRepository) {}
 
     async findAll(
         find?: Record<string, any>,
         options?: IDatabaseFindAllOptions
-    ): Promise<TagDocument[]> {
-        
-        const tags = this.tagModel.find(find);
-        if (
-            options &&
-            options.limit !== undefined &&
-            options.skip !== undefined
-        ) {
-            tags.limit(options.limit).skip(options.skip);
-        }
-
-        if (options && options.sort) {
-            tags.sort(options.sort);
-        }
-
-        return tags.lean();
-    }
-
-    async findAllMe(
-        id: string
-    ): Promise<TagDocument[]> {
-        
-        return this.tagModel.find({ owner: id })
-    }
-
-    async getTotal(find?: Record<string, any>): Promise<number> {
-        return this.tagModel.countDocuments(find);
+    ): Promise<ITagEntity[]> {
+        return this.tagRepository.findAll<ITagEntity>(find, {
+            ...options,
+            join: true,
+        });
     }
 
     async findOneById<T>(
         _id: string,
         options?: IDatabaseFindOneOptions
     ): Promise<T> {
-        const tags = this.tagModel.findById(_id);
-
-        if (options && options.populate && options.populate.owner) {
-            tags.populate({
-                path: 'users',
-                model: UserEntity.name,
-            });
-        }
-        
-        return tags.lean();
+        return this.tagRepository.findOneById<T>(_id, options);
     }
 
     async findOne<T>(
-        find?: Record<string, any>,
+        find: Record<string, any>,
         options?: IDatabaseFindOneOptions
     ): Promise<T> {
-        const tag = this.tagModel.findOne(find);
+        return this.tagRepository.findOne<T>(find, options);
+    }
 
-        if (options && options.populate && options.populate.owner) {
-            tag.populate({
-                path: 'users',
-                model: UserEntity.name,
-            });
+    async findOneByName<T>(
+        name: string,
+        options?: IDatabaseFindOneOptions
+    ): Promise<T> {
+        return this.tagRepository.findOne<T>({ name }, options);
+    }
+
+    async create(
+        { name, description, owner }: TagCreateDto,
+        options?: IDatabaseCreateOptions
+    ): Promise<TagDoc> {
+        const create: TagEntity = new TagEntity();
+        create.name = name;
+        create.description = description;
+        create.owner = owner;
+
+        return this.tagRepository.create<TagEntity>(create, options);
+    }
+
+    async delete(
+        repository: TagDoc,
+        options?: IDatabaseSaveOptions
+    ): Promise<TagDoc> {
+        return this.tagRepository.softDelete(repository, options);
+    }
+
+    async update(
+        repository: TagDoc,
+        { name, description }: TagUpdateDto,
+        options?: IDatabaseSaveOptions
+    ): Promise<TagDoc> {
+        repository.name = name;
+        repository.description = description;
+
+        return this.tagRepository.save(repository, options);
+    }
+
+    async getTotal(
+        find?: Record<string, any>,
+        options?: IDatabaseGetTotalOptions
+    ): Promise<number> {
+        return this.tagRepository.getTotal(find, { ...options, join: true });
+    }
+
+    async joinWithOwner(repository: TagDoc): Promise<ITagDoc> {
+        return repository.populate({
+            path: 'owner',
+            localField: 'user',
+            foreignField: '_id',
+            model: UserEntity.name,
+        });
+    }
+
+    async belongByOwnerId(
+        tags: string[],
+        owner: string,
+        options?: IDatabaseExistOptions
+    ): Promise<boolean> {
+        if (!tags) {
+            return undefined;
         }
 
-        return tag.lean();
+        const search: Record<string, any> = tags.map((i) => {
+            return { _id: i };
+        });
+        const find: Record<string, any> = {
+            $or: search,
+            owner,
+        };
+        return this.tagRepository.exists(find, options);
     }
 
-    async exists(name: string, user: string, _id?: string, ): Promise<boolean> {
-        const exist = await this.tagModel.exists({
-            name: {
-                $regex: new RegExp(name),
-                $options: 'i',
-            },
-            owner: new Types.ObjectId(user),
-            _id: { $nin: new Types.ObjectId(_id) },
-        });      
-
-        return exist ? true : false;
+    async deleteMany(
+        find: Record<string, any>,
+        options?: IDatabaseManyOptions
+    ): Promise<boolean> {
+        return this.tagRepository.deleteMany(find, options);
     }
 
-    async create({
-        name,
-        owner
-    }: TagCreateDto): Promise<TagDocument> {
-        const create: TagDocument = new this.tagModel({
-            name: name,
-            owner: new Types.ObjectId(owner),
+    async import(
+        data: TagImportDto[],
+        options?: IDatabaseCreateManyOptions
+    ): Promise<boolean> {
+        const tags: TagEntity[] = data.map(({ name, description, owner }) => {
+            const create: TagEntity = new TagEntity();
+            create.name = name;
+            create.description = description;
+            create.owner = owner;
+
+            return create;
         });
 
-        return create.save();
-    }
-
-
-    async deleteOneById(_id: string): Promise<TagDocument> {
-        return this.tagModel.findByIdAndDelete(_id);
-    }
-    async deleteOne(find: Record<string, any>): Promise<TagDocument> {
-        return this.tagModel.findOneAndDelete(find);
+        return this.tagRepository.createMany<TagEntity>(tags, options);
     }
 }

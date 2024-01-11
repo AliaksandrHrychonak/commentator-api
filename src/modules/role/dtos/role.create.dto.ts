@@ -1,17 +1,56 @@
-import { Type } from 'class-transformer';
+import { faker } from '@faker-js/faker';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { Transform, Type } from 'class-transformer';
 import {
     IsString,
     IsNotEmpty,
     MaxLength,
     MinLength,
-    IsMongoId,
     IsEnum,
     IsArray,
     ArrayNotEmpty,
+    ValidateIf,
+    ValidateNested,
 } from 'class-validator';
-import { ENUM_AUTH_ACCESS_FOR_DEFAULT } from 'src/common/auth/constants/auth.enum.constant';
+import {
+    ENUM_POLICY_ACTION,
+    ENUM_POLICY_SUBJECT,
+} from '../../../common/policy/constants/policy.enum.constant';
+import { RoleUpdateDto } from './role.update.dto';
+import { ENUM_ROLE_TYPE } from '../constants/role.enum.constant';
 
-export class RoleCreateDto {
+class RolePermissionsDto {
+    @ApiProperty({
+        required: true,
+        description: 'Permission subject',
+        enum: ENUM_POLICY_SUBJECT,
+    })
+    @IsNotEmpty()
+    @IsString()
+    @IsEnum(ENUM_POLICY_SUBJECT)
+    subject: ENUM_POLICY_SUBJECT;
+
+    @ApiProperty({
+        required: true,
+        description: 'Permission action base on subject',
+        isArray: true,
+        default: [],
+        enum: ENUM_POLICY_ACTION,
+    })
+    @IsString({ each: true })
+    @IsEnum(ENUM_POLICY_ACTION, { each: true })
+    @IsArray()
+    @IsNotEmpty()
+    @ArrayNotEmpty()
+    action: ENUM_POLICY_ACTION[];
+}
+
+export class RoleCreateDto extends PartialType(RoleUpdateDto) {
+    @ApiProperty({
+        description: 'Name of role',
+        example: faker.person.jobTitle(),
+        required: true,
+    })
     @IsString()
     @IsNotEmpty()
     @MinLength(3)
@@ -19,13 +58,29 @@ export class RoleCreateDto {
     @Type(() => String)
     readonly name: string;
 
-    @IsMongoId({ each: true })
-    @ArrayNotEmpty()
-    @IsArray()
+    @ApiProperty({
+        description: 'Representative for role type',
+        example: 'ADMIN',
+        required: true,
+    })
+    @IsEnum(ENUM_ROLE_TYPE)
     @IsNotEmpty()
-    readonly permissions: string[];
+    readonly type: ENUM_ROLE_TYPE;
 
-    @IsEnum(ENUM_AUTH_ACCESS_FOR_DEFAULT)
+    @ApiProperty({
+        required: true,
+        description: 'Permission list of role',
+        isArray: true,
+        default: [],
+        type: () => RolePermissionsDto,
+    })
+    @Type(() => RolePermissionsDto)
     @IsNotEmpty()
-    readonly accessFor: ENUM_AUTH_ACCESS_FOR_DEFAULT;
+    @IsArray()
+    @ValidateNested()
+    @ValidateIf((e) => e.type === ENUM_ROLE_TYPE.ADMIN)
+    @Transform(({ value, obj }) =>
+        obj.type !== ENUM_ROLE_TYPE.ADMIN ? [] : value
+    )
+    readonly permissions: RolePermissionsDto[];
 }

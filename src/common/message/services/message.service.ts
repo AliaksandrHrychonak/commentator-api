@@ -1,84 +1,99 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import {
-    IMessage,
-    IMessageOptions,
-    IMessageSetOptions,
-} from '../message.interface';
 import { ValidationError } from 'class-validator';
 import { I18nService } from 'nestjs-i18n';
 import {
     IErrors,
     IErrorsImport,
     IValidationErrorImport,
-} from 'src/common/error/error.interface';
+} from 'src/common/error/interfaces/error.interface';
+import { HelperArrayService } from 'src/common/helper/services/helper.array.service';
+import {
+    IMessageErrorOptions,
+    IMessageOptions,
+    IMessageSetOptions,
+} from 'src/common/message/interfaces/message.interface';
+import { IMessageService } from 'src/common/message/interfaces/message.service.interface';
 
 @Injectable()
-export class MessageService {
-    private readonly defaultLanguage: string;
+export class MessageService implements IMessageService {
+    private readonly appDefaultLanguage: string;
+    private readonly appDefaultAvailableLanguage: string[];
 
     constructor(
         private readonly i18n: I18nService,
-        private readonly configService: ConfigService
+        private readonly configService: ConfigService,
+        private readonly helperArrayService: HelperArrayService
     ) {
-        this.defaultLanguage = this.configService.get<string>('app.language');
+        this.appDefaultLanguage =
+            this.configService.get<string>('message.language');
+        this.appDefaultAvailableLanguage = this.configService.get<string[]>(
+            'message.availableLanguage'
+        );
     }
 
-    private setMessage(
+    getAvailableLanguages(): string[] {
+        return this.appDefaultAvailableLanguage;
+    }
+
+    getLanguage(): string {
+        return this.appDefaultLanguage;
+    }
+
+    filterLanguage(customLanguages: string[]): string[] {
+        return this.helperArrayService.filterIncludeUniqueByArray(
+            customLanguages,
+            this.appDefaultAvailableLanguage
+        );
+    }
+
+    setMessage(
         lang: string,
         key: string,
         options?: IMessageSetOptions
-    ): any {
+    ): string {
         return this.i18n.translate(key, {
-            lang: lang || this.defaultLanguage,
-            args:
-                options && options.properties ? options.properties : undefined,
-        });
+            lang: lang,
+            args: options?.properties,
+        }) as any;
     }
 
-    async getRequestErrorsMessage(
+    getRequestErrorsMessage(
         requestErrors: ValidationError[],
-        customLanguages?: string[]
-    ): Promise<IErrors[]> {
+        options?: IMessageErrorOptions
+    ): IErrors[] {
         const messages: Array<IErrors[]> = [];
-        for (const transfomer of requestErrors) {
-            let children: Record<string, any>[] = transfomer.children;
+        for (const requestError of requestErrors) {
+            let children: Record<string, any>[] = requestError.children;
             let constraints: string[] = Object.keys(
-                transfomer.constraints || []
+                requestError.constraints ?? []
             );
-            const errors: IErrors[] = [];
-            let property: string = transfomer.property;
-            let propertyValue: string = transfomer.value;
+            let property: string = requestError.property;
+            let propertyValue: string = requestError.value;
 
-            if (children.length > 0) {
-                while (children.length > 0) {
-                    for (const child of children) {
-                        property = `${property}.${child.property}`;
+            while (children?.length > 0) {
+                property = `${property}.${children[0].property}`;
 
-                        if (child.children && child.children.length > 0) {
-                            children = child.children;
-                            break;
-                        } else if (child.constraints) {
-                            constraints = Object.keys(child.constraints);
-                            children = [];
-                            propertyValue = child.value;
-                            break;
-                        }
-                    }
+                if (children[0].children?.length > 0) {
+                    children = children[0].children;
+                } else {
+                    constraints = Object.keys(children[0].constraints);
+                    propertyValue = children[0].value;
+                    children = [];
                 }
             }
 
+            const errors: IErrors[] = [];
             for (const constraint of constraints) {
-                const message = await this.get(`request.${constraint}`, {
-                    customLanguages,
-                    properties: {
-                        property,
-                        value: propertyValue,
-                    },
-                });
                 errors.push({
                     property,
-                    message,
+                    message: this.get(`request.${constraint}`, {
+                        customLanguages: options?.customLanguages,
+                        properties: {
+                            property,
+                            value: propertyValue,
+                        },
+                    }),
                 });
             }
 
@@ -88,53 +103,38 @@ export class MessageService {
         return messages.flat(1) as IErrors[];
     }
 
-    async getImportErrorsMessage(
+    getImportErrorsMessage(
         errors: IValidationErrorImport[],
-        customLanguages?: string[]
-    ): Promise<IErrorsImport[]> {
-        const newErrors: IErrorsImport[] = [];
-        for (const error of errors) {
-            newErrors.push({
-                row: error.row,
-                file: error.file,
-                errors: await this.getRequestErrorsMessage(
-                    error.errors,
-                    customLanguages
-                ),
-            });
-        }
-
-        return newErrors;
+        options?: IMessageErrorOptions
+    ): IErrorsImport[] {
+        return errors.map((val) => ({
+            row: val.row,
+            file: val.file,
+            sheet: val.sheet,
+            errors: this.getRequestErrorsMessage(val.errors, options),
+        }));
     }
 
-    async get(
-        key: string,
-        options?: IMessageOptions
-    ): Promise<string | IMessage> {
-        const properties =
-            options && options.properties ? options.properties : undefined;
+    get<T = string>(key: string, options?: IMessageOptions): T {
         const customLanguages =
-            options &&
-            options.customLanguages &&
-            options.customLanguages.length > 0
-                ? options.customLanguages
-                : [this.defaultLanguage];
+            options?.customLanguages?.length > 0
+                ? this.filterLanguage(options.customLanguages)
+                : [this.appDefaultLanguage];
 
-        const messages: IMessage = {};
-        for (const customLanguage of customLanguages) {
-            messages[customLanguage] = await this.setMessage(
-                customLanguage,
-                key,
-                {
-                    properties,
-                }
-            );
+        if (customLanguages.length > 1) {
+            return customLanguages.reduce(
+                (a, v) => ({
+                    ...a,
+                    [v]: this.setMessage(v, key, {
+                        properties: options?.properties,
+                    }),
+                }),
+                {}
+            ) as any;
         }
 
-        if (customLanguages.length <= 1) {
-            return messages[customLanguages[0]];
-        }
-
-        return messages;
+        return this.setMessage(customLanguages[0], key, {
+            properties: options?.properties,
+        }) as any;
     }
 }

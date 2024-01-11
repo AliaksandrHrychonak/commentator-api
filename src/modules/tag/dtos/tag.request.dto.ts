@@ -1,9 +1,9 @@
 import { Type } from 'class-transformer';
-import { IsNotEmpty, IsMongoId } from 'class-validator';
+import { IsNotEmpty, IsUUID } from 'class-validator';
 
 export class TagRequestDto {
     @IsNotEmpty()
-    @IsMongoId()
+    @IsUUID('4')
     @Type(() => String)
     tag: string;
 }

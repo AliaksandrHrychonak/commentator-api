@@ -1,32 +1,60 @@
+import { faker } from '@faker-js/faker';
+import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
     IsString,
     IsNotEmpty,
     MaxLength,
     MinLength,
-    IsMongoId,
-    ArrayNotEmpty,
-    IsArray,
+    IsUUID,
     IsOptional,
-    ArrayUnique,
+    IsArray,
+    ArrayNotEmpty,
 } from 'class-validator';
-import { Types } from 'mongoose';
-import { TagDocument } from 'src/modules/tag/schemas/tag.schema';
-
 
 export class CommentCreateDto {
+    @ApiProperty({
+        example: faker.string.alphanumeric(50),
+        required: true,
+    })
+    @IsString()
+    @IsOptional()
+    @MinLength(1)
+    @MaxLength(50)
+    @Type(() => String)
+    readonly name?: string;
+
+    @ApiProperty({
+        example: faker.string.alphanumeric(300),
+        required: true,
+    })
     @IsString()
     @IsNotEmpty()
     @MinLength(1)
-    @MaxLength(9999)
     @Type(() => String)
     readonly value: string;
 
-    @IsOptional()
-    @IsMongoId({ each: true })
-    @ArrayUnique()
-    @ArrayNotEmpty()
-    @IsArray()
+    @ApiProperty({
+        example: faker.string.uuid(),
+        required: true,
+    })
     @IsNotEmpty()
-    readonly tags: Types.ObjectId[];
+    @IsUUID('4')
+    readonly owner: string;
+
+    // TODO add ApiProp
+    @IsString({ each: true })
+    @IsArray()
+    @IsOptional()
+    @ArrayNotEmpty()
+    @IsUUID('4', { each: true })
+    readonly tags?: string[];
+
+    // TODO add ApiProp
+    @IsString({ each: true })
+    @IsArray()
+    @IsOptional()
+    @ArrayNotEmpty()
+    @IsUUID('4', { each: true })
+    readonly categories?: string[];
 }

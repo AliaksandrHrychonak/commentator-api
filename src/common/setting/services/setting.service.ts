@@ -1,94 +1,173 @@
 import { Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
-import { IDatabaseFindAllOptions } from 'src/common/database/database.interface';
-import { DatabaseEntity } from 'src/common/database/decorators/database.decorator';
-import { HelperStringService } from 'src/common/helper/services/helper.string.service';
-import { SettingCreateDto } from '../dtos/setting.create.dto';
-import { SettingUpdateDto } from '../dtos/setting.update.dto';
-import { SettingDocument, SettingEntity } from '../schemas/setting.schema';
+import { ConfigService } from '@nestjs/config';
+import {
+    IDatabaseCreateOptions,
+    IDatabaseFindAllOptions,
+    IDatabaseFindOneOptions,
+    IDatabaseGetTotalOptions,
+    IDatabaseManyOptions,
+    IDatabaseSaveOptions,
+} from 'src/common/database/interfaces/database.interface';
+import { HelperNumberService } from 'src/common/helper/services/helper.number.service';
+import { ENUM_SETTING_DATA_TYPE } from 'src/common/setting/constants/setting.enum.constant';
+import { SettingCreateDto } from 'src/common/setting/dtos/setting.create.dto';
+import { SettingUpdateValueDto } from 'src/common/setting/dtos/setting.update-value.dto';
+import { ISettingService } from 'src/common/setting/interfaces/setting.service.interface';
+import {
+    SettingDoc,
+    SettingEntity,
+} from 'src/common/setting/repository/entities/setting.entity';
+import { SettingRepository } from 'src/common/setting/repository/repositories/setting.repository';
 
 @Injectable()
-export class SettingService {
+export class SettingService implements ISettingService {
+    private readonly mobileNumberCountryCodeAllowed: string[];
+    private readonly passwordAttempt: boolean;
+    private readonly maxPasswordAttempt: number;
+
     constructor(
-        @DatabaseEntity(SettingEntity.name)
-        private readonly settingModel: Model<SettingDocument>,
-        private readonly helperStringService: HelperStringService
-    ) {}
+        private readonly settingRepository: SettingRepository,
+        private readonly configService: ConfigService,
+        private readonly helperNumberService: HelperNumberService
+    ) {
+        this.mobileNumberCountryCodeAllowed = this.configService.get<string[]>(
+            'user.mobileNumberCountryCodeAllowed'
+        );
+        this.passwordAttempt = this.configService.get<boolean>(
+            'auth.password.attempt'
+        );
+        this.maxPasswordAttempt = this.configService.get<number>(
+            'auth.password.maxAttempt'
+        );
+    }
 
     async findAll(
         find?: Record<string, any>,
         options?: IDatabaseFindAllOptions
-    ): Promise<SettingDocument[]> {
-        const settings = this.settingModel.find(find);
-
-        if (
-            options &&
-            options.limit !== undefined &&
-            options.skip !== undefined
-        ) {
-            settings.limit(options.limit).skip(options.skip);
-        }
-
-        if (options && options.sort) {
-            settings.sort(options.sort);
-        }
-
-        return settings.lean();
+    ): Promise<SettingEntity[]> {
+        return this.settingRepository.findAll<SettingEntity>(find, options);
     }
 
-    async getTotal(find?: Record<string, any>): Promise<number> {
-        return this.settingModel.countDocuments(find);
-    }
-
-    async findOneById(_id: string): Promise<SettingDocument> {
-        return this.settingModel.findById(_id).lean();
-    }
-
-    async findOneByName(name: string): Promise<SettingDocument> {
-        return this.settingModel.findOne({ name }).lean();
-    }
-
-    async create({
-        name,
-        description,
-        value,
-    }: SettingCreateDto): Promise<SettingDocument> {
-        const create: SettingDocument = new this.settingModel();
-
-        let convertValue = value;
-        if (typeof value === 'string') {
-            convertValue = await this.convertValue(value as string);
-        }
-
-        create.name = name;
-        create.description = description;
-        create.value = convertValue;
-        return create.save();
-    }
-
-    async updateOneById(
+    async findOneById(
         _id: string,
-        { description, value }: SettingUpdateDto
-    ): Promise<SettingDocument> {
-        const update: SettingDocument = await this.settingModel.findById(_id);
+        options?: IDatabaseFindOneOptions
+    ): Promise<SettingDoc> {
+        return this.settingRepository.findOneById<SettingDoc>(_id, options);
+    }
 
-        let convertValue = value;
-        if (typeof value === 'string') {
-            convertValue = await this.convertValue(value as string);
+    async findOneByName(
+        name: string,
+        options?: IDatabaseFindOneOptions
+    ): Promise<SettingDoc> {
+        return this.settingRepository.findOne<SettingDoc>({ name }, options);
+    }
+
+    async getTotal(
+        find?: Record<string, any>,
+        options?: IDatabaseGetTotalOptions
+    ): Promise<number> {
+        return this.settingRepository.getTotal(find, options);
+    }
+
+    async create(
+        { name, description, type, value }: SettingCreateDto,
+        options?: IDatabaseCreateOptions
+    ): Promise<SettingDoc> {
+        const create: SettingEntity = new SettingEntity();
+        create.name = name;
+        create.description = description ?? undefined;
+        create.value = value;
+        create.type = type;
+
+        return this.settingRepository.create<SettingEntity>(create, options);
+    }
+
+    async updateValue(
+        repository: SettingDoc,
+        { type, value }: SettingUpdateValueDto,
+        options?: IDatabaseSaveOptions
+    ): Promise<SettingDoc> {
+        repository.type = type;
+        repository.value = value;
+
+        return this.settingRepository.save(repository, options);
+    }
+
+    async delete(
+        repository: SettingDoc,
+        options?: IDatabaseSaveOptions
+    ): Promise<SettingDoc> {
+        return this.settingRepository.softDelete(repository, options);
+    }
+
+    async getValue<T>(setting: SettingDoc): Promise<T> {
+        if (
+            setting.type === ENUM_SETTING_DATA_TYPE.BOOLEAN &&
+            (setting.value === 'true' || setting.value === 'false')
+        ) {
+            return (setting.value === 'true') as any;
+        } else if (
+            setting.type === ENUM_SETTING_DATA_TYPE.NUMBER &&
+            this.helperNumberService.check(setting.value)
+        ) {
+            return this.helperNumberService.create(setting.value) as any;
+        } else if (setting.type === ENUM_SETTING_DATA_TYPE.ARRAY_OF_STRING) {
+            return setting.value.split(',') as any;
         }
 
-        update.description = description;
-        update.value = convertValue;
-        return update.save();
+        return setting.value as any;
     }
 
-    async deleteOne(find: Record<string, any>): Promise<SettingDocument> {
-        return this.settingModel.findOneAndDelete(find);
+    async checkValue(
+        value: string,
+        type: ENUM_SETTING_DATA_TYPE
+    ): Promise<boolean> {
+        if (
+            type === ENUM_SETTING_DATA_TYPE.BOOLEAN &&
+            (value === 'true' || value === 'false')
+        ) {
+            return true;
+        } else if (
+            type === ENUM_SETTING_DATA_TYPE.NUMBER &&
+            this.helperNumberService.check(value)
+        ) {
+            return true;
+        } else if (
+            (type === ENUM_SETTING_DATA_TYPE.STRING ||
+                type === ENUM_SETTING_DATA_TYPE.ARRAY_OF_STRING) &&
+            typeof value === 'string'
+        ) {
+            return true;
+        }
+
+        return false;
     }
 
-    async convertValue(value: string): Promise<string | number | boolean> {
-        return this.helperStringService.convertStringToNumberOrBooleanIfPossible(
-            value
-        );
+    async getMaintenance(): Promise<boolean> {
+        const setting: SettingDoc =
+            await this.settingRepository.findOne<SettingDoc>({
+                name: 'maintenance',
+            });
+
+        return this.getValue<boolean>(setting);
+    }
+
+    async getMobileNumberCountryCodeAllowed(): Promise<string[]> {
+        return this.mobileNumberCountryCodeAllowed;
+    }
+
+    async getPasswordAttempt(): Promise<boolean> {
+        return this.passwordAttempt;
+    }
+
+    async getMaxPasswordAttempt(): Promise<number> {
+        return this.maxPasswordAttempt;
+    }
+
+    async deleteMany(
+        find: Record<string, any>,
+        options?: IDatabaseManyOptions
+    ): Promise<boolean> {
+        return this.settingRepository.deleteMany(find, options);
     }
 }

@@ -1,30 +1,13 @@
 import { Global, Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
-import { DATABASE_CONNECTION_NAME } from 'src/common/database/constants/database.constant';
-import {
-    SettingDatabaseName,
-    SettingEntity,
-    SettingSchema,
-} from './schemas/setting.schema';
-import { SettingBulkService } from './services/setting.bulk.service';
+import { SettingMiddlewareModule } from 'src/common/setting/middleware/setting.middleware.module';
+import { SettingRepositoryModule } from 'src/common/setting/repository/setting.repository.module';
 import { SettingService } from './services/setting.service';
 
 @Global()
 @Module({
-    imports: [
-        MongooseModule.forFeature(
-            [
-                {
-                    name: SettingEntity.name,
-                    schema: SettingSchema,
-                    collection: SettingDatabaseName,
-                },
-            ],
-            DATABASE_CONNECTION_NAME
-        ),
-    ],
-    exports: [SettingService, SettingBulkService],
-    providers: [SettingService, SettingBulkService],
+    imports: [SettingRepositoryModule, SettingMiddlewareModule],
+    exports: [SettingService],
+    providers: [SettingService],
     controllers: [],
 })
 export class SettingModule {}

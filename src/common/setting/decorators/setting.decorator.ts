@@ -1,8 +1,18 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { SettingDocument } from '../schemas/setting.schema';
+import { IRequestApp } from 'src/common/request/interfaces/request.interface';
+import {
+    SettingDoc,
+    SettingEntity,
+} from 'src/common/setting/repository/entities/setting.entity';
+
 export const GetSetting = createParamDecorator(
-    (data: string, ctx: ExecutionContext): SettingDocument => {
-        const { __setting } = ctx.switchToHttp().getRequest();
-        return __setting;
+    (
+        returnPlain: boolean,
+        ctx: ExecutionContext
+    ): SettingDoc | SettingEntity => {
+        const { __setting } = ctx
+            .switchToHttp()
+            .getRequest<IRequestApp & { __setting: SettingDoc }>();
+        return returnPlain ? __setting.toObject() : __setting;
     }
 );
