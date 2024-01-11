@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4f9788fb-1a80-4eb6-87a2-79f9e1ee9b19" name="Changes" comment="init">
-      <change afterPath="$PROJECT_DIR$/.dockerignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.eslintrc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.prettierrc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -296,7 +296,7 @@
       <workItem from="1704897086025" duration="619000" />
       <workItem from="1704920549116" duration="2004000" />
       <workItem from="1704923946330" duration="559000" />
-      <workItem from="1705003941731" duration="2337000" />
+      <workItem from="1705003941731" duration="2491000" />
     </task>
     <task id="LOCAL-00001" summary="add list all tags endp">
       <created>1683196385113</created>
@@ -425,7 +425,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705006223852</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="init">
+      <option name="closed" value="true" />
+      <created>1705006317502</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1705006317502</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
