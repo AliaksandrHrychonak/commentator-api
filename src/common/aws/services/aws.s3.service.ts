@@ -52,6 +52,7 @@ import {
     Bucket,
     _Object,
 } from '@aws-sdk/client-s3';
+import {ObjectCannedACL} from "@aws-sdk/client-s3/dist-types/models/models_0";
 
 @Injectable()
 export class AwsS3Service implements IAwsS3Service {
@@ -197,7 +198,7 @@ export class AwsS3Service implements IAwsS3Service {
             Bucket: this.bucket,
             Key: key,
             Body: content,
-            ACL: acl,
+            ACL: acl as ObjectCannedACL,
         });
 
         try {
