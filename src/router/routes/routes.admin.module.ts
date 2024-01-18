@@ -12,6 +12,7 @@ import { TagModule } from '../../modules/tag/tag.module';
 import { CategoryAdminController } from '../../modules/category/controllers/category.admin.controller';
 import { CategoryModule } from '../../modules/category/category.module';
 import { CommentModule } from '../../modules/comment/comment.module';
+import {CommentAdminController} from "../../modules/comment/controllers/comment.admin.controller";
 
 @Module({
     controllers: [
@@ -21,6 +22,7 @@ import { CommentModule } from '../../modules/comment/comment.module';
         UserAdminController,
         TagAdminController,
         CategoryAdminController,
+        CommentAdminController
     ],
     providers: [],
     exports: [],

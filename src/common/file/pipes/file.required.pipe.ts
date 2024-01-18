@@ -10,7 +10,6 @@ import { IFile } from 'src/common/file/interfaces/file.interface';
 export class FileRequiredPipe implements PipeTransform {
     async transform(value: IFile | IFile[]): Promise<IFile | IFile[]> {
         await this.validate(value);
-
         return value;
     }
 

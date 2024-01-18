@@ -6,7 +6,6 @@
     "upgrade:package": "ncu -u",
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "deploy": "yarn build && scp -r ./dist/* commentator@51.250.28.199:/home/commentator/backend",
     "format": "yarn format:src && yarn format:test",
     "format:src": "prettier --write src/**/*.ts",
     "format:test": "prettier --write test/**/*.ts",
