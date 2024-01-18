@@ -22,7 +22,6 @@ export class DatabaseOptionsService implements IDatabaseOptionsService {
             : '';
 
         let uri = `${host}`;
-        console.log(options)
         if (database) {
             uri = `${uri}/${database}${options}`;
         }
@@ -43,8 +42,6 @@ export class DatabaseOptionsService implements IDatabaseOptionsService {
                 password: password,
             };
         }
-
-        console.log(mongooseOptions)
 
         return mongooseOptions;
     }

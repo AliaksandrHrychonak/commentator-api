@@ -4,16 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4f9788fb-1a80-4eb6-87a2-79f9e1ee9b19" name="Changes" comment="fix ubuntu ts error build">
-      <change afterPath="$PROJECT_DIR$/src/modules/comment/controllers/comment.admin.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/swagger.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/swagger.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+    <list default="true" id="4f9788fb-1a80-4eb6-87a2-79f9e1ee9b19" name="Changes" comment="add comments export/import">
       <change beforePath="$PROJECT_DIR$/src/common/database/services/database.options.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/database/services/database.options.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/common/file/pipes/file.required.pipe.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/file/pipes/file.required.pipe.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/modules/comment/serializations/comment.list-export.serialization.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/comment/serializations/comment.list-export.serialization.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/router/routes/routes.admin.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/router/routes/routes.admin.module.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -332,7 +324,7 @@
       <workItem from="1705141967029" duration="56000" />
       <workItem from="1705143341740" duration="1819000" />
       <workItem from="1705221189791" duration="945000" />
-      <workItem from="1705579708146" duration="8694000" />
+      <workItem from="1705579708146" duration="8837000" />
     </task>
     <task id="LOCAL-00001" summary="add list all tags endp">
       <created>1683196385113</created>
@@ -501,7 +493,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705018501207</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="add comments export/import">
+      <option name="closed" value="true" />
+      <created>1705601987480</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1705601987480</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -553,6 +553,7 @@
     <MESSAGE value="clear" />
     <MESSAGE value="init" />
     <MESSAGE value="fix ubuntu ts error build" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix ubuntu ts error build" />
+    <MESSAGE value="add comments export/import" />
+    <option name="LAST_COMMIT_MESSAGE" value="add comments export/import" />
   </component>
 </project>
