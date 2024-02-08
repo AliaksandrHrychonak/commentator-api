@@ -99,25 +99,6 @@ export class TagService implements ITagService {
         });
     }
 
-    async belongByOwnerId(
-        tags: string[],
-        owner: string,
-        options?: IDatabaseExistOptions
-    ): Promise<boolean> {
-        if (!tags) {
-            return undefined;
-        }
-
-        const search: Record<string, any> = tags.map((i) => {
-            return { _id: i };
-        });
-        const find: Record<string, any> = {
-            $or: search,
-            owner,
-        };
-        return this.tagRepository.exists(find, options);
-    }
-
     async deleteMany(
         find: Record<string, any>,
         options?: IDatabaseManyOptions
