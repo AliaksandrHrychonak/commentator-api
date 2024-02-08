@@ -9,6 +9,10 @@ import { MigrationApiKeySeed } from 'src/migration/seeds/migration.api-key.seed'
 import { MigrationSettingSeed } from 'src/migration/seeds/migration.setting.seed';
 import { MigrationRoleSeed } from 'src/migration/seeds/migration.role.seed';
 import { MigrationUserSeed } from 'src/migration/seeds/migration.user.seed';
+import { TagModule } from '../modules/tag/tag.module';
+import { MigrationTagSeed } from './seeds/migration.tag.seed';
+import { MigrationCommentSeed } from './seeds/migration.comment.seed';
+import { CommentModule } from '../modules/comment/comment.module';
 
 @Module({
     imports: [
@@ -18,12 +22,16 @@ import { MigrationUserSeed } from 'src/migration/seeds/migration.user.seed';
         AuthModule,
         RoleModule,
         UserModule,
+        CommentModule,
+        TagModule
     ],
     providers: [
         MigrationApiKeySeed,
         MigrationSettingSeed,
         MigrationRoleSeed,
         MigrationUserSeed,
+        MigrationTagSeed,
+        MigrationCommentSeed
     ],
     exports: [],
 })

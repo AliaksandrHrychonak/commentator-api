@@ -33,6 +33,8 @@
     "rollback:apikey": "nestjs-command remove:apikey",
     "rollback:role": "nestjs-command remove:role",
     "rollback:user": "nestjs-command remove:user",
+    "rollback:tag": "nestjs-command remove:tag",
+    "rollback:comment": "nestjs-command remove:comment",
     "seed": "yarn seed:setting && yarn seed:role && yarn seed:user && yarn seed:apikey",
     "rollback": "yarn rollback:setting && yarn rollback:apikey && yarn rollback:user && yarn rollback:role"
   },
