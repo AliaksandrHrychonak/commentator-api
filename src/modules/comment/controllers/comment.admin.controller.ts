@@ -79,7 +79,6 @@ export class CommentAdminController {
     async export(): Promise<IResponse> {
         const comments: ICommentEntity[] =
             await this.commentService.findAll({});
-        console.log(comments)
         return { data: comments };
     }
 }
