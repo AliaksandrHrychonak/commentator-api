@@ -29,5 +29,9 @@ export interface IPaginationService {
         field: string,
         filterValue: T[]
     ): Record<string, { $in: T[] }>;
+    filterNin<T = string>(
+        field: string,
+        filterValue: T[]
+    ): Record<string, { $nin: T[] }>;
     filterDate(field: string, filterValue: Date): Record<string, Date>;
 }
