@@ -1,6 +1,5 @@
 import { UserEntity } from '../../user/repository/entities/user.entity';
 import { TagEntity } from '../../tag/repository/entities/tag.entity';
-import { CategoryEntity } from '../../category/repository/entities/category.entity';
 import { ICommentService } from '../interfaces/comment.service.interface';
 import { Injectable } from '@nestjs/common';
 import { CommentRepository } from '../repository/repositories/comment.repository';
@@ -58,7 +57,7 @@ export class CommentService implements ICommentService {
     }
 
     async create(
-        { name, value, owner, tags, categories }: CommentCreateDto,
+        { name, value, owner, tags }: CommentCreateDto,
         options?: IDatabaseCreateOptions
     ): Promise<CommentDoc> {
         const create: CommentEntity = new CommentEntity();
@@ -66,7 +65,6 @@ export class CommentService implements ICommentService {
         create.value = value;
         create.owner = owner;
         create.tags = tags;
-        create.categories = categories;
 
         return this.commentRepository.create<CommentEntity>(create, options);
     }
@@ -80,13 +78,12 @@ export class CommentService implements ICommentService {
 
     async update(
         repository: CommentDoc,
-        { name, value, tags, categories }: CommentUpdateDto,
+        { name, value, tags }: CommentUpdateDto,
         options?: IDatabaseSaveOptions
     ): Promise<CommentDoc> {
         repository.name = name;
         repository.value = value;
         repository.tags = tags;
-        repository.categories = categories;
 
         return this.commentRepository.save(repository, options);
     }
@@ -114,12 +111,6 @@ export class CommentService implements ICommentService {
                 localField: 'tag',
                 foreignField: '_id',
                 model: TagEntity.name,
-            },
-            {
-                path: 'categories',
-                localField: 'category',
-                foreignField: '_id',
-                model: CategoryEntity.name,
             },
         ]);
     }

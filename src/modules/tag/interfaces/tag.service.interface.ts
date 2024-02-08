@@ -6,7 +6,6 @@ import {
     IDatabaseCreateManyOptions,
     IDatabaseGetTotalOptions,
     IDatabaseSaveOptions,
-    IDatabaseExistOptions,
 } from 'src/common/database/interfaces/database.interface';
 import { TagCreateDto } from '../dtos/tag.create.dto';
 import { TagDoc } from '../repository/entities/tag.entity';

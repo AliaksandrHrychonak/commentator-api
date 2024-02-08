@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import {
     IDatabaseCreateManyOptions,
     IDatabaseCreateOptions,
-    IDatabaseExistOptions,
     IDatabaseFindAllOptions,
     IDatabaseFindOneOptions,
     IDatabaseGetTotalOptions,

@@ -6,8 +6,6 @@ import {
     Post,
     UploadedFile
 } from "@nestjs/common";
-import {AuthService} from "../../../common/auth/services/auth.service";
-import {PaginationService} from "../../../common/pagination/services/pagination.service";
 import {Response, ResponseFile} from "../../../common/response/decorators/response.decorator";
 import {PolicyAbilityProtected} from "../../../common/policy/decorators/policy.decorator";
 import {ENUM_POLICY_ACTION, ENUM_POLICY_SUBJECT} from "../../../common/policy/constants/policy.enum.constant";
@@ -33,8 +31,6 @@ import {CommentListExportSerialization} from "../serializations/comment.list-exp
 })
 export class CommentAdminController {
     constructor(
-        private readonly authService: AuthService,
-        private readonly paginationService: PaginationService,
         private readonly commentService: CommentService
     ) {}
 
@@ -79,7 +75,6 @@ export class CommentAdminController {
     async export(): Promise<IResponse> {
         const comments: ICommentEntity[] =
             await this.commentService.findAll({});
-        console.log(comments)
         return { data: comments };
     }
 }
