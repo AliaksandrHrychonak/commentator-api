@@ -49,12 +49,4 @@ export class CommentCreateDto {
     @ArrayNotEmpty()
     @IsUUID('4', { each: true })
     readonly tags?: string[];
-
-    // TODO add ApiProp
-    @IsString({ each: true })
-    @IsArray()
-    @IsOptional()
-    @ArrayNotEmpty()
-    @IsUUID('4', { each: true })
-    readonly categories?: string[];
 }

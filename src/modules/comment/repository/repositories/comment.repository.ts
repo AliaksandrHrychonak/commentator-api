@@ -5,7 +5,6 @@ import { DatabaseModel } from 'src/common/database/decorators/database.decorator
 import { UserEntity } from 'src/modules/user/repository/entities/user.entity';
 import { CommentDoc, CommentEntity } from '../entities/comment.entity';
 import { TagEntity } from '../../../tag/repository/entities/tag.entity';
-import { CategoryEntity } from '../../../category/repository/entities/category.entity';
 
 @Injectable()
 export class CommentRepository extends DatabaseMongoUUIDRepositoryAbstract<
@@ -28,12 +27,6 @@ export class CommentRepository extends DatabaseMongoUUIDRepositoryAbstract<
                 localField: 'tag',
                 foreignField: '_id',
                 model: TagEntity.name,
-            },
-            {
-                path: 'categories',
-                localField: 'category',
-                foreignField: '_id',
-                model: CategoryEntity.name,
             },
         ]);
     }
