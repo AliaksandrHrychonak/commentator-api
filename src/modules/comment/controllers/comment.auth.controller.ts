@@ -26,7 +26,6 @@ import {
     IResponsePaging,
 } from '../../../common/response/interfaces/response.interface';
 import { ApiTags } from '@nestjs/swagger';
-import { AuthService } from '../../../common/auth/services/auth.service';
 import { PaginationService } from '../../../common/pagination/services/pagination.service';
 import { CommentService } from '../services/comment.service';
 import { CommentDoc } from '../repository/entities/comment.entity';
@@ -37,15 +36,13 @@ import {
     GetComment,
 } from '../decorators/comment.decorator';
 import { CommentRequestDto } from '../dtos/comment.request.dto';
-import { CategoryService } from '../../category/services/category.service';
 import { TagService } from '../../tag/services/tag.service';
 import { ENUM_COMMENT_STATUS_CODE_ERROR } from '../constants/comment.status-code.constant';
 import { HelperArrayService } from '../../../common/helper/services/helper.array.service';
 import { CommentUpdateDto } from '../dtos/comment.update.dto';
 
 import {
-    PaginationQuery,
-    PaginationQueryFilterEqualObjectId,
+    PaginationQuery, PaginationQueryFilterInObjectId, PaginationQueryFilterNinObjectId,
 } from '../../../common/pagination/decorators/pagination.decorator';
 import { PaginationListDto } from '../../../common/pagination/dtos/pagination.list.dto';
 import { CommentListSerialization } from '../serializations/comment.list.serialization';
@@ -64,11 +61,9 @@ import { ICommentEntity } from '../interfaces/comment.interface';
 })
 export class CommentAuthController {
     constructor(
-        private readonly authService: AuthService,
         private readonly paginationService: PaginationService,
         private readonly helperArrayService: HelperArrayService,
         private readonly commentService: CommentService,
-        private readonly categoryService: CategoryService,
         private readonly tagService: TagService
     ) {}
 
@@ -93,20 +88,20 @@ export class CommentAuthController {
             COMMENT_AUTH_USER_AVAILABLE_ORDER_BY
         )
         { _search, _limit, _offset, _order }: PaginationListDto,
-        @PaginationQueryFilterEqualObjectId('categories')
-        categories: Record<string, any>,
-        @PaginationQueryFilterEqualObjectId('tags')
-        tags: Record<string, any>
+        @PaginationQueryFilterInObjectId('tags')
+        tags: Record<string, any>,
+        @PaginationQueryFilterNinObjectId('tags')
+        disabledTags: Record<string, any>,
     ): Promise<IResponsePaging> {
         const find: Record<string, any> = {
-            ..._search,
-            ...tags,
-            ...categories,
-            owner: ownerId,
+          owner: ownerId,
+          ..._search,
+          ...tags,
+          ...disabledTags,
         };
 
         const comments: ICommentEntity[] = await this.commentService.findAll(
-            find,
+               find,
             {
                 paging: {
                     limit: _limit,
@@ -139,42 +134,19 @@ export class CommentAuthController {
     @AuthJwtAccessProtected()
     @Post('/create')
     async create(
-        @GetUser() { _id }: UserDoc,
-        @Body() { name, value, tags, categories }: CommentUserCreateDto
+        @GetUser() { _id: owner }: UserDoc,
+        @Body() { name, value, tags }: CommentUserCreateDto
     ): Promise<IResponse> {
         const checkDuplicateTags = tags && this.helperArrayService.unique(tags);
 
-        const checkDuplicateCategories =
-            categories && this.helperArrayService.unique(categories);
-
         if (checkDuplicateTags) {
-            const belongByOwnerId = await this.tagService.belongByOwnerId(
-                checkDuplicateTags,
-                _id,
-                {}
-            );
+            const result = await this.tagService.findAll({ _id: { "$all": checkDuplicateTags }, owner });
 
-            if (!belongByOwnerId) {
+            if (!result.length) {
                 throw new NotFoundException({
                     statusCode:
-                        ENUM_COMMENT_STATUS_CODE_ERROR.COMMENT_NOT_FOUND_TAG_ERROR,
+                    ENUM_COMMENT_STATUS_CODE_ERROR.COMMENT_NOT_FOUND_TAG_ERROR,
                     message: 'comment.error.notFoundTag',
-                });
-            }
-        }
-
-        if (checkDuplicateCategories) {
-            const belongByOwnerId = await this.categoryService.belongByOwnerId(
-                checkDuplicateCategories,
-                _id,
-                {}
-            );
-
-            if (!belongByOwnerId) {
-                throw new NotFoundException({
-                    statusCode:
-                        ENUM_COMMENT_STATUS_CODE_ERROR.COMMENT_NOT_FOUND_CATEGORY_ERROR,
-                    message: 'comment.error.notFoundCategory',
                 });
             }
         }
@@ -183,8 +155,7 @@ export class CommentAuthController {
             name,
             value,
             tags: checkDuplicateTags,
-            categories: checkDuplicateCategories,
-            owner: _id,
+            owner,
         });
 
         return {
@@ -221,43 +192,20 @@ export class CommentAuthController {
     @RequestParamGuard(CommentRequestDto)
     @Patch('/update/:comment')
     async update(
-        @GetUser() { _id }: UserDoc,
+        @GetUser() { _id: owner }: UserDoc,
         @GetComment() comment: CommentDoc,
-        @Body() { name, value, tags, categories }: CommentUpdateDto
+        @Body() { name, value, tags }: CommentUpdateDto
     ): Promise<IResponse> {
         const uniqueTags = tags && this.helperArrayService.unique(tags);
 
-        const uniqueCategories =
-            categories && this.helperArrayService.unique(categories);
-
         if (uniqueTags) {
-            const belongByOwnerId = await this.tagService.belongByOwnerId(
-                uniqueTags,
-                _id,
-                {}
-            );
+            const result = await this.tagService.findAll({ _id: { "$all": uniqueTags }, owner });
 
-            if (!belongByOwnerId) {
+            if (!result.length) {
                 throw new NotFoundException({
                     statusCode:
-                        ENUM_COMMENT_STATUS_CODE_ERROR.COMMENT_NOT_FOUND_TAG_ERROR,
+                    ENUM_COMMENT_STATUS_CODE_ERROR.COMMENT_NOT_FOUND_TAG_ERROR,
                     message: 'comment.error.notFoundTag',
-                });
-            }
-        }
-
-        if (uniqueCategories) {
-            const belongByOwnerId = await this.categoryService.belongByOwnerId(
-                uniqueCategories,
-                _id,
-                {}
-            );
-
-            if (!belongByOwnerId) {
-                throw new NotFoundException({
-                    statusCode:
-                        ENUM_COMMENT_STATUS_CODE_ERROR.COMMENT_NOT_FOUND_CATEGORY_ERROR,
-                    message: 'comment.error.notFoundCategory',
                 });
             }
         }
@@ -266,7 +214,6 @@ export class CommentAuthController {
             name,
             value,
             tags: uniqueTags,
-            categories: uniqueCategories,
         });
 
         return {

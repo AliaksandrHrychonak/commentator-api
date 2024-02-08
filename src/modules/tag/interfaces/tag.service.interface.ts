@@ -6,7 +6,6 @@ import {
     IDatabaseCreateManyOptions,
     IDatabaseGetTotalOptions,
     IDatabaseSaveOptions,
-    IDatabaseExistOptions,
 } from 'src/common/database/interfaces/database.interface';
 import { TagCreateDto } from '../dtos/tag.create.dto';
 import { TagDoc } from '../repository/entities/tag.entity';
@@ -43,11 +42,6 @@ export interface ITagService {
         options?: IDatabaseSaveOptions
     ): Promise<TagDoc>;
     joinWithOwner(repository: TagDoc): Promise<ITagDoc>;
-    belongByOwnerId(
-        tags: string[],
-        owner: string,
-        options?: IDatabaseExistOptions
-    ): Promise<boolean>;
     import(
         data: TagImportDto[],
         options?: IDatabaseCreateManyOptions

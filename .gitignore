@@ -19,7 +19,7 @@ lerna-debug.log*
 /.nyc_output
 
 # IDEs and editors
-/.idea
+.idea
 .project
 .classpath
 .c9/
@@ -49,4 +49,4 @@ lerna-debug.log*
 !.env.example
 config.yaml
 config.yml
-.env.production
+.env.production!

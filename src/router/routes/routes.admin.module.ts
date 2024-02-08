@@ -9,8 +9,6 @@ import { UserAdminController } from 'src/modules/user/controllers/user.admin.con
 import { UserModule } from 'src/modules/user/user.module';
 import { TagAdminController } from '../../modules/tag/controllers/tag.admin.controller';
 import { TagModule } from '../../modules/tag/tag.module';
-import { CategoryAdminController } from '../../modules/category/controllers/category.admin.controller';
-import { CategoryModule } from '../../modules/category/category.module';
 import { CommentModule } from '../../modules/comment/comment.module';
 import {CommentAdminController} from "../../modules/comment/controllers/comment.admin.controller";
 
@@ -21,7 +19,6 @@ import {CommentAdminController} from "../../modules/comment/controllers/comment.
         RoleAdminController,
         UserAdminController,
         TagAdminController,
-        CategoryAdminController,
         CommentAdminController
     ],
     providers: [],
@@ -32,7 +29,6 @@ import {CommentAdminController} from "../../modules/comment/controllers/comment.
         UserModule,
         AuthModule,
         TagModule,
-        CategoryModule,
         CommentModule,
     ],
 })

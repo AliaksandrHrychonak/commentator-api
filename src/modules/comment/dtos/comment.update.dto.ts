@@ -5,5 +5,4 @@ export class CommentUpdateDto extends PickType(CommentCreateDto, [
     'name',
     'value',
     'tags',
-    'categories',
 ] as const) {}

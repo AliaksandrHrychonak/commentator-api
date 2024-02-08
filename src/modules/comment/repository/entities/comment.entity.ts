@@ -40,13 +40,6 @@ export class CommentEntity extends DatabaseMongoUUIDEntityAbstract {
         index: true,
     })
     tags?: string[];
-
-    @Prop({
-        required: false,
-        ref: CommentEntity.name,
-        index: true,
-    })
-    categories?: string[];
 }
 
 export const CommentSchema = SchemaFactory.createForClass(CommentEntity);

@@ -32,7 +32,7 @@ export interface ICommentService {
         options?: IDatabaseGetTotalOptions
     ): Promise<number>;
     create(
-        { name, value, owner, tags, categories }: CommentCreateDto,
+        { name, value, owner, tags }: CommentCreateDto,
         options?: IDatabaseCreateOptions
     ): Promise<CommentDoc>;
     delete(
