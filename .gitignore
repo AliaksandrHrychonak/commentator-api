@@ -49,4 +49,3 @@ lerna-debug.log*
 !.env.example
 config.yaml
 config.yml
-.env.production!
