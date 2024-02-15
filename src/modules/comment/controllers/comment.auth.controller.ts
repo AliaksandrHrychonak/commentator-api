@@ -1,15 +1,15 @@
 import {
     Response,
     ResponsePaging,
-} from '../../../common/response/decorators/response.decorator';
-import { ResponseIdSerialization } from '../../../common/response/serializations/response.id.serialization';
-import { PolicyAbilityProtected } from '../../../common/policy/decorators/policy.decorator';
+} from 'src/common/response/decorators/response.decorator';
+import { ResponseIdSerialization } from 'src/common/response/serializations/response.id.serialization';
+import { PolicyAbilityProtected } from 'src/common/policy/decorators/policy.decorator';
 import {
     ENUM_POLICY_ACTION,
     ENUM_POLICY_SUBJECT,
-} from '../../../common/policy/constants/policy.enum.constant';
-import { GetUser, UserProtected } from '../../user/decorators/user.decorator';
-import { AuthJwtAccessProtected } from '../../../common/auth/decorators/auth.jwt.decorator';
+} from 'src/common/policy/constants/policy.enum.constant';
+import { GetUser, UserProtected } from 'src/modules/user/decorators/user.decorator';
+import { AuthJwtAccessProtected } from 'src/common/auth/decorators/auth.jwt.decorator';
 import {
     Body,
     Controller,
@@ -20,41 +20,48 @@ import {
     Post,
     SerializeOptions,
 } from '@nestjs/common';
-import { UserDoc } from '../../user/repository/entities/user.entity';
+import { UserDoc } from 'src/modules/user/repository/entities/user.entity';
 import {
     IResponse,
     IResponsePaging,
-} from '../../../common/response/interfaces/response.interface';
+} from 'src/common/response/interfaces/response.interface';
 import { ApiTags } from '@nestjs/swagger';
-import { PaginationService } from '../../../common/pagination/services/pagination.service';
-import { CommentService } from '../services/comment.service';
-import { CommentDoc } from '../repository/entities/comment.entity';
-import { CommentUserCreateDto } from '../dtos/comment.user-create.dto';
-import { RequestParamGuard } from '../../../common/request/decorators/request.decorator';
+import { PaginationService } from 'src/common/pagination/services/pagination.service';
+import { CommentService } from 'src/modules/comment/services/comment.service';
+import { CommentDoc } from 'src/modules/comment/repository/entities/comment.entity';
+import { CommentUserCreateDto } from 'src/modules/comment/dtos/comment.user-create.dto';
+import { RequestParamGuard } from 'src/common/request/decorators/request.decorator';
 import {
     CommentAuthUserProtected,
     GetComment,
-} from '../decorators/comment.decorator';
-import { CommentRequestDto } from '../dtos/comment.request.dto';
-import { TagService } from '../../tag/services/tag.service';
-import { ENUM_COMMENT_STATUS_CODE_ERROR } from '../constants/comment.status-code.constant';
-import { HelperArrayService } from '../../../common/helper/services/helper.array.service';
-import { CommentUpdateDto } from '../dtos/comment.update.dto';
+} from 'src/modules/comment/decorators/comment.decorator';
+import { CommentRequestDto } from 'src/modules/comment/dtos/comment.request.dto';
+import { TagService } from 'src/modules/tag/services/tag.service';
+import { ENUM_COMMENT_STATUS_CODE_ERROR } from 'src/modules/comment/constants/comment.status-code.constant';
+import { HelperArrayService } from 'src/common/helper/services/helper.array.service';
+import { CommentUpdateDto } from 'src/modules/comment/dtos/comment.update.dto';
 
 import {
     PaginationQuery, PaginationQueryFilterInObjectId, PaginationQueryFilterNinObjectId,
-} from '../../../common/pagination/decorators/pagination.decorator';
-import { PaginationListDto } from '../../../common/pagination/dtos/pagination.list.dto';
-import { CommentListSerialization } from '../serializations/comment.list.serialization';
+} from 'src/common/pagination/decorators/pagination.decorator';
+import { PaginationListDto } from 'src/common/pagination/dtos/pagination.list.dto';
+import { CommentListSerialization } from 'src/modules/comment/serializations/comment.list.serialization';
 import {
     COMMENT_AUTH_USER_AVAILABLE_ORDER_BY,
     COMMENT_AUTH_USER_AVAILABLE_SEARCH,
     COMMENT_DEFAULT_ORDER_BY,
     COMMENT_DEFAULT_ORDER_DIRECTION,
     COMMENT_DEFAULT_PER_PAGE,
-} from '../constants/comment.list.constant';
-import { ICommentEntity } from '../interfaces/comment.interface';
-@ApiTags('modules.admin.comment')
+} from 'src/modules/comment/constants/comment.list.constant';
+import { ICommentEntity } from 'src/modules/comment/interfaces/comment.interface';
+import {
+    CommentAuthUserCreateDoc,
+    CommentAuthUserDeleteDoc,
+    CommentAuthUserGetDoc,
+    CommentAuthUserListDoc,
+    CommentAuthUserUpdateDoc
+} from "src/modules/comment/docs/comment.auth.doc";
+@ApiTags('modules.auth.comment')
 @Controller({
     version: '1',
     path: '/comment',
@@ -67,7 +74,7 @@ export class CommentAuthController {
         private readonly tagService: TagService
     ) {}
 
-    // @CommentAuthUserListDoc()
+    @CommentAuthUserListDoc()
     @ResponsePaging('comment.list', {
         serialization: CommentListSerialization,
     })
@@ -122,7 +129,7 @@ export class CommentAuthController {
         };
     }
 
-    // @CommentAuthUserCreateDoc()
+    @CommentAuthUserCreateDoc()
     @Response('comment.create', {
         serialization: ResponseIdSerialization,
     })
@@ -140,13 +147,17 @@ export class CommentAuthController {
         const checkDuplicateTags = tags && this.helperArrayService.unique(tags);
 
         if (checkDuplicateTags) {
-            const result = await this.tagService.findAll({ _id: { "$all": checkDuplicateTags }, owner });
-
-            if (!result.length) {
+            const find: { _id: string, owner: string }[] = checkDuplicateTags.map(i => ({
+                _id: i,
+                owner
+            }))
+            const result = await this.tagService.belongListById(find)
+            const check = this.helperArrayService.differenceBy(find, result, "_id")
+            if (!!check.length) {
                 throw new NotFoundException({
                     statusCode:
                     ENUM_COMMENT_STATUS_CODE_ERROR.COMMENT_NOT_FOUND_TAG_ERROR,
-                    message: 'comment.error.notFoundTag',
+                    message: 'comment.error.notFoundTag' + check[0]._id,
                 });
             }
         }
@@ -163,7 +174,7 @@ export class CommentAuthController {
         };
     }
 
-    // @CategoryAdminGetDoc()
+    @CommentAuthUserGetDoc()
     // TODO add Serialize (fix bug "RangeError: Maximum call stack size exceeded")
     @SerializeOptions({})
     @Response('comment.get')
@@ -179,7 +190,7 @@ export class CommentAuthController {
         return { data: comment };
     }
 
-    // @CategoryAuthUserUpdateDoc()
+    @CommentAuthUserUpdateDoc()
     @Response('comment.update', {
         serialization: ResponseIdSerialization,
     })
@@ -196,16 +207,20 @@ export class CommentAuthController {
         @GetComment() comment: CommentDoc,
         @Body() { name, value, tags }: CommentUpdateDto
     ): Promise<IResponse> {
-        const uniqueTags = tags && this.helperArrayService.unique(tags);
+        const checkDuplicateTags = tags && this.helperArrayService.unique(tags);
 
-        if (uniqueTags) {
-            const result = await this.tagService.findAll({ _id: { "$all": uniqueTags }, owner });
-
-            if (!result.length) {
+        if (checkDuplicateTags) {
+            const find: { _id: string, owner: string }[] = checkDuplicateTags.map(i => ({
+                _id: i,
+                owner
+            }))
+            const result = await this.tagService.belongListById(find)
+            const check = this.helperArrayService.differenceBy(find, result, "_id")
+            if (!!check.length) {
                 throw new NotFoundException({
                     statusCode:
                     ENUM_COMMENT_STATUS_CODE_ERROR.COMMENT_NOT_FOUND_TAG_ERROR,
-                    message: 'comment.error.notFoundTag',
+                    message: 'comment.error.notFoundTag ' + check[0]._id,
                 });
             }
         }
@@ -213,7 +228,7 @@ export class CommentAuthController {
         await this.commentService.update(comment, {
             name,
             value,
-            tags: uniqueTags,
+            tags: checkDuplicateTags,
         });
 
         return {
@@ -221,7 +236,7 @@ export class CommentAuthController {
         };
     }
 
-    // @CategoryAuthUserDeleteDoc()
+    @CommentAuthUserDeleteDoc()
     @Response('comment.delete')
     @CommentAuthUserProtected()
     @PolicyAbilityProtected({
