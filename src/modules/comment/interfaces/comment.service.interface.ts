@@ -7,11 +7,11 @@ import {
     IDatabaseGetTotalOptions,
     IDatabaseManyOptions,
     IDatabaseSaveOptions,
-} from '../../../common/database/interfaces/database.interface';
-import { CommentCreateDto } from '../dtos/comment.create.dto';
-import { CommentDoc } from '../repository/entities/comment.entity';
-import { CommentUpdateDto } from '../dtos/comment.update.dto';
-import { CommentImportDto } from '../dtos/comment.import.dto';
+} from 'src/common/database/interfaces/database.interface';
+import { CommentCreateDto } from 'src/modules/comment/dtos/comment.create.dto';
+import { CommentDoc } from 'src/modules/comment/repository/entities/comment.entity';
+import { CommentUpdateDto } from 'src/modules/comment/dtos/comment.update.dto';
+import { CommentImportDto } from 'src/modules/comment/dtos/comment.import.dto';
 
 export interface ICommentService {
     findAll(

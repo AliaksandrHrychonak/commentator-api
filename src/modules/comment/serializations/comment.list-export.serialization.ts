@@ -8,4 +8,7 @@ export class CommentListExportSerialization extends OmitType(
 ) {
     @Transform(({ obj }) => `${obj.owner._id}`)
     owner: string;
+
+    @Transform(({ value }) => value.map(i => i._id).join(','))
+    tags?: string;
 }

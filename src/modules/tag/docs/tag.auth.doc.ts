@@ -8,8 +8,8 @@ import {
     DocResponse,
     DocResponsePaging,
 } from 'src/common/doc/decorators/doc.decorator';
-import { ResponseIdSerialization } from '../../../common/response/serializations/response.id.serialization';
-import { TagListSerialization } from '../serializations/tag.list.serialization';
+import { ResponseIdSerialization } from 'src/common/response/serializations/response.id.serialization';
+import { TagListSerialization } from 'src/modules/tag/serializations/tag.list.serialization';
 
 export function TagAuthUserCreateDoc(): MethodDecorator {
     return applyDecorators(

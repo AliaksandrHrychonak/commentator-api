@@ -5,43 +5,43 @@ import {
     Response,
     ResponsePaging,
 } from 'src/common/response/decorators/response.decorator';
-import { TagService } from '../services/tag.service';
+import { TagService } from 'src/modules/tag/services/tag.service';
 import {
     TagAuthUserCreateDoc,
     TagAuthUserDeleteDoc,
     TagAuthUserListDoc,
     TagAuthUserUpdateDoc,
-} from '../docs/tag.auth.doc';
-import { TagDoc } from '../repository/entities/tag.entity';
-import { GetTag, TagAuthUserProtected } from '../decorators/tag.decorator';
-import { TagUpdateDto } from '../dtos/tag.update.dto';
-import { GetUser, UserProtected } from '../../user/decorators/user.decorator';
-import { PolicyAbilityProtected } from '../../../common/policy/decorators/policy.decorator';
+} from 'src/modules/tag/docs/tag.auth.doc';
+import { TagDoc } from 'src/modules/tag/repository/entities/tag.entity';
+import { GetTag, TagAuthUserProtected } from 'src/modules/tag/decorators/tag.decorator';
+import { TagUpdateDto } from 'src/modules/tag/dtos/tag.update.dto';
+import { GetUser, UserProtected } from 'src/modules/user/decorators/user.decorator';
+import { PolicyAbilityProtected } from 'src/common/policy/decorators/policy.decorator';
 import {
     ENUM_POLICY_ACTION,
     ENUM_POLICY_SUBJECT,
-} from '../../../common/policy/constants/policy.enum.constant';
-import { UserDoc } from '../../user/repository/entities/user.entity';
-import { TagUserCreateDto } from '../dtos/tag.user-create.dto';
-import { ResponseIdSerialization } from '../../../common/response/serializations/response.id.serialization';
+} from 'src/common/policy/constants/policy.enum.constant';
+import { UserDoc } from 'src/modules/user/repository/entities/user.entity';
+import { TagUserCreateDto } from 'src/modules/tag/dtos/tag.user-create.dto';
+import { ResponseIdSerialization } from 'src/common/response/serializations/response.id.serialization';
 import {
     IResponse,
     IResponsePaging,
-} from '../../../common/response/interfaces/response.interface';
-import { PaginationQuery } from '../../../common/pagination/decorators/pagination.decorator';
-import { PaginationListDto } from '../../../common/pagination/dtos/pagination.list.dto';
+} from 'src/common/response/interfaces/response.interface';
+import { PaginationQuery } from 'src/common/pagination/decorators/pagination.decorator';
+import { PaginationListDto } from 'src/common/pagination/dtos/pagination.list.dto';
 import {
     TAG_AUTH_USER_AVAILABLE_ORDER_BY,
     TAG_AUTH_USER_AVAILABLE_SEARCH,
     TAG_DEFAULT_ORDER_BY,
     TAG_DEFAULT_ORDER_DIRECTION,
     TAG_DEFAULT_PER_PAGE,
-} from '../constants/tag.list.constant';
-import { TagListSerialization } from '../serializations/tag.list.serialization';
-import { ITagEntity } from '../interfaces/tag.interface';
-import { PaginationService } from '../../../common/pagination/services/pagination.service';
-import { RequestParamGuard } from '../../../common/request/decorators/request.decorator';
-import { TagRequestDto } from '../dtos/tag.request.dto';
+} from 'src/modules/tag/constants/tag.list.constant';
+import { TagListSerialization } from 'src/modules/tag/serializations/tag.list.serialization';
+import { ITagEntity } from 'src/modules/tag/interfaces/tag.interface';
+import { PaginationService } from 'src/common/pagination/services/pagination.service';
+import { RequestParamGuard } from 'src/common/request/decorators/request.decorator';
+import { TagRequestDto } from 'src/modules/tag/dtos/tag.request.dto';
 
 @ApiTags('modules.auth.tag')
 @Controller({

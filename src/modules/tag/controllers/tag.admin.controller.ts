@@ -11,41 +11,40 @@ import {
     SerializeOptions,
     UploadedFile,
 } from '@nestjs/common';
-import { AuthService } from '../../../common/auth/services/auth.service';
-import { PaginationService } from '../../../common/pagination/services/pagination.service';
-import { TagService } from '../services/tag.service';
+import { PaginationService } from 'src/common/pagination/services/pagination.service';
+import { TagService } from 'src/modules/tag/services/tag.service';
 import { Response } from 'src/common/response/decorators/response.decorator';
 import {
     ResponseFile,
     ResponsePaging,
-} from '../../../common/response/decorators/response.decorator';
-import { TagListSerialization } from '../serializations/tag.list.serialization';
-import { PolicyAbilityProtected } from '../../../common/policy/decorators/policy.decorator';
+} from 'src/common/response/decorators/response.decorator';
+import { TagListSerialization } from 'src/modules/tag/serializations/tag.list.serialization';
+import { PolicyAbilityProtected } from 'src/common/policy/decorators/policy.decorator';
 import {
     ENUM_POLICY_ACTION,
     ENUM_POLICY_SUBJECT,
-} from '../../../common/policy/constants/policy.enum.constant';
+} from 'src/common/policy/constants/policy.enum.constant';
 import {
     AuthJwtAccessProtected,
     AuthJwtAdminAccessProtected,
-} from '../../../common/auth/decorators/auth.jwt.decorator';
+} from 'src/common/auth/decorators/auth.jwt.decorator';
 import {
     PaginationQuery,
     PaginationQueryFilterEqualObjectId,
-} from '../../../common/pagination/decorators/pagination.decorator';
+} from 'src/common/pagination/decorators/pagination.decorator';
 import {
     TAG_DEFAULT_AVAILABLE_ORDER_BY,
     TAG_DEFAULT_AVAILABLE_SEARCH,
     TAG_DEFAULT_ORDER_BY,
     TAG_DEFAULT_ORDER_DIRECTION,
     TAG_DEFAULT_PER_PAGE,
-} from '../constants/tag.list.constant';
-import { PaginationListDto } from '../../../common/pagination/dtos/pagination.list.dto';
+} from 'src/modules/tag/constants/tag.list.constant';
+import { PaginationListDto } from 'src/common/pagination/dtos/pagination.list.dto';
 import {
     IResponse,
     IResponsePaging,
-} from '../../../common/response/interfaces/response.interface';
-import { ITagEntity } from '../interfaces/tag.interface';
+} from 'src/common/response/interfaces/response.interface';
+import { ITagEntity } from 'src/modules/tag/interfaces/tag.interface';
 import {
     TagAdminCreateDoc,
     TagAdminDeleteDoc,
@@ -54,33 +53,33 @@ import {
     TagAdminImportDoc,
     TagAdminListDoc,
     TagAdminUpdateDoc,
-} from '../docs/tag.admin.doc';
+} from 'src/modules/tag/docs/tag.admin.doc';
 import {
     TagAdminCreateGuard,
     TagAdminDeleteGuard,
     TagAdminGetGuard,
     TagAdminUpdateGuard,
-} from '../decorators/tag.admin.decorator';
-import { RequestParamGuard } from '../../../common/request/decorators/request.decorator';
-import { TagRequestDto } from '../dtos/tag.request.dto';
-import { GetTag } from '../decorators/tag.decorator';
-import { TagDoc } from '../repository/entities/tag.entity';
-import { ResponseIdSerialization } from '../../../common/response/serializations/response.id.serialization';
-import { ENUM_HELPER_FILE_TYPE } from '../../../common/helper/constants/helper.enum.constant';
-import { FileRequiredPipe } from '../../../common/file/pipes/file.required.pipe';
-import { FileSizeExcelPipe } from '../../../common/file/pipes/file.size.pipe';
-import { FileTypeExcelPipe } from '../../../common/file/pipes/file.type.pipe';
-import { FileExtractPipe } from '../../../common/file/pipes/file.extract.pipe';
-import { FileValidationPipe } from '../../../common/file/pipes/file.validation.pipe';
-import { TagImportDto } from '../dtos/tag.import.dto';
-import { IFileExtract } from '../../../common/file/interfaces/file.interface';
-import { UploadFileSingle } from '../../../common/file/decorators/file.decorator';
-import { TagUpdateDto } from '../dtos/tag.update.dto';
-import { TagListExportSerialization } from '../serializations/tag.list-export.serialization';
-import { UserDoc } from '../../user/repository/entities/user.entity';
-import { GetUser } from '../../user/decorators/user.decorator';
-import { UserRequestDto } from '../../user/dtos/user.request.dto';
-import { TagUserCreateDto } from '../dtos/tag.user-create.dto';
+} from 'src/modules/tag/decorators/tag.admin.decorator';
+import { RequestParamGuard } from 'src/common/request/decorators/request.decorator';
+import { TagRequestDto } from 'src/modules/tag/dtos/tag.request.dto';
+import { GetTag } from 'src/modules/tag/decorators/tag.decorator';
+import { TagDoc } from 'src/modules/tag/repository/entities/tag.entity';
+import { ResponseIdSerialization } from 'src/common/response/serializations/response.id.serialization';
+import { ENUM_HELPER_FILE_TYPE } from 'src/common/helper/constants/helper.enum.constant';
+import { FileRequiredPipe } from 'src/common/file/pipes/file.required.pipe';
+import { FileSizeExcelPipe } from 'src/common/file/pipes/file.size.pipe';
+import { FileTypeExcelPipe } from 'src/common/file/pipes/file.type.pipe';
+import { FileExtractPipe } from 'src/common/file/pipes/file.extract.pipe';
+import { FileValidationPipe } from 'src/common/file/pipes/file.validation.pipe';
+import { TagImportDto } from 'src/modules/tag/dtos/tag.import.dto';
+import { IFileExtract } from 'src/common/file/interfaces/file.interface';
+import { UploadFileSingle } from 'src/common/file/decorators/file.decorator';
+import { TagUpdateDto } from 'src/modules/tag/dtos/tag.update.dto';
+import { TagListExportSerialization } from 'src/modules/tag/serializations/tag.list-export.serialization';
+import { UserDoc } from 'src/modules/user/repository/entities/user.entity';
+import { GetUser } from 'src/modules/user/decorators/user.decorator';
+import { UserRequestDto } from 'src/modules/user/dtos/user.request.dto';
+import { TagUserCreateDto } from 'src/modules/tag/dtos/tag.user-create.dto';
 
 @ApiTags('modules.admin.tag')
 @Controller({
@@ -89,7 +88,6 @@ import { TagUserCreateDto } from '../dtos/tag.user-create.dto';
 })
 export class TagAdminController {
     constructor(
-        private readonly authService: AuthService,
         private readonly paginationService: PaginationService,
         private readonly tagService: TagService
     ) {}

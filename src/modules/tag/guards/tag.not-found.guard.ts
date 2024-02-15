@@ -5,8 +5,8 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import { IRequestApp } from 'src/common/request/interfaces/request.interface';
-import { TagDoc } from '../repository/entities/tag.entity';
-import { ENUM_TAG_STATUS_CODE_ERROR } from '../constants/tag.status-code.constant';
+import { TagDoc } from 'src/modules/tag/repository/entities/tag.entity';
+import { ENUM_TAG_STATUS_CODE_ERROR } from 'src/modules/tag/constants/tag.status-code.constant';
 
 @Injectable()
 export class TagNotFoundGuard implements CanActivate {

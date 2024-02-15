@@ -3,7 +3,7 @@ import { Model } from 'mongoose';
 import { DatabaseMongoUUIDRepositoryAbstract } from 'src/common/database/abstracts/mongo/repositories/database.mongo.uuid.repository.abstract';
 import { DatabaseModel } from 'src/common/database/decorators/database.decorator';
 import { UserEntity } from 'src/modules/user/repository/entities/user.entity';
-import { TagDoc, TagEntity } from '../entities/tag.entity';
+import { TagDoc, TagEntity } from 'src/modules/tag/repository/entities/tag.entity';
 
 @Injectable()
 export class TagRepository extends DatabaseMongoUUIDRepositoryAbstract<

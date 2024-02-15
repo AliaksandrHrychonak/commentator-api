@@ -1,7 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { IRequestApp } from 'src/common/request/interfaces/request.interface';
-import { TagDoc } from '../../repository/entities/tag.entity';
-import { TagService } from '../../services/tag.service';
+import { TagDoc } from 'src/modules/tag/repository/entities/tag.entity';
+import { TagService } from 'src/modules/tag/services/tag.service';
 
 @Injectable()
 export class TagPutToRequestGuard implements CanActivate {

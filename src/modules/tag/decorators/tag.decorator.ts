@@ -5,12 +5,12 @@ import {
     UseGuards,
 } from '@nestjs/common';
 import { IRequestApp } from 'src/common/request/interfaces/request.interface';
-import { TagDoc, TagEntity } from '../repository/entities/tag.entity';
-import { TagPutToRequestGuard } from '../guards/payload/tag.payload.put-to-request.guard';
-import { TagNotFoundGuard } from '../guards/tag.not-found.guard';
-import { TagNotOwnerGuard } from '../guards/tag.not-owner.guard';
-import { UserPayloadPutToRequestGuard } from '../../user/guards/payload/user.payload.put-to-request.guard';
-import { UserNotFoundGuard } from '../../user/guards/user.not-found.guard';
+import { TagDoc, TagEntity } from 'src/modules/tag/repository/entities/tag.entity';
+import { TagPutToRequestGuard } from 'src/modules/tag/guards/payload/tag.payload.put-to-request.guard';
+import { TagNotFoundGuard } from 'src/modules/tag/guards/tag.not-found.guard';
+import { TagNotOwnerGuard } from 'src/modules/tag/guards/tag.not-owner.guard';
+import { UserPayloadPutToRequestGuard } from 'src/modules/user/guards/payload/user.payload.put-to-request.guard';
+import { UserNotFoundGuard } from 'src/modules/user/guards/user.not-found.guard';
 export const GetTag = createParamDecorator(
     (returnPlain: boolean, ctx: ExecutionContext): TagDoc | TagEntity => {
         const { __tag } = ctx

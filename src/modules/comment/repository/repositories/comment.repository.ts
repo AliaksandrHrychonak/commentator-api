@@ -3,8 +3,8 @@ import { Model } from 'mongoose';
 import { DatabaseMongoUUIDRepositoryAbstract } from 'src/common/database/abstracts/mongo/repositories/database.mongo.uuid.repository.abstract';
 import { DatabaseModel } from 'src/common/database/decorators/database.decorator';
 import { UserEntity } from 'src/modules/user/repository/entities/user.entity';
-import { CommentDoc, CommentEntity } from '../entities/comment.entity';
-import { TagEntity } from '../../../tag/repository/entities/tag.entity';
+import { CommentDoc, CommentEntity } from 'src/modules/comment/repository/entities/comment.entity';
+import { TagEntity } from 'src/modules/tag/repository/entities/tag.entity';
 
 @Injectable()
 export class CommentRepository extends DatabaseMongoUUIDRepositoryAbstract<

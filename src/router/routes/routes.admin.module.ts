@@ -7,10 +7,10 @@ import { RoleModule } from 'src/modules/role/role.module';
 import { SettingAdminController } from 'src/common/setting/controllers/setting.admin.controller';
 import { UserAdminController } from 'src/modules/user/controllers/user.admin.controller';
 import { UserModule } from 'src/modules/user/user.module';
-import { TagAdminController } from '../../modules/tag/controllers/tag.admin.controller';
-import { TagModule } from '../../modules/tag/tag.module';
-import { CommentModule } from '../../modules/comment/comment.module';
-import {CommentAdminController} from "../../modules/comment/controllers/comment.admin.controller";
+import { TagAdminController } from 'src/modules/tag/controllers/tag.admin.controller';
+import { TagModule } from 'src/modules/tag/tag.module';
+import { CommentModule } from 'src/modules/comment/comment.module';
+import {CommentAdminController} from "src/modules/comment/controllers/comment.admin.controller";
 
 @Module({
     controllers: [

@@ -1,7 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { IRequestApp } from 'src/common/request/interfaces/request.interface';
-import { CommentService } from '../../services/comment.service';
-import { CommentDoc } from '../../repository/entities/comment.entity';
+import { CommentService } from 'src/modules/comment/services/comment.service';
+import { CommentDoc } from 'src/modules/comment/repository/entities/comment.entity';
 
 @Injectable()
 export class CommentPutToRequestGuard implements CanActivate {

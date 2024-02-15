@@ -10,6 +10,7 @@ import {
     IsOptional,
     IsArray,
     ArrayNotEmpty,
+    ArrayMaxSize,
 } from 'class-validator';
 
 export class CommentCreateDto {
@@ -47,6 +48,7 @@ export class CommentCreateDto {
     @IsArray()
     @IsOptional()
     @ArrayNotEmpty()
+    @ArrayMaxSize(20)
     @IsUUID('4', { each: true })
     readonly tags?: string[];
 }

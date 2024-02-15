@@ -1,8 +1,8 @@
-import { UserEntity } from '../../user/repository/entities/user.entity';
-import { TagEntity } from '../../tag/repository/entities/tag.entity';
-import { ICommentService } from '../interfaces/comment.service.interface';
+import { UserEntity } from 'src/modules/user/repository/entities/user.entity';
+import { TagEntity } from 'src/modules/tag/repository/entities/tag.entity';
+import { ICommentService } from 'src/modules/comment/interfaces/comment.service.interface';
 import { Injectable } from '@nestjs/common';
-import { CommentRepository } from '../repository/repositories/comment.repository';
+import { CommentRepository } from 'src/modules/comment/repository/repositories/comment.repository';
 import {
     IDatabaseCreateManyOptions,
     IDatabaseCreateOptions,
@@ -11,15 +11,15 @@ import {
     IDatabaseGetTotalOptions,
     IDatabaseManyOptions,
     IDatabaseSaveOptions,
-} from '../../../common/database/interfaces/database.interface';
-import { ICommentDoc, ICommentEntity } from '../interfaces/comment.interface';
-import { CommentCreateDto } from '../dtos/comment.create.dto';
+} from 'src/modules/../common/database/interfaces/database.interface';
+import { ICommentDoc, ICommentEntity } from 'src/modules/comment/interfaces/comment.interface';
+import { CommentCreateDto } from 'src/modules/comment/dtos/comment.create.dto';
 import {
     CommentDoc,
     CommentEntity,
-} from '../repository/entities/comment.entity';
-import { CommentUpdateDto } from '../dtos/comment.update.dto';
-import { CommentImportDto } from '../dtos/comment.import.dto';
+} from 'src/modules/comment/repository/entities/comment.entity';
+import { CommentUpdateDto } from 'src/modules/comment/dtos/comment.update.dto';
+import { CommentImportDto } from 'src/modules/comment/dtos/comment.import.dto';
 
 @Injectable()
 export class CommentService implements ICommentService {
@@ -126,11 +126,12 @@ export class CommentService implements ICommentService {
         data: CommentImportDto[],
         options?: IDatabaseCreateManyOptions
     ): Promise<boolean> {
-        const comments: CommentEntity[] = data.map(({ name, value, owner }) => {
+        const comments: CommentEntity[] = data.map(({ name, value, owner, tags }) => {
             const create: CommentEntity = new CommentEntity();
             create.name = name;
             create.value = value;
             create.owner = owner;
+            create.tags = tags.split(',');
 
             return create;
         });

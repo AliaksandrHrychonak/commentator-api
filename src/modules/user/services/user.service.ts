@@ -31,9 +31,6 @@ import { plainToInstance } from 'class-transformer';
 import { RoleEntity } from 'src/modules/role/repository/entities/role.entity';
 import { UserImportDto } from 'src/modules/user/dtos/user.import.dto';
 import { UserUpdateUsernameDto } from 'src/modules/user/dtos/user.update-username.dto';
-import { UserUpdateGoogleSSODto } from 'src/modules/user/dtos/user.update-google-sso.dto';
-import {UserUpdateYandexSSODto} from "../dtos/user.update-yandex-sso.dto";
-import {UserUpdateGithubSSODto} from "../dtos/user.update-github-sso.dto";
 
 @Injectable()
 export class UserService implements IUserService {
@@ -201,44 +198,18 @@ export class UserService implements IUserService {
         return this.userRepository.save(repository, options);
     }
 
-    async updateGoogleSSO(
-        repository: UserDoc,
-        { accessToken, refreshToken }: UserUpdateGoogleSSODto,
-        options?: IDatabaseSaveOptions
-    ): Promise<UserDoc> {
-        repository.google = {
-            accessToken,
-            refreshToken,
-        };
-
-        return this.userRepository.save(repository, options);
-    }
-
-    async updateYandexSSO(
-        repository: UserDoc,
-        { accessToken, refreshToken }: UserUpdateYandexSSODto,
-        options?: IDatabaseSaveOptions
-    ): Promise<UserDoc> {
-        repository.yandex = {
-            accessToken,
-            refreshToken,
-        };
-
-        return this.userRepository.save(repository, options);
-    }
-
-    async updateGithubSSO(
-        repository: UserDoc,
-        { accessToken, refreshToken }: UserUpdateGithubSSODto,
-        options?: IDatabaseSaveOptions
-    ): Promise<UserDoc> {
-        repository.github = {
-            accessToken,
-            refreshToken
-        };
-
-        return this.userRepository.save(repository, options);
-    }
+    // async updateGoogleSSO(
+    //     repository: UserDoc,
+    //     { accessToken, refreshToken }: UserUpdateGoogleSSODto,
+    //     options?: IDatabaseSaveOptions
+    // ): Promise<UserDoc> {
+    //     repository.google = {
+    //         accessToken,
+    //         refreshToken,
+    //     };
+    //
+    //     return this.userRepository.save(repository, options);
+    // }
 
     async updatePhoto(
         repository: UserDoc,

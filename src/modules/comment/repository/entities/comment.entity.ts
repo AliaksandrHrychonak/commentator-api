@@ -2,8 +2,8 @@ import { Prop, SchemaFactory } from '@nestjs/mongoose';
 import { CallbackWithoutResultAndOptionalError, Document } from 'mongoose';
 import { DatabaseMongoUUIDEntityAbstract } from 'src/common/database/abstracts/mongo/entities/database.mongo.uuid.entity.abstract';
 import { DatabaseEntity } from 'src/common/database/decorators/database.decorator';
-import { UserEntity } from '../../../user/repository/entities/user.entity';
-import { TagEntity } from '../../../tag/repository/entities/tag.entity';
+import { UserEntity } from 'src/modules/user/repository/entities/user.entity';
+import { TagEntity } from 'src/modules/tag/repository/entities/tag.entity';
 export const CommentDatabaseName = 'comments';
 
 @DatabaseEntity({ collection: CommentDatabaseName })

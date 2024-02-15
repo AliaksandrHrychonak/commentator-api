@@ -7,11 +7,11 @@ import {
     IDatabaseGetTotalOptions,
     IDatabaseSaveOptions,
 } from 'src/common/database/interfaces/database.interface';
-import { TagCreateDto } from '../dtos/tag.create.dto';
-import { TagDoc } from '../repository/entities/tag.entity';
-import { TagUpdateDto } from '../dtos/tag.update.dto';
+import { TagCreateDto } from 'src/modules/tag/dtos/tag.create.dto';
+import { TagDoc } from 'src/modules/tag/repository/entities/tag.entity';
+import { TagUpdateDto } from 'src/modules/tag/dtos/tag.update.dto';
 import { ITagDoc, ITagEntity } from './tag.interface';
-import { TagImportDto } from '../dtos/tag.import.dto';
+import { TagImportDto } from 'src/modules/tag/dtos/tag.import.dto';
 
 export interface ITagService {
     findAll(

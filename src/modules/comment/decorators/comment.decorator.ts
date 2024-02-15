@@ -7,13 +7,13 @@ import {
 import {
     CommentDoc,
     CommentEntity,
-} from '../repository/entities/comment.entity';
-import { IRequestApp } from '../../../common/request/interfaces/request.interface';
-import { UserPayloadPutToRequestGuard } from '../../user/guards/payload/user.payload.put-to-request.guard';
-import { UserNotFoundGuard } from '../../user/guards/user.not-found.guard';
-import { CommentPutToRequestGuard } from '../guards/payload/comment.payload.put-to-request.guard';
-import { CommentNotFoundGuard } from '../guards/comment.not-found.guard';
-import { CommentNotOwnerGuard } from '../guards/comment.not-owner.guard';
+} from 'src/modules/comment/repository/entities/comment.entity';
+import { IRequestApp } from 'src/common/request/interfaces/request.interface';
+import { UserPayloadPutToRequestGuard } from 'src/modules/user/guards/payload/user.payload.put-to-request.guard';
+import { UserNotFoundGuard } from 'src/modules/user/guards/user.not-found.guard';
+import { CommentPutToRequestGuard } from 'src/modules/comment/guards/payload/comment.payload.put-to-request.guard';
+import { CommentNotFoundGuard } from 'src/modules/comment/guards/comment.not-found.guard';
+import { CommentNotOwnerGuard } from 'src/modules/comment/guards/comment.not-owner.guard';
 
 export const GetComment = createParamDecorator(
     (

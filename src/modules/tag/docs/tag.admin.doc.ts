@@ -12,9 +12,9 @@ import {
 } from 'src/common/doc/decorators/doc.decorator';
 import { ResponseIdSerialization } from 'src/common/response/serializations/response.id.serialization';
 import { UserDocParamsId } from 'src/modules/user/constants/user.doc.constant';
-import { TagListSerialization } from '../serializations/tag.list.serialization';
-import { TagGetSerialization } from '../serializations/tag.get.serialization';
-import { TagDocParamsId } from '../constants/tag.doc.constant';
+import { TagListSerialization } from 'src/modules/tag/serializations/tag.list.serialization';
+import { TagGetSerialization } from 'src/modules/tag/serializations/tag.get.serialization';
+import { TagDocParamsId } from 'src/modules/tag/constants/tag.doc.constant';
 
 export function TagAdminListDoc(): MethodDecorator {
     return applyDecorators(

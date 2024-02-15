@@ -4,9 +4,9 @@ import {
     Injectable,
     NotFoundException,
 } from '@nestjs/common';
-import { IRequestApp } from '../../../common/request/interfaces/request.interface';
-import { ENUM_COMMENT_STATUS_CODE_ERROR } from '../constants/comment.status-code.constant';
-import { CommentDoc } from '../repository/entities/comment.entity';
+import { IRequestApp } from 'src/common/request/interfaces/request.interface';
+import { ENUM_COMMENT_STATUS_CODE_ERROR } from 'src/modules/comment/constants/comment.status-code.constant';
+import { CommentDoc } from 'src/modules/comment/repository/entities/comment.entity';
 
 @Injectable()
 export class CommentNotFoundGuard implements CanActivate {

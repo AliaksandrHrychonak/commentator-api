@@ -15,17 +15,7 @@ export interface IUserDoc extends Omit<UserDoc, 'role'> {
     role: RoleDoc;
 }
 
-export interface IUserGoogleEntity {
-    accessToken: string;
-    refreshToken: string;
-}
-
-export interface IUserYandexEntity {
-    accessToken: string;
-    refreshToken: string;
-}
-
-export interface IUserGithubEntity {
-    accessToken: string;
-    refreshToken: string;
-}
+// export interface IUserGoogleEntity {
+//     accessToken: string;
+//     refreshToken: string;
+// }

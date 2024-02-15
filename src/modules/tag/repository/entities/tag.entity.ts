@@ -2,7 +2,7 @@ import { Prop, SchemaFactory } from '@nestjs/mongoose';
 import { CallbackWithoutResultAndOptionalError, Document } from 'mongoose';
 import { DatabaseMongoUUIDEntityAbstract } from 'src/common/database/abstracts/mongo/entities/database.mongo.uuid.entity.abstract';
 import { DatabaseEntity } from 'src/common/database/decorators/database.decorator';
-import { UserEntity } from '../../../user/repository/entities/user.entity';
+import { UserEntity } from 'src/modules/user/repository/entities/user.entity';
 export const TagDatabaseName = 'tags';
 
 @DatabaseEntity({ collection: TagDatabaseName })
