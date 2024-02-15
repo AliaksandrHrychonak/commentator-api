@@ -13,30 +13,5 @@ export interface IAuthPayloadOptions {
 }
 
 export interface IAuthRefreshTokenOptions {
-    // in milis
     notBeforeExpirationTime?: number | string;
-}
-
-export interface IAuthGooglePayload {
-    email: string;
-    firstName: string;
-    lastName: string;
-    accessToken: string;
-    refreshToken: string;
-}
-
-export interface IAuthYandexPayload {
-    email: string;
-    firstName: string;
-    lastName: string;
-    accessToken: string;
-    refreshToken: string;
-}
-
-export interface IAuthGithubPayload {
-    email: string;
-    firstName: string;
-    lastName: string;
-    accessToken: string;
-    refreshToken: string;
 }
