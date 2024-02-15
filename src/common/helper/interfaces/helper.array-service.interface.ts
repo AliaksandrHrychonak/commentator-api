@@ -28,4 +28,6 @@ export interface IHelperArrayService {
     notIn<T>(a: T[], b: T[]): boolean;
     includes<T>(a: T[], b: T): boolean;
     chunk<T>(a: T[], size: number): T[][];
+    difference<T>(a: T[], b: T[]): T[];
+    differenceBy<T>(a: T[], b: T[], property?: unknown): T[];
 }

@@ -116,4 +116,12 @@ export class HelperArrayService implements IHelperArrayService {
     chunk<T>(a: T[], size: number): T[][] {
         return _.chunk<T>(a, size);
     }
+
+    difference<T>(a: T[], b: T[]): T[] {
+        return _.difference(a, b);
+    }
+
+    differenceBy<T>(a: T[], b: T[], property?: string): T[] {
+        return _.differenceBy(a, b, property);
+    }
 }

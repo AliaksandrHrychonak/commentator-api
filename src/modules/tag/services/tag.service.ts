@@ -5,17 +5,17 @@ import {
     IDatabaseFindAllOptions,
     IDatabaseFindOneOptions,
     IDatabaseGetTotalOptions,
-    IDatabaseManyOptions,
+    IDatabaseManyOptions, IDatabaseRawOptions,
     IDatabaseSaveOptions,
 } from 'src/common/database/interfaces/database.interface';
 import { UserEntity } from 'src/modules/user/repository/entities/user.entity';
-import { ITagService } from '../interfaces/tag.service.interface';
-import { TagRepository } from '../repository/repositories/tag.repository';
-import { TagDoc, TagEntity } from '../repository/entities/tag.entity';
-import { TagCreateDto } from '../dtos/tag.create.dto';
-import { TagUpdateDto } from '../dtos/tag.update.dto';
-import { ITagDoc, ITagEntity } from '../interfaces/tag.interface';
-import { TagImportDto } from '../dtos/tag.import.dto';
+import { ITagService } from 'src/modules/tag/interfaces/tag.service.interface';
+import { TagRepository } from 'src/modules/tag/repository/repositories/tag.repository';
+import { TagDoc, TagEntity } from 'src/modules/tag/repository/entities/tag.entity';
+import { TagCreateDto } from 'src/modules/tag/dtos/tag.create.dto';
+import { TagUpdateDto } from 'src/modules/tag/dtos/tag.update.dto';
+import { ITagDoc, ITagEntity } from 'src/modules/tag/interfaces/tag.interface';
+import { TagImportDto } from 'src/modules/tag/dtos/tag.import.dto';
 
 @Injectable()
 export class TagService implements ITagService {
@@ -96,6 +96,21 @@ export class TagService implements ITagService {
             foreignField: '_id',
             model: UserEntity.name,
         });
+    }
+
+    async belongListById<T>(arr: T[], options?: IDatabaseRawOptions): Promise<T[]> {
+        return this.tagRepository.raw([
+            {
+                $match: {
+                    $or: arr
+                }
+            }, {
+                $project: {
+                    _id: 1,
+                    owner: 1
+                }
+            }
+        ], options)
     }
 
     async deleteMany(
