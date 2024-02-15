@@ -1,0 +1,13 @@
+{
+  "list": "List Tag Success.",
+  "get": "Get Tag Success.",
+  "create": "Create Tag Success.",
+  "delete": "Delete Tag Success.",
+  "update": "Update Tag Success.",
+  "import": "Import Tag Succeed",
+
+  "error": {
+    "notFound": "Tag not found.",
+    "notOwner": "Tag not found."
+  }
+}
