@@ -1,0 +1,13 @@
+{
+  "list": "List Comment Success.",
+  "get": "Get Comment Success.",
+  "create": "Create Comment Success.",
+  "delete": "Delete Comment Success.",
+  "update": "Update Comment Success.",
+  "import": "Import Comment Succeed",
+
+  "error": {
+    "notFound": "Comment not found.",
+    "notFoundTag": "Tag _id not found: "
+  }
+}
